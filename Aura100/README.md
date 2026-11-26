@@ -76,9 +76,9 @@ Combina una arquitectura robusta orientada a la privacidad, un frontend modular 
 
 ### Instalación Rápida
 
-1. Clona o entra en la carpeta del proyecto:
+1. Entra en la carpeta `Aura100` del repositorio:
    ```bash
-   cd C:\Users\mateo\.gemini\antigravity\scratch\LingoQuest
+   cd Aura100
    ```
 
 2. Instala las dependencias del servidor:
@@ -86,29 +86,31 @@ Combina una arquitectura robusta orientada a la privacidad, un frontend modular 
    npm install
    ```
 
-3. Configura las variables de entorno:
+3. Crea tu archivo local de configuración a partir de la plantilla:
    ```bash
    cp .env.example .env
    ```
-   Abre `.env` y agrega opcionalmente tu `OPENAI_API_KEY`:
-   ```ini
-   PORT=3000
-   OPENAI_API_KEY=tu_clave_de_openai_aqui
-   OPENAI_MODEL=gpt-6.1-sol
-   ```
+   En Windows PowerShell también puedes usar `Copy-Item .env.example .env`. Edita `.env` y reemplaza el marcador de `OPENAI_API_KEY` por tu clave privada. No compartas ni subas ese archivo.
+
+   Para desarrollo local, la plantilla usa `NODE_ENV=development`; no exige las credenciales de acceso de la beta. En producción, configura además `NODE_ENV=production`, `APP_ACCESS_USER` y `APP_ACCESS_PASSWORD` (mínimo 16 caracteres).
    > ⚠️ **Nota de Seguridad:** Las claves de API se procesan exclusivamente en `server.mjs` del lado del servidor. Ninguna clave privada se expone en el cliente web ni se incluye en el control de versiones.
 
-4. Verifica la integridad del código:
+4. Verifica la sintaxis del proyecto:
    ```bash
    npm run check
    ```
 
-5. Inicia el servidor de Aura100:
+5. Ejecuta las pruebas automatizadas disponibles:
+   ```bash
+   npm test
+   ```
+
+6. Inicia el servidor de Aura100:
    ```bash
    npm start
    ```
 
-6. Abre tu navegador en:
+7. Abre tu navegador en:
    ```text
    http://localhost:3000
    ```
@@ -141,6 +143,7 @@ LingoQuest/
 ├── server.mjs                   # Servidor Express seguro (Helmet, CORS, rate limiting)
 ├── package.json                 # Dependencias y scripts de verificación
 ├── .env.example                 # Plantilla de configuración de entorno sin secretos
+├── .gitignore                    # Excluye credenciales, dependencias y archivos locales
 ├── ai-client.js                 # Cliente frontend para interactuar con la API de IA
 ├── js/                          # Módulos frontend especializados de Aura100 v4.0
 │   ├── adaptive-engine.js       # Motor adaptativo de competencias y Cuaderno de Errores
@@ -165,6 +168,8 @@ LingoQuest/
 ---
 
 ## 🔒 Privacidad y Seguridad
+
+El archivo `.env.example` contiene únicamente valores de ejemplo. El archivo `.env` real está excluido del control de versiones mediante `.gitignore`. En Railway, define las variables directamente en el panel del servicio; no crees ni subas un `.env` con credenciales.
 
 - **Sin Claves en el Cliente:** Todo el tráfico hacia los proveedores de IA ocurre a través del servidor Node.js intermediario.
 - **Protección de Archivos Sensibles:** `server.mjs` bloquea peticiones estáticas hacia `/src/`, `.env`, `.bak`, archivos `.py`, `.md` y carpetas de respaldo.
