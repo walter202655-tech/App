@@ -4832,7 +4832,7 @@ Warm regards,
         item.onclick = () => { this.currentSubIndex = idx; this.renderCurrentSubtitleLine(); this.sound.playClick(); };
         const mm = Math.floor(line.start / 60).toString().padStart(2, '0');
         const ss = (line.start % 60).toString().padStart(2, '0');
-        item.innerHTML = `<div class="transcript-line-time">${mm}:${ss}</div><div class="transcript-line-en">${line.en}</div><div class="transcript-line-es">${line.es}</div>`;
+        item.innerHTML = `<div class="transcript-line-time">${mm}:${ss}</div><div class="transcript-line-en">${escapeHTML(line.en)}</div><div class="transcript-line-es">${escapeHTML(line.es)}</div>`;
         list.appendChild(item);
       });
     }
@@ -4841,7 +4841,7 @@ Warm regards,
       const listEl = document.getElementById('mined-words-list');
       if (!listEl) return;
       if (this.minedWords.length === 0) { listEl.innerHTML = '<p style="font-size:0.78rem;color:var(--text-muted);text-align:center;padding:0.5rem">Haz clic en palabras o usa ⛏️ para minar frases</p>'; return; }
-      listEl.innerHTML = this.minedWords.map(w => `<div class="mined-word-tag"><strong>${w.word}</strong><span>${w.translation}</span></div>`).join('');
+      listEl.innerHTML = this.minedWords.map(w => `<div class="mined-word-tag"><strong>${escapeHTML(w.word)}</strong><span>${escapeHTML(w.translation)}</span></div>`).join('');
     }
 
     nextSubtitleLine() {
@@ -5021,7 +5021,7 @@ Warm regards,
         setTimeout(() => {
           const botDiv = document.createElement('div');
           botDiv.className = 'chat-msg chat-msg-bot';
-          botDiv.innerHTML = `🤖 ${botText}`;
+          botDiv.textContent = `🤖 ${botText}`;
           messages.appendChild(botDiv);
           messages.scrollTop = messages.scrollHeight;
           this.speakText(botText, 0.95);
@@ -5191,7 +5191,7 @@ Warm regards,
         const cls = score >= 0.8 ? 'hist-correct' : (score >= 0.5 ? 'hist-partial' : 'hist-wrong');
         const item = document.createElement('div');
         item.className = `history-item ${cls}`;
-        item.innerHTML = `<div class="hist-result-dot"></div><span class="hist-phrase">${phrase?.en?.substring(0,40)}...</span>`;
+        item.innerHTML = `<div class="hist-result-dot"></div><span class="hist-phrase">${escapeHTML(phrase?.en?.substring(0,40))}...</span>`;
         if (hist.querySelector('p')) hist.innerHTML = '';
         hist.insertBefore(item, hist.firstChild);
       }
@@ -6972,7 +6972,7 @@ Warm regards,
       container.innerHTML = `
         <div class="card" style="text-align:center">
           <div style="font-size:5rem;cursor:pointer;margin-bottom:0.5rem" onclick="document.getElementById('modal-avatar-picker').classList.remove('hidden')" title="Cambiar avatar">${avatar}</div>
-          <h2 style="font-size:1.8rem;font-weight:900;color:var(--text-main);margin-bottom:0.25rem">${username}</h2>
+          <h2 style="font-size:1.8rem;font-weight:900;color:var(--text-main);margin-bottom:0.25rem">${escapeHTML(username)}</h2>
           <span class="badge-diff" style="font-size:0.88rem">${targetCefr} Track</span>
           <p style="color:var(--text-muted);margin-top:0.5rem;font-size:0.85rem">Toca el avatar para cambiarlo</p>
           <div class="card" style="margin-top:1.25rem;text-align:left">
@@ -7123,7 +7123,7 @@ Warm regards,
       toast.className = 'toast';
       const icons = { purple:'⚡', cyan:'🌐', gold:'🔥', orange:'🔥', info:'💡' };
       toast.style.borderColor = { cyan:'var(--cyan-neon)', gold:'var(--gold-neon)', info:'rgba(255,255,255,0.2)' }[type] || 'var(--purple-neon)';
-      toast.innerHTML = `<span>${icons[type]||'⚡'}</span><span>${message}</span>`;
+    toast.innerHTML = `<span>${icons[type] || '⚡'}</span><span>${escapeHTML(message)}</span>`;
       container.appendChild(toast);
       setTimeout(() => { toast.style.opacity='0'; toast.style.transform='translateY(12px)'; toast.style.transition='all 0.3s ease'; setTimeout(() => toast.remove(), 350); }, 3500);
     }
