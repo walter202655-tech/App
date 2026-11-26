@@ -9,6 +9,12 @@
 (function (global) {
   "use strict";
 
+  function escapeHTML(value) {
+    return String(value ?? "").replace(/[&<>"']/g, char => ({
+      "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;"
+    })[char]);
+  }
+
   const WRITING_TASKS = [
     {
       id: "write_a1_email",
@@ -264,7 +270,7 @@
           container.innerHTML = `
             <div class="eval-error-box">
               <h4>⚠️ Error al procesar la evaluación</h4>
-              <p>${err.message || "Comprueba la conexión con el servidor Aura100."}</p>
+              <p>${escapeHTML(err.message || "Comprueba la conexión con el servidor Aura100.")}</p>
               <button class="btn btn-secondary btn-sm" onclick="app.writingLab.retryEvaluation()">Reintentar</button>
             </div>
           `;
@@ -569,7 +575,7 @@
       const headerRow = document.createElement("div");
       headerRow.className = "history-header-row";
       headerRow.innerHTML = `
-        <span><strong>${history.length}</strong> redacciones guardadas</span>
+        <span><strong>${escapeHTML(history.length)}</strong> redacciones guardadas</span>
         <button class="btn btn-ghost btn-sm" onclick="app.writingLab.clearHistory()">🗑️ Borrar Historial</button>
       `;
       container.appendChild(headerRow);
@@ -581,11 +587,11 @@
         
         row.innerHTML = `
           <div class="hist-info">
-            <strong>${item.taskTitle}</strong>
-            <span class="hist-meta">${item.level} • ${item.wordCount} palabras • ${dateStr}</span>
+            <strong>${escapeHTML(item.taskTitle)}</strong>
+            <span class="hist-meta">${escapeHTML(item.level)} • ${escapeHTML(item.wordCount)} palabras • ${escapeHTML(dateStr)}</span>
           </div>
           <div class="hist-score-wrap">
-            <span class="hist-score-badge">${item.evaluation?.overallScore || 0}/100</span>
+            <span class="hist-score-badge">${escapeHTML(item.evaluation?.overallScore || 0)}/100</span>
             <button class="btn btn-secondary btn-sm" onclick='app.writingLab.viewSavedSubmission("${item.id}")'>Ver</button>
             <button class="btn btn-ghost btn-sm" onclick='app.writingLab.deleteSubmission("${item.id}")' title="Eliminar">✕</button>
           </div>
