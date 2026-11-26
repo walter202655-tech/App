@@ -3563,11 +3563,45 @@ Warm regards,
     }
 
     loadState() {
+      const initial = this.getInitialState();
       try {
         const saved = localStorage.getItem(this.storageKey);
-        if (saved) return Object.assign(this.getInitialState(), JSON.parse(saved));
-      } catch(e) { console.warn("State load error:", e); }
-      return this.getInitialState();
+        if (!saved) return initial;
+
+        const parsed = JSON.parse(saved);
+        if (!parsed || typeof parsed !== 'object' || Array.isArray(parsed)) return initial;
+
+        const state = { ...initial, ...parsed };
+        const savedStats = parsed.stats && typeof parsed.stats === 'object' && !Array.isArray(parsed.stats) ? parsed.stats : {};
+        const savedInventory = parsed.inventory && typeof parsed.inventory === 'object' && !Array.isArray(parsed.inventory) ? parsed.inventory : {};
+        state.stats = {
+          ...initial.stats,
+          ...savedStats,
+          categoriesPracticed: {
+            ...initial.stats.categoriesPracticed,
+            ...(savedStats.categoriesPracticed && typeof savedStats.categoriesPracticed === 'object' ? savedStats.categoriesPracticed : {})
+          },
+          weeklyXp: {
+            ...initial.stats.weeklyXp,
+            ...(savedStats.weeklyXp && typeof savedStats.weeklyXp === 'object' ? savedStats.weeklyXp : {})
+          }
+        };
+        state.inventory = { ...initial.inventory, ...savedInventory };
+
+        ['completedLessons', 'knownWords', 'ankiDeck', 'unlockedAchievements'].forEach((key) => {
+          if (!Array.isArray(state[key])) state[key] = initial[key];
+        });
+        ['totalAnswers', 'correctAnswers', 'grammarCompleted', 'perfectLessonsCount', 'quizzesPassed', 'videosWatched', 'chatsCompleted', 'pronunciationCorrect'].forEach((key) => {
+          if (!Number.isFinite(Number(state.stats[key]))) state.stats[key] = initial.stats[key];
+        });
+        if (typeof state.username !== 'string' || !state.username.trim()) state.username = initial.username;
+        if (typeof state.avatar !== 'string' || state.avatar.length > 8) state.avatar = initial.avatar;
+        if (!THEMES[state.theme]) state.theme = initial.theme;
+        return state;
+      } catch (e) {
+        console.warn('State load error; using a safe default state.', e);
+        return initial;
+      }
     }
 
     saveState() {
@@ -3697,12 +3731,16 @@ Warm regards,
     }
 
     navigate(viewId) {
+      const target = document.getElementById(`view-${viewId}`);
+      if (!target || !target.classList.contains('content-view')) {
+        console.warn(`Aura100: vista no encontrada: ${viewId}`);
+        return;
+      }
       this.sound.playClick();
       this.activeView = viewId;
       document.querySelectorAll('.nav-item').forEach(el => el.classList.toggle('active', el.dataset.view === viewId));
       document.querySelectorAll('.content-view').forEach(el => el.classList.remove('active'));
-      const target = document.getElementById(`view-${viewId}`);
-      if (target) target.classList.add('active');
+      target.classList.add('active');
       this.toggleSidebar(false);
       if (viewId === 'dashboard') this.renderDashboard();
       if (viewId === 'placement' && this.placementManager) this.placementManager.render();
@@ -6984,14 +7022,14 @@ Warm regards,
 
       container.innerHTML = `
         <div class="card" style="text-align:center">
-          <div style="font-size:5rem;cursor:pointer;margin-bottom:0.5rem" onclick="document.getElementById('modal-avatar-picker').classList.remove('hidden')" title="Cambiar avatar">${avatar}</div>
+          <button type="button" class="profile-avatar-trigger" onclick="document.getElementById('modal-avatar-picker')?.classList.remove('hidden')" aria-label="Cambiar avatar" title="Cambiar avatar">${escapeHTML(avatar)}</button>
           <h2 style="font-size:1.8rem;font-weight:900;color:var(--text-main);margin-bottom:0.25rem">${escapeHTML(username)}</h2>
           <span class="badge-diff" style="font-size:0.88rem">${targetCefr} Track</span>
           <p style="color:var(--text-muted);margin-top:0.5rem;font-size:0.85rem">Toca el avatar para cambiarlo</p>
           <div class="card" style="margin-top:1.25rem;text-align:left">
             <label style="font-size:0.82rem;color:var(--text-muted);font-weight:700;display:block;margin-bottom:0.4rem">✏️ Cambiar Username:</label>
             <div style="display:flex;gap:0.5rem">
-              <input type="text" id="profile-username-input" class="text-input" value="${username}" placeholder="Nuevo username..." style="flex:1">
+              <input type="text" id="profile-username-input" class="text-input" value="${escapeHTML(username)}" placeholder="Nuevo username..." maxlength="24" autocomplete="nickname" aria-label="Nuevo nombre de usuario" style="flex:1">
               <button class="btn btn-primary btn-sm" onclick="app.saveUsername()">Guardar</button>
             </div>
           </div>
@@ -7057,14 +7095,18 @@ Warm regards,
 
     saveUsername() {
       const input = document.getElementById('profile-username-input');
-      const val = input?.value.trim();
-      if (!val || val.length < 2) { this.showToast("El username debe tener al menos 2 caracteres.", "info"); return; }
+      const val = String(input?.value ?? '').replace(/[\u0000-\u001F\u007F]/g, '').trim().slice(0, 24);
+      if (!val || val.length < 2) { this.showToast("El nombre debe tener al menos 2 caracteres.", "info"); return; }
+      if (input) input.value = val;
       this.state.username = val;
       this.saveState();
-      this.showToast(`✅ Username actualizado a: ${val}`, "purple");
+      this.renderProfile();
+      this.showToast("Nombre de usuario actualizado.", "purple");
     }
 
     setAvatar(emoji) {
+      const allowedAvatars = ['🦊','🐼','🦁','🐯','🦅','🐸','🦝','🐺','🦋','🐉','🦄','⚡','🌟','🎯','🔮','🚀'];
+      if (!allowedAvatars.includes(emoji)) return;
       this.state.avatar = emoji;
       this.saveState();
       document.getElementById('modal-avatar-picker')?.classList.add('hidden');
@@ -7161,6 +7203,11 @@ Warm regards,
       // Keyboard shortcuts
       window.addEventListener('keydown', (e) => {
         if (e.key === 'Escape') this.toggleSidebar(false);
+        const eventTarget = e.target;
+        const isEditing = eventTarget instanceof HTMLElement && (
+          eventTarget.isContentEditable || ['INPUT', 'TEXTAREA', 'SELECT'].includes(eventTarget.tagName)
+        );
+        if (isEditing) return;
         if (this.activeView === 'anki-srs') {
           const reviewVisible = !document.getElementById('anki-review-screen')?.classList.contains('hidden');
           if (!reviewVisible) return;
