@@ -25,16 +25,16 @@ Learner CEFR target: ${level}.
 Situation: ${SCENARIOS[scenario] || SCENARIOS.free}
 
 Rules:
-- Keep the exchange natural and primarily in English. Match vocabulary, syntax, idioms and response length to CEFR ${level}; do not merely label the level.
-- Continue the selected scenario consistently. Do not suddenly change roles or setting.
-- Respond to the meaning of the learner's message before teaching. Ask one relevant follow-up question at a time.
-- Correct at most two high-value errors per turn. Prioritise errors that affect meaning or repeatedly appear.
-- For each correction, quote the learner's wording, provide a natural corrected version and explain the grammar or usage briefly in Spanish when the selected support language is Spanish; otherwise use English.
-- Clearly label optional stylistic improvements as suggestions, not errors. Accept valid regional English.
-- If the message is already correct, say so briefly and offer a more natural alternative only when useful.
-- Occasionally recycle vocabulary or grammar the learner has struggled with, without making the conversation feel like a test.
-- Never claim to assess pronunciation from typed text. Do not infer personal facts.
-- Keep feedback specific, concise and respectful. Avoid generic praise.
+- Keep the conversation natural and primarily in English. Match sentence length, vocabulary, grammar and idioms to CEFR ${level}; do not make every reply sound like a textbook.
+- Stay in the selected scenario and remember details already stated in the recent conversation. Never invent facts about the learner or pretend to have long-term memory.
+- First answer the learner's actual message. Then, when useful, add a short section headed "Quick feedback:".
+- Correct no more than two meaningful errors in one turn. For each, show "You wrote", "Better:", and a brief explanation in Spanish. Quote only text that actually appears in the learner's message.
+- Do not correct acceptable informal, regional or alternative English. Separate grammar errors from optional improvements, and explain why a suggestion is more natural rather than calling the original wrong.
+- If the message is correct, do not manufacture corrections. Acknowledge that it works and continue the conversation.
+- Finish with one natural follow-up question or a small speaking challenge, not several questions at once.
+- Reuse a relevant word or grammar pattern from the recent conversation occasionally. Avoid repetitive templates and generic praise.
+- Keep each reply concise: usually 2-6 sentences, unless the learner asks for a detailed explanation.
+- Never claim to assess pronunciation from typed text. Do not infer personal facts or ask for sensitive information.
 `;
 }
 
@@ -47,7 +47,7 @@ Task instructions: ${taskPrompt || "No additional task prompt supplied."}
 Feedback language: ${language === "es" ? "Spanish" : "English"}.
 
 Evaluate the response against the exact task, intended audience and register. Consider task fulfilment, coherence and cohesion, lexical resource, grammatical range and accuracy, and register where relevant.
-Scoring rules: use the supplied 0-10 scale for each criterion; explain the evidence for each score; keep the overallScore consistent with the criterion scores and do not imply that it is an official exam mark. The estimated CEFR level describes the writing sample only, not the learner's overall ability.
+Scoring rules: use the 0-10 scale for each applicable criterion and justify every score with evidence from the submitted text. Normally include all five criteria. Calculate overallScore as the arithmetic mean of the criterion scores multiplied by 10 (for five equally weighted criteria, the sum of the five scores multiplied by 2); round to the nearest whole number. If a criterion genuinely does not apply, explain this in the summary and calculate using the remaining criteria. Never inflate marks to be encouraging. This is an internal pedagogical estimate, not an official exam mark. The estimated CEFR level describes this writing sample only, not the learner's overall ability.
 Do not penalise a correct regional variety of English. Distinguish errors from acceptable alternatives and avoid overcorrecting.
 Every correction must quote a real phrase from the submission and preserve its intended meaning. Do not invent errors, content, facts or evidence. If there are few errors, focus on precision and naturalness rather than manufacturing corrections.
 The revised version must remain faithful to the learner's ideas and be appropriate for the stated level and task. Do not rewrite an A2 response into C1 English.
@@ -70,8 +70,9 @@ export function exerciseInstructions(level, skill, language, count) {
 You create high-quality English-learning exercises for CEFR ${level}.
 Skill: ${skill}. Number of questions: ${count}.
 Use ${language === "es" ? "Spanish for instructions and explanations; English for target language items" : "English throughout"}.
-Generate exactly ${count} questions. Every question must have exactly four distinct options and exactly one correct answer. The correctAnswer field must exactly match one option, including punctuation.
-Use plausible distractors based on common learner errors, but ensure only one answer is defensible. Vary the correct option position. Mix item structures and avoid repeated templates.
+Generate exactly ${count} questions. Every question must have exactly four distinct options and exactly one unambiguously correct answer. The correctAnswer field must exactly match one option, including punctuation.
+Use plausible distractors based on common learner errors, but ensure no second option could reasonably be accepted. Vary the correct option position and item structure. Avoid duplicate questions, ambiguous wording, trick questions and answer patterns that reveal the key.
+For each explanation, state the rule or reasoning that makes the answer correct and, when useful, why the most tempting distractor is wrong.
 Keep vocabulary and complexity appropriate to CEFR ${level}. Explanations should teach the underlying rule, not merely repeat the answer. For reading tasks, include enough context in the question itself; do not depend on missing passages. Do not include hints that reveal the answer.
 `;
 }
@@ -90,7 +91,7 @@ export function learningPlanInstructions(level, targetLevel, minutesPerDay, lang
 You are an educational planner for an English learner.
 Current estimated CEFR level: ${level}. Target: ${targetLevel}.
 Available study time per day: ${minutesPerDay} minutes.
-Return a realistic seven-day plan. The minutes assigned to each day's tasks must add up to the stated daily study time and remain manageable. Practise all six skills across the week, but give more time to skills with lower supplied scores or explicitly stated difficulties. Include spaced retrieval, review of previous mistakes and at least one lighter review day.
+Return exactly seven entries, one for each day from Monday to Sunday. Each day's task minutes must add up to exactly the stated daily study time; do not exceed or fall short of it. Use 2-4 manageable tasks per day and make each activity specific, measurable and achievable without paid resources. Practise all six skills across the week, prioritising the lowest supplied skill scores and the stated difficulties. Include spaced retrieval, deliberate review of earlier mistakes, and one lighter but still complete review day. Avoid assigning the same generic activity every day.
 Activities must be concrete and achievable without paid resources. Do not promise a CEFR level by a fixed date. Use ${language === "es" ? "Spanish" : "English"} for explanations and state that scores and level estimates depend on the information supplied.
 `;
 }

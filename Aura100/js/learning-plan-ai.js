@@ -111,18 +111,16 @@
     _verifyPlanTiming(plan, targetMinutes) {
       if (!plan || !Array.isArray(plan.weeklyPlan)) return;
 
+      // Keep the schedule mathematically exact, including after rounding.
       plan.weeklyPlan.forEach(dayPlan => {
-        let daySum = 0;
-        if (Array.isArray(dayPlan.tasks)) {
-          dayPlan.tasks.forEach(t => { daySum += (t.minutes || 0); });
-          // If sum differs significantly from target, normalize
-          if (daySum !== targetMinutes && dayPlan.tasks.length > 0) {
-            const factor = targetMinutes / Math.max(1, daySum);
-            dayPlan.tasks.forEach(t => {
-              t.minutes = Math.max(5, Math.round((t.minutes || 10) * factor));
-            });
-          }
-        }
+        if (!Array.isArray(dayPlan.tasks) || dayPlan.tasks.length === 0) return;
+        const taskCount = dayPlan.tasks.length;
+        const base = Math.floor(targetMinutes / taskCount);
+        let remaining = targetMinutes - (base * taskCount);
+        dayPlan.tasks.forEach(task => {
+          task.minutes = base + (remaining > 0 ? 1 : 0);
+          if (remaining > 0) remaining -= 1;
+        });
       });
     }
 
@@ -175,9 +173,17 @@
             ]
           },
           {
-            day: "Sábado / Domingo",
+            day: "Sábado",
             tasks: [
-              { skill: "speaking", activity: "Práctica libre y Shadowing en Video Lab", minutes: mins, objective: "Inmersión relajada sin presión de evaluación" }
+              { skill: "listening", activity: "Escucha guiada de un vídeo breve y anotación de ideas clave", minutes: part1 + part2, objective: "Reconocer información principal y expresiones en contexto" },
+              { skill: "speaking", activity: "Resumen oral del vídeo con vocabulario nuevo", minutes: part3, objective: "Reutilizar expresiones y mejorar la fluidez" }
+            ]
+          },
+          {
+            day: "Domingo",
+            tasks: [
+              { skill: "reading", activity: "Lectura breve y recuperación de vocabulario sin consultar apuntes", minutes: part1, objective: "Consolidar comprensión y recuerdo activo" },
+              { skill: "grammar", activity: "Revisión de errores de la semana y mini práctica", minutes: part2 + part3, objective: "Identificar patrones y comprobar mejoras" }
             ]
           }
         ],
