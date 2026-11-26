@@ -16,6 +16,18 @@
 (function () {
   'use strict';
 
+  // Escape dynamic text before inserting it into HTML templates.
+  // Keep this helper inside the app scope so every renderer can use it.
+  function escapeHTML(value) {
+    return String(value ?? '').replace(/[&<>"']/g, (char) => ({
+      '&': '&amp;',
+      '<': '&lt;',
+      '>': '&gt;',
+      '"': '&quot;',
+      "'": '&#39;'
+    })[char]);
+  }
+
   // ==========================================================================
   // 1. CONSTANTS & DATASETS
   // ==========================================================================
