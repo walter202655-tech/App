@@ -8,6 +8,12 @@
 (function (global) {
   "use strict";
 
+  function escapeHTML(value) {
+    return String(value ?? "").replace(/[&<>"']/g, char => ({
+      "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;"
+    })[char]);
+  }
+
   class AdaptiveLearningEngine {
     constructor(appInstance) {
       this.app = appInstance;
@@ -234,13 +240,13 @@
         if (!exists && m.correctAnswer) {
           this.app.state.ankiDeck.unshift({
             id: `anki_mst_${m.id}`,
-            front: `[Repaso de Error] ¿Cómo se dice o completa correctamente: "${m.topic}"?`,
+            front: `[Repaso de Error] ¿Cómo se dice o completa correctamente: "${escapeHTML(m.topic)}"?`,
             back: m.correctAnswer,
             level: this.app.state.targetCefr || "B1",
             phonetic: "",
-            example: `Tu respuesta previa: "${m.userAnswer}"`,
+            example: `Tu respuesta previa: "${escapeHTML(m.userAnswer)}"`,
             exampleEs: m.explanation,
-            explanation: `Cuaderno de Errores (${m.skill}) • ${m.sourceModule}`,
+            explanation: `Cuaderno de Errores (${m.skill}) • ${escapeHTML(m.sourceModule)}`,
             tag: "Cuaderno de Errores ⚠️",
             repetitions: 0,
             interval: 0,
@@ -354,7 +360,7 @@
 
       this.mistakes.forEach(m => {
         const item = document.createElement("div");
-        item.className = `mistake-notebook-item ${m.status}`;
+        item.className = `mistake-notebook-item ${escapeHTML(m.status)}`;
 
         const isPending = m.status !== "mastered";
         const successes = Math.min(2, m.consecutiveSuccesses || 0);
@@ -362,19 +368,19 @@
 
         item.innerHTML = `
           <div class="mst-header-row">
-            <span class="mst-skill-badge ${m.skill}">${m.skill.toUpperCase()}</span>
-            <span class="mst-topic-tag">${m.topic}</span>
-            <span class="mst-status-pill ${m.status}">${m.status === "mastered" ? "✅ Consolidado (2/2)" : (m.status === "reviewing" ? `🔄 En Revisión (${successes}/2)` : `⏳ Pendiente (${successes}/2)`)}</span>
-            <span class="mst-freq-tag">Frecuencia: ${m.frequency}x</span>
-            <span class="mst-date-tag">${dateStr}</span>
+            <span class="mst-skill-badge ${m.skill}">${escapeHTML(m.skill.toUpperCase())}</span>
+            <span class="mst-topic-tag">${escapeHTML(m.topic)}</span>
+            <span class="mst-status-pill ${escapeHTML(m.status)}">${m.status === "mastered" ? "✅ Consolidado (2/2)" : (m.status === "reviewing" ? `🔄 En Revisión (${successes}/2)` : `⏳ Pendiente (${successes}/2)`)}</span>
+            <span class="mst-freq-tag">Frecuencia: ${escapeHTML(m.frequency)}x</span>
+            <span class="mst-date-tag">${escapeHTML(dateStr)}</span>
           </div>
           <div class="mst-body-row">
-            <div class="mst-user-ans"><strong>Tu respuesta:</strong> <span class="strike">${m.userAnswer}</span></div>
-            <div class="mst-corr-ans"><strong>Solución correcta:</strong> <span>${m.correctAnswer}</span></div>
-            <div class="mst-expl"><strong>💡 Explicación didáctica:</strong> ${m.explanation}</div>
+            <div class="mst-user-ans"><strong>Tu respuesta:</strong> <span class="strike">${escapeHTML(m.userAnswer)}</span></div>
+            <div class="mst-corr-ans"><strong>Solución correcta:</strong> <span>${escapeHTML(m.correctAnswer)}</span></div>
+            <div class="mst-expl"><strong>💡 Explicación didáctica:</strong> ${escapeHTML(m.explanation)}</div>
           </div>
           <div class="mst-actions-row">
-            <span class="mst-module-tag">Módulo: ${m.sourceModule}</span>
+            <span class="mst-module-tag">Módulo: ${escapeHTML(m.sourceModule)}</span>
             ${isPending ? `<button class="btn btn-secondary btn-sm" onclick='app.adaptiveEngine.markMistakeResolved("${m.id}")'>✓ Marcar repasado (${successes}/2)</button>` : ""}
             <button class="btn btn-ghost btn-sm" onclick='app.adaptiveEngine.deleteMistake("${m.id}")' title="Eliminar" aria-label="Eliminar error">🗑️</button>
           </div>

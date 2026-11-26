@@ -11,6 +11,12 @@
 (function (global) {
   "use strict";
 
+  function escapeHTML(value) {
+    return String(value ?? "").replace(/[&<>"']/g, char => ({
+      "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;"
+    })[char]);
+  }
+
   const MINIMAL_PAIRS_DATA = [
     {
       id: "pair_1",
@@ -205,8 +211,8 @@
             <strong>${isGood ? "✅ Coincidencia Exitosa" : "🔄 Coincidencia Parcial"}</strong>
             <span class="pronun-score-pill">${feedback.accuracyScore}% similitud</span>
           </div>
-          <p><strong>Lo que dijiste (transcripción):</strong> "${feedback.recognizedText}"</p>
-          <p><strong>Frase objetivo:</strong> "${feedback.targetPhrase}"</p>
+          <p><strong>Lo que dijiste (transcripción):</strong> "${escapeHTML(feedback.recognizedText)}"</p>
+          <p><strong>Frase objetivo:</strong> "${escapeHTML(feedback.targetPhrase)}"</p>
           <div class="pronun-technical-disclaimer">
             <small>ℹ️ <strong>Transparencia técnica:</strong> Este valor representa una coincidencia textual aproximada procesada por el motor de voz de tu navegador. La evaluación de formantes acústicos y fonemas específicos requiere un proveedor fonético dedicado (Estado actual: <em>${feedback.acousticEvaluation}</em>).</small>
           </div>
@@ -224,27 +230,27 @@
         <div class="minimal-pair-card">
           <div class="mp-header">
             <span class="mp-tag">Par Mínimo #${this.activePairIndex + 1} de ${MINIMAL_PAIRS_DATA.length}</span>
-            <h3>${pair.title}</h3>
-            <p>${pair.description}</p>
+            <h3>${escapeHTML(pair.title)}</h3>
+            <p>${escapeHTML(pair.description)}</p>
           </div>
 
           <div class="mp-words-comparison-grid">
             <div class="mp-word-box ${this.selectedPairSide === "A" ? "selected-box" : ""}" onclick="app.audioAdapter.selectPairWord('A')">
-              <span class="mp-word-text">${pair.wordA.text}</span>
-              <span class="mp-word-ipa">${pair.wordA.ipa}</span>
-              <span class="mp-word-es">${pair.wordA.es}</span>
-              <button class="btn btn-secondary btn-sm" onclick="event.stopPropagation(); app.speakText('${pair.wordA.text}', 0.85)">🔊 Escuchar</button>
-              <p class="mp-sentence"><em>"${pair.sampleSentenceA}"</em></p>
+              <span class="mp-word-text">${escapeHTML(pair.wordA.text)}</span>
+              <span class="mp-word-ipa">${escapeHTML(pair.wordA.ipa)}</span>
+              <span class="mp-word-es">${escapeHTML(pair.wordA.es)}</span>
+              <button class="btn btn-secondary btn-sm" onclick="event.stopPropagation(); app.speakText('${escapeHTML(pair.wordA.text)}', 0.85)">🔊 Escuchar</button>
+              <p class="mp-sentence"><em>"${escapeHTML(pair.sampleSentenceA)}"</em></p>
             </div>
 
             <div class="mp-vs-divider">VS</div>
 
             <div class="mp-word-box ${this.selectedPairSide === "B" ? "selected-box" : ""}" onclick="app.audioAdapter.selectPairWord('B')">
-              <span class="mp-word-text">${pair.wordB.text}</span>
-              <span class="mp-word-ipa">${pair.wordB.ipa}</span>
-              <span class="mp-word-es">${pair.wordB.es}</span>
-              <button class="btn btn-secondary btn-sm" onclick="event.stopPropagation(); app.speakText('${pair.wordB.text}', 0.85)">🔊 Escuchar</button>
-              <p class="mp-sentence"><em>"${pair.sampleSentenceB}"</em></p>
+              <span class="mp-word-text">${escapeHTML(pair.wordB.text)}</span>
+              <span class="mp-word-ipa">${escapeHTML(pair.wordB.ipa)}</span>
+              <span class="mp-word-es">${escapeHTML(pair.wordB.es)}</span>
+              <button class="btn btn-secondary btn-sm" onclick="event.stopPropagation(); app.speakText('${escapeHTML(pair.wordB.text)}', 0.85)">🔊 Escuchar</button>
+              <p class="mp-sentence"><em>"${escapeHTML(pair.sampleSentenceB)}"</em></p>
             </div>
           </div>
 

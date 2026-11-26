@@ -8,6 +8,12 @@
 (function (global) {
   "use strict";
 
+  function escapeHTML(value) {
+    return String(value ?? "").replace(/[&<>"']/g, char => ({
+      "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;"
+    })[char]);
+  }
+
   class LearningPlanManager {
     constructor(appInstance) {
       this.app = appInstance;
@@ -88,6 +94,12 @@
           plan = this._generateLocalPlan(payload);
         }
 
+        // Reject malformed model output before rendering or saving it.
+        if (!this._isValidPlan(plan)) {
+          console.warn("AI plan failed structural validation; using the local plan.");
+          plan = this._generateLocalPlan(payload);
+        }
+
         // Validate plan time math locally
         this._verifyPlanTiming(plan, payload.minutesPerDay);
         this.savePlan(plan);
@@ -99,13 +111,24 @@
           resultBox.innerHTML = `
             <div class="eval-error-box">
               <h4>⚠️ Error al generar el plan de estudio</h4>
-              <p>${err.message || "Inténtalo de nuevo."}</p>
+              <p>${escapeHTML(err.message || "Inténtalo de nuevo.")}</p>
             </div>
           `;
         }
       } finally {
         if (loader) loader.classList.add("hidden");
       }
+    }
+
+    _isValidPlan(plan) {
+      if (!plan || !Array.isArray(plan.weeklyPlan) || plan.weeklyPlan.length !== 7) return false;
+      return plan.weeklyPlan.every(day =>
+        day && typeof day.day === "string" && Array.isArray(day.tasks) &&
+        day.tasks.length >= 2 && day.tasks.every(task =>
+          task && typeof task.skill === "string" && typeof task.activity === "string" &&
+          typeof task.objective === "string" && Number.isFinite(task.minutes) && task.minutes > 0
+        )
+      );
     }
 
     _verifyPlanTiming(plan, targetMinutes) {
@@ -207,23 +230,23 @@
             <div>
               <span class="ai-generated-badge">✨ Plan de Estudio Adaptativo Semanal</span>
               <h3>Ruta Semanal Personalizada</h3>
-              <p class="plan-overview-text">${plan.overview}</p>
+              <p class="plan-overview-text">${escapeHTML(plan.overview)}</p>
             </div>
           </div>
 
           <div class="plan-days-grid">
             ${plan.weeklyPlan.map(dp => `
               <div class="plan-day-column">
-                <div class="plan-day-title"><strong>${dp.day}</strong></div>
+                <div class="plan-day-title"><strong>${escapeHTML(dp.day)}</strong></div>
                 <div class="plan-tasks-list">
                   ${dp.tasks.map(t => `
                     <div class="plan-task-pill">
                       <div class="task-top">
-                        <span class="task-skill-tag ${t.skill}">${t.skill.toUpperCase()}</span>
-                        <span class="task-time-pill">⏱️ ${t.minutes} min</span>
+                        <span class="task-skill-tag ${t.skill}">${escapeHTML(t.skill.toUpperCase())}</span>
+                        <span class="task-time-pill">⏱️ ${escapeHTML(t.minutes)} min</span>
                       </div>
-                      <div class="task-activity-name">${t.activity}</div>
-                      <div class="task-objective-sub">${t.objective}</div>
+                      <div class="task-activity-name">${escapeHTML(t.activity)}</div>
+                      <div class="task-objective-sub">${escapeHTML(t.objective)}</div>
                     </div>
                   `).join("")}
                 </div>
@@ -235,12 +258,12 @@
             <div class="plan-advice-box">
               <h4>💡 Consejos Didácticos del Tutor:</h4>
               <ul>
-                ${plan.reviewAdvice.map(a => `<li>${a}</li>`).join("")}
+                ${plan.reviewAdvice.map(a => `<li>${escapeHTML(a)}</li>`).join("")}
               </ul>
             </div>
           ` : ""}
 
-          <p class="eval-disclaimer-tag" style="margin-top:1rem">${plan.disclaimer || "Orientación pedagógica interna Aura100."}</p>
+          <p class="eval-disclaimer-tag" style="margin-top:1rem">${escapeHTML(plan.disclaimer || "Orientación pedagógica interna Aura100.")}</p>
         </div>
       `;
     }

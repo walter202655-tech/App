@@ -8,6 +8,12 @@
 (function (global) {
   "use strict";
 
+  function escapeHTML(value) {
+    return String(value ?? "").replace(/[&<>"']/g, char => ({
+      "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;"
+    })[char]);
+  }
+
   class GrammarAITutor {
     constructor(appInstance) {
       this.app = appInstance;
@@ -58,7 +64,7 @@
           modalResult.innerHTML = `
             <div class="eval-error-box">
               <h4>⚠️ No se pudo obtener la explicación</h4>
-              <p>${err.message || "Verifica la conexión con el servidor Aura100."}</p>
+              <p>${escapeHTML(err.message || "Verifica la conexión con el servidor Aura100.")}</p>
             </div>
           `;
         }
@@ -101,7 +107,7 @@
       header.className = "grammar-ai-resp-header";
       header.innerHTML = `
         <span class="ai-generated-badge">✨ Explicación Asistida por IA</span>
-        <h3>${data.title}</h3>
+        <h3>${escapeHTML(data.title)}</h3>
       `;
       box.appendChild(header);
 
@@ -113,7 +119,7 @@
       if (data.form) {
         const formBox = document.createElement("div");
         formBox.className = "grammar-ai-form-card";
-        formBox.innerHTML = `<strong>📐 Estructura / Forma:</strong> <code>${data.form}</code>`;
+        formBox.innerHTML = `<strong>📐 Estructura / Forma:</strong> <code>${escapeHTML(data.form)}</code>`;
         box.appendChild(formBox);
       }
 
@@ -150,10 +156,10 @@
         checkCard.className = "grammar-ai-selfcheck-card";
         checkCard.innerHTML = `
           <h4>🎯 Pregunta de Autoevaluación</h4>
-          <p class="selfcheck-q"><strong>Pregunta:</strong> ${data.checkQuestion}</p>
+          <p class="selfcheck-q"><strong>Pregunta:</strong> ${escapeHTML(data.checkQuestion)}</p>
           <div class="selfcheck-answer hidden" id="selfcheck-ans">
-            <p><strong>Respuesta correcta:</strong> ${data.checkAnswer}</p>
-            <p><small>${data.checkExplanation}</small></p>
+            <p><strong>Respuesta correcta:</strong> ${escapeHTML(data.checkAnswer)}</p>
+            <p><small>${escapeHTML(data.checkExplanation)}</small></p>
           </div>
           <button class="btn btn-secondary btn-sm" id="btn-reveal-selfcheck" onclick="document.getElementById('selfcheck-ans').classList.toggle('hidden')">👁️ Revelar Respuesta</button>
         `;
@@ -204,7 +210,7 @@
           container.innerHTML = `
             <div class="eval-error-box">
               <h4>⚠️ No se pudieron generar ejercicios</h4>
-              <p>${err.message || "Inténtalo nuevamente."}</p>
+              <p>${escapeHTML(err.message || "Inténtalo nuevamente.")}</p>
             </div>
           `;
         }
@@ -263,7 +269,7 @@
       header.className = "exercise-set-header";
       header.innerHTML = `
         <span class="ai-generated-badge">✨ Práctica Dinámica Generada por IA</span>
-        <h3>Tema: ${set.topic} • Nivel ${set.level} (${set.questions.length} preguntas)</h3>
+        <h3>Tema: ${escapeHTML(set.topic)} • Nivel ${escapeHTML(set.level)} (${set.questions.length} preguntas)</h3>
       `;
       container.appendChild(header);
 
@@ -323,7 +329,7 @@
         feedback.className = `ai-gen-feedback ${isCorrect ? "feedback-success" : "feedback-danger"}`;
         feedback.innerHTML = `
           <strong>${isCorrect ? "✅ ¡Correcto!" : "❌ Respuesta incorrecta"}</strong>
-          <p>${explanation}</p>
+          <p>${escapeHTML(explanation)}</p>
         `;
       }
 
