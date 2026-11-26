@@ -272,7 +272,9 @@ app.post("/api/ai/learning-plan", async (req, res, next) => {
       && result.weeklyPlan.every(day =>
         Array.isArray(day.tasks)
         && day.tasks.every(task => Number.isInteger(task.minutes) && task.minutes > 0)
-        && day.tasks.reduce((sum, task) => sum + task.minutes, 0) <= data.minutesPerDay
+        && day.tasks.length >= 2
+        && day.tasks.every(task => task.minutes <= data.minutesPerDay)
+        && day.tasks.reduce((sum, task) => sum + task.minutes, 0) === data.minutesPerDay
       );
     if (!validDays) {
       return res.status(502).json({
