@@ -8,6 +8,12 @@
 (function (global) {
   "use strict";
 
+  function escapeHTML(value) {
+    return String(value ?? "").replace(/[&<>"']/g, char => ({
+      "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;"
+    })[char]);
+  }
+
   class VocabularyAIManager {
     constructor(appInstance) {
       this.app = appInstance;
@@ -54,7 +60,7 @@
           resultBox.innerHTML = `
             <div class="eval-error-box">
               <h4>⚠️ Error al consultar el vocabulario</h4>
-              <p>${err.message || "Comprueba la conexión con el servidor."}</p>
+              <p>${escapeHTML(err.message || "Comprueba la conexión con el servidor.")}</p>
             </div>
           `;
         }
@@ -103,9 +109,9 @@
       const metaLine = document.createElement("div");
       metaLine.className = "vocab-meta-line";
       metaLine.innerHTML = `
-        <span class="vocab-pos-badge">${entry.partOfSpeech}</span>
-        ${entry.ipa ? `<span class="vocab-ipa-badge">${entry.ipa}</span>` : ""}
-        <span class="vocab-register-badge">${entry.register || "General"}</span>
+        <span class="vocab-pos-badge">${escapeHTML(entry.partOfSpeech)}</span>
+        ${entry.ipa ? `<span class="vocab-ipa-badge">${escapeHTML(entry.ipa)}</span>` : ""}
+        <span class="vocab-register-badge">${escapeHTML(entry.register || "General")}</span>
         <span class="ai-generated-badge">✨ Enriquecido por IA</span>
       `;
 
@@ -128,7 +134,7 @@
       // Meaning
       const meaningP = document.createElement("p");
       meaningP.className = "vocab-meaning-text";
-      meaningP.innerHTML = `<strong>Significado:</strong> ${entry.meaning}`;
+      meaningP.innerHTML = `<strong>Significado:</strong> ${escapeHTML(entry.meaning)}`;
       card.appendChild(meaningP);
 
       // Collocations & Synonyms
@@ -139,7 +145,7 @@
         const colWrap = document.createElement("div");
         colWrap.className = "vocab-chip-group";
         colWrap.innerHTML = `<strong>Collocations:</strong> ` + 
-          entry.collocations.map(c => `<span class="vocab-chip">${c}</span>`).join(" ");
+          entry.collocations.map(c => `<span class="vocab-chip">${escapeHTML(c)}</span>`).join(" ");
         tagsGrid.appendChild(colWrap);
       }
 
@@ -147,7 +153,7 @@
         const synWrap = document.createElement("div");
         synWrap.className = "vocab-chip-group";
         synWrap.innerHTML = `<strong>Sinónimos:</strong> ` + 
-          entry.synonyms.map(s => `<span class="vocab-chip syn-chip">${s}</span>`).join(" ");
+          entry.synonyms.map(s => `<span class="vocab-chip syn-chip">${escapeHTML(s)}</span>`).join(" ");
         tagsGrid.appendChild(synWrap);
       }
 
@@ -155,7 +161,7 @@
         const antWrap = document.createElement("div");
         antWrap.className = "vocab-chip-group";
         antWrap.innerHTML = `<strong>Antónimos:</strong> ` + 
-          entry.antonyms.map(a => `<span class="vocab-chip ant-chip">${a}</span>`).join(" ");
+          entry.antonyms.map(a => `<span class="vocab-chip ant-chip">${escapeHTML(a)}</span>`).join(" ");
         tagsGrid.appendChild(antWrap);
       }
 
@@ -181,7 +187,7 @@
       if (entry.usageNote) {
         const noteBox = document.createElement("div");
         noteBox.className = "vocab-usage-note";
-        noteBox.innerHTML = `<strong>💡 Nota de Registro / Uso:</strong> ${entry.usageNote}`;
+        noteBox.innerHTML = `<strong>💡 Nota de Registro / Uso:</strong> ${escapeHTML(entry.usageNote)}`;
         card.appendChild(noteBox);
       }
 
@@ -241,7 +247,7 @@
         phonetic: entry.ipa || "",
         example: primaryExample,
         exampleEs: "Ver ejemplos y collocations en tu Word Bank.",
-        explanation: `${entry.partOfSpeech} • ${entry.register || "General"}`,
+        explanation: `${escapeHTML(entry.partOfSpeech)} • ${escapeHTML(entry.register || "General")}`,
         tag: "AI Vocab ✨",
         repetitions: 0,
         interval: 0,
