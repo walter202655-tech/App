@@ -3713,10 +3713,11 @@ Warm regards,
 
     toggleSidebar(forceState) {
       const sb = document.getElementById('app-sidebar');
-      if (sb) {
-        if (typeof forceState === 'boolean') sb.classList.toggle('open', forceState);
-        else sb.classList.toggle('open');
-      }
+      const toggle = document.getElementById('btn-toggle-sidebar');
+      if (!sb) return;
+      const shouldOpen = typeof forceState === 'boolean' ? forceState : !sb.classList.contains('open');
+      sb.classList.toggle('open', shouldOpen);
+      if (toggle) toggle.setAttribute('aria-expanded', String(shouldOpen));
     }
 
     // ========================================================================
@@ -7147,6 +7148,7 @@ Warm regards,
 
       // Keyboard shortcuts
       window.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') this.toggleSidebar(false);
         if (this.activeView === 'anki-srs') {
           const reviewVisible = !document.getElementById('anki-review-screen')?.classList.contains('hidden');
           if (!reviewVisible) return;
