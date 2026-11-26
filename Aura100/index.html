@@ -41,7 +41,7 @@
     <!-- Top Navigation Bar -->
     <header class="app-header">
       <div class="header-left">
-        <button id="btn-toggle-sidebar" class="btn-icon mobile-only" aria-label="Abrir menú">
+        <button id="btn-toggle-sidebar" class="btn-icon mobile-only" aria-label="Abrir menú" aria-controls="app-sidebar" aria-expanded="false">
           <svg viewBox="0 0 24 24" class="svg-icon"><path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"/></svg>
         </button>
         <div class="brand-logo" onclick="app.navigate('dashboard')">
@@ -103,7 +103,7 @@
     <!-- Main App Body -->
     <div class="app-body">
       <!-- Sidebar Navigation -->
-      <aside id="app-sidebar" class="app-sidebar">
+      <aside id="app-sidebar" class="app-sidebar" aria-label="Navegación principal">
         <div class="sidebar-backdrop mobile-only" onclick="app.toggleSidebar(false)"></div>
         <nav class="sidebar-nav">
           <div class="sidebar-group-header">LEARN</div>
