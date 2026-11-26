@@ -6253,3 +6253,56 @@ select:focus-visible {
   .sidebar-nav,
   .sidebar-footer { position: relative; z-index: 1; }
 }
+
+
+/* Profile controls: keyboard access, touch targets and narrow screens. */
+.profile-avatar-trigger {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 76px;
+  min-height: 76px;
+  margin: 0 auto 0.5rem;
+  padding: 0.25rem;
+  border: 1px solid transparent;
+  border-radius: 1rem;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  font-size: 5rem;
+  line-height: 1.15;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.profile-avatar-trigger:hover {
+  border-color: var(--purple-neon);
+  background: rgba(139, 92, 246, 0.08);
+}
+
+.profile-avatar-trigger:focus-visible {
+  outline: 3px solid var(--cyan-neon);
+  outline-offset: 3px;
+}
+
+#profile-content,
+#profile-content > * {
+  min-width: 0;
+}
+
+#profile-username-input {
+  min-width: 0;
+  width: 100%;
+}
+
+@media (max-width: 480px) {
+  .profile-avatar-trigger {
+    min-width: 68px;
+    min-height: 68px;
+    font-size: 4.25rem;
+  }
+
+  #profile-content .card {
+    padding: 1rem;
+  }
+}
