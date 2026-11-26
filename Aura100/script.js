@@ -7089,7 +7089,7 @@ Warm regards,
       // Populate avatar picker
       const avatarGrid = document.getElementById('avatar-grid');
       if (avatarGrid) {
-        avatarGrid.innerHTML = avatarEmojis.map(e => `<button class="avatar-btn" onclick="app.setAvatar('${e}')">${e}</button>`).join('');
+        avatarGrid.innerHTML = avatarEmojis.map(e => `<button type="button" class="avatar-btn" aria-label="Elegir avatar ${escapeHTML(e)}" onclick="app.setAvatar('${e}')">${escapeHTML(e)}</button>`).join('');
       }
     }
 
