@@ -25,7 +25,7 @@ test("profile editing and avatar selection have input constraints", () => {
 });
 
 test("navigation rejects unknown views and keyboard shortcuts ignore editable fields", () => {
-  assert.match(script, /!target \\|\\| !target\.classList\.contains\('content-view'\)/);
+  assert.match(script, /!target \|\| !target\.classList\.contains\('content-view'\)/);
   assert.match(script, /if \(isEditing\) return/);
 });
 
