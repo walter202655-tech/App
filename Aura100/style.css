@@ -6246,3 +6246,10 @@ select:focus-visible {
     transition-duration: 0.01ms !important;
   }
 }
+
+/* Mobile drawer stacking: keep the backdrop behind navigation controls. */
+@media (max-width: 768px) {
+  .sidebar-backdrop { z-index: 0; }
+  .sidebar-nav,
+  .sidebar-footer { position: relative; z-index: 1; }
+}
