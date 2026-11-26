@@ -1,0 +1,1640 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- Content Security Policy: Authorizes YouTube, Google and fonts, preventing Error 153 -->
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline' 'unsafe-eval' data: blob: https://*.youtube.com https://*.youtube-nocookie.com https://*.ytimg.com https://*.google.com https://fonts.googleapis.com https://fonts.gstatic.com; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://*.youtube.com https://*.youtube-nocookie.com https://*.ytimg.com https://*.google.com; frame-src 'self' https://*.youtube.com https://*.youtube-nocookie.com https://player.vimeo.com; child-src 'self' https://*.youtube.com https://*.youtube-nocookie.com; connect-src 'self' https://*.youtube.com https://*.google.com https://*.googleapis.com; img-src 'self' data: blob: https://*.ytimg.com https://*.google.com https://*.ggpht.com https://*.youtube.com; media-src 'self' data: blob: https://*.youtube.com; font-src 'self' data: https://fonts.gstatic.com;">
+  <title>Aura100 — English Academy</title>
+    <!-- Google Fonts: Aura100 & Figma 4 Themes (Lora, DM Sans, Space Grotesk, IBM Plex Sans, Manrope, Inter, Rajdhani) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=IBM+Plex+Sans:ital,wght@0,100..700;1,100..700&family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Lora:ital,wght@0,400..700;1,400..700&family=Manrope:wght@200..800&family=Rajdhani:wght@500;600;700&family=Space+Grotesk:wght@300..700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>⚡</text></svg>">
+</head>
+<body class="cyber-theme">
+  <!-- Focus Mode HUD Overlay (Aura100 v4.0) -->
+  <div id="focus-mode-hud" class="focus-mode-hud hidden">
+    <div class="focus-hud-content">
+      <div class="focus-hud-left">
+        <span class="focus-hud-badge">🧘 MODO CONCENTRACIÓN</span>
+        <span class="focus-hud-timer" id="focus-hud-timer">25:00</span>
+      </div>
+      <div class="focus-hud-center">
+        <span id="focus-hud-task-name">Sesión de Estudio Libre</span>
+      </div>
+      <div class="focus-hud-right">
+        <button class="btn btn-secondary btn-sm" onclick="app.toggleFocusTimerPause()" id="btn-focus-timer-pause">⏸️ Pausa</button>
+        <button class="btn btn-primary btn-sm" onclick="app.toggleFocusMode()">✕ Salir del Modo Foco</button>
+      </div>
+    </div>
+  </div>
+  <!-- Cyber Scanline Effect Overlay -->
+  <div class="cyber-scanline"></div>
+  <!-- Animated particle stars background -->
+  <canvas id="stars-canvas" class="stars-canvas"></canvas>
+
+  <!-- App Container -->
+  <div id="app" class="app-container">
+
+    <!-- Top Navigation Bar -->
+    <header class="app-header">
+      <div class="header-left">
+        <button id="btn-toggle-sidebar" class="btn-icon mobile-only" aria-label="Abrir menú">
+          <svg viewBox="0 0 24 24" class="svg-icon"><path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"/></svg>
+        </button>
+        <div class="brand-logo" onclick="app.navigate('dashboard')">
+          <div class="logo-gem cyber-glow-pulse">
+            <svg viewBox="0 0 24 24" class="svg-logo-icon"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+          </div>
+          <div class="brand-text-col">
+            <span class="logo-text">Aura<span class="highlight">100</span></span>
+            <span class="logo-subtext">ENGLISH ACADEMY • A1-C2</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Quick User Stats in Header -->
+      <div class="header-stats">
+        <div class="stat-badge cefr-badge" id="header-cefr-badge" onclick="app.showCefrSelectorModal()" title="Nivel CEFR (toca para cambiar)">
+          <span class="stat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-stat-icon"><circle cx="12" cy="12" r="10"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/><line x1="2" y1="12" x2="22" y2="12"/></svg></span>
+          <span class="stat-val" id="header-cefr-val">B1</span>
+          <span class="stat-lbl">CEFR</span>
+        </div>
+        <div class="stat-badge streak-badge" title="Racha de días activos">
+          <span class="stat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-stat-icon"><path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z"/></svg></span>
+          <span class="stat-val" id="header-streak">0</span>
+          <span class="stat-lbl">días</span>
+        </div>
+        <div class="stat-badge anki-header-badge" id="header-anki-badge" title="Tarjetas Anki pendientes" onclick="app.navigate('anki-srs')">
+          <span class="stat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-stat-icon"><rect x="3" y="4" width="18" height="13" rx="2"/><path d="M8 20h8M12 17v3M7 8h10M7 11h5"/></svg></span>
+          <span class="stat-val" id="header-anki-due">0</span>
+          <span class="stat-lbl">SRS</span>
+        </div>
+        <div class="stat-badge coins-badge" id="header-coins-badge" title="Aura Coins" onclick="app.navigate('shop')">
+          <span class="stat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-stat-icon"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><path d="M12 8v8M9.5 10.5h5M9.5 13.5h5"/></svg></span>
+          <span class="stat-val" id="header-coins">0</span>
+        </div>
+        <div class="stat-badge hearts-badge" title="Corazones" onclick="app.showHeartModal()">
+          <span class="stat-icon"><svg viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="1" class="svg-stat-icon"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></span>
+          <span class="stat-val" id="header-hearts">3/3</span>
+        </div>
+        <div class="stat-badge xp-badge" title="XP total">
+          <span class="stat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-stat-icon"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg></span>
+          <span class="stat-val" id="header-xp">0</span>
+          <span class="stat-lbl">XP</span>
+        </div>
+        <button id="btn-toggle-audio" class="btn-icon" aria-label="Activar o desactivar sonido" title="Sonido on/off">
+          <svg id="icon-sound-on" viewBox="0 0 24 24" class="svg-icon"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/></svg>
+          <svg id="icon-sound-off" viewBox="0 0 24 24" class="svg-icon hidden"><path d="M16.5 12c0-1.77-1.02-3.29-2.5-4.03v2.21l2.45 2.45c.03-.2.05-.41.05-.63zm2.5 0c0 .94-.2 1.82-.54 2.64l1.51 1.51C20.63 14.91 21 13.5 21 12c0-4.28-2.99-7.86-7-8.77v2.06c2.89.86 5 3.54 5 6.71zM4.27 3L3 4.27l4.73 4.73H3v6h4l5 5v-6.73l4.25 4.25c-.67.52-1.42.93-2.25 1.18v2.06c1.38-.31 2.63-.95 3.69-1.81L19.73 21 21 19.73l-9-9L4.27 3zM12 4L9.91 6.09 12 8.18V4z"/></svg>
+        </button>
+        <button id="btn-toggle-focus" class="btn-icon" aria-label="Modo Concentración" title="Focus Mode (Sesión de concentración sin distracciones)" onclick="app.toggleFocusMode()">🧘</button>
+        <button id="btn-toggle-theme" class="btn-icon" aria-label="Cambiar estilo visual" title="Cambiar Estilo Visual (Figma 4 Estilos)" onclick="app.openThemeModal()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="svg-icon"><circle cx="13.5" cy="6.5" r=".5" fill="currentColor"/><circle cx="17.5" cy="10.5" r=".5" fill="currentColor"/><circle cx="8.5" cy="7.5" r=".5" fill="currentColor"/><circle cx="6.5" cy="12.5" r=".5" fill="currentColor"/><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.926 0 1.648-.746 1.648-1.688 0-.437-.18-.835-.437-1.125-.29-.289-.438-.652-.438-1.125a1.64 1.64 0 0 1 1.668-1.668h1.996c3.051 0 5.555-2.503 5.555-5.554C21.965 6.012 17.461 2 12 2z"/></svg>
+        </button>
+        <button type="button" class="user-avatar-pill" onclick="app.navigate('profile')" aria-label="Mi Perfil" title="Mi Perfil">
+          <span class="user-avatar-emoji" id="header-avatar-emoji">🦊</span>
+          <span class="user-name-short" id="header-username">Learner</span>
+        </button>
+      </div>
+    </header>
+
+    <!-- Main App Body -->
+    <div class="app-body">
+      <!-- Sidebar Navigation -->
+      <aside id="app-sidebar" class="app-sidebar">
+        <div class="sidebar-backdrop mobile-only" onclick="app.toggleSidebar(false)"></div>
+        <nav class="sidebar-nav">
+          <div class="sidebar-group-header">LEARN</div>
+          <button class="nav-item active" data-view="dashboard" onclick="app.navigate('dashboard')">
+            <span class="nav-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="svg-nav-icon"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></span><span class="nav-text">Dashboard</span>
+          </button>
+          <button class="nav-item" data-view="lessons" onclick="app.navigate('lessons')">
+            <span class="nav-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="svg-nav-icon"><polygon points="3 6 9 3 15 6 21 3 21 18 15 21 9 18 3 21"/><line x1="9" y1="3" x2="9" y2="18"/><line x1="15" y1="6" x2="15" y2="21"/></svg></span><span class="nav-text">Ruta A1 - C2</span>
+          </button>
+          <button class="nav-item" data-view="modules" onclick="app.navigate('modules')">
+            <span class="nav-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="svg-nav-icon"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg></span><span class="nav-text">Módulos & Gramática</span>
+          </button>
+          <button class="nav-item" data-view="word-bank" onclick="app.navigate('word-bank')">
+            <span class="nav-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="svg-nav-icon"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/><line x1="9" y1="7" x2="15" y2="7"/><line x1="9" y1="11" x2="13" y2="11"/></svg></span><span class="nav-text">Word Bank</span>
+          </button>
+
+          <div class="sidebar-group-header">PRACTICE</div>
+          <button class="nav-item" data-view="chatbot" onclick="app.navigate('chatbot')">
+            <span class="nav-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="svg-nav-icon"><rect x="3" y="11" width="18" height="10" rx="2"/><circle cx="12" cy="5" r="2"/><path d="M12 7v4M8 15h.01M16 15h.01"/></svg></span><span class="nav-text">AI Conversation</span>
+            <span class="badge-mini-new">AI</span>
+          </button>
+          <button class="nav-item" data-view="writing-lab" onclick="app.navigate('writing-lab')">
+            <span class="nav-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="svg-nav-icon"><path d="M12 19l7-7 3 3-7 7-3-3z"/><path d="M18 13l-1.5-7.5L2 2l3.5 14.5L13 18l5-5z"/><path d="M2 2l7.586 7.586"/><circle cx="11" cy="11" r="2"/></svg></span><span class="nav-text">Writing Lab</span>
+            <span class="badge-mini-new">AI</span>
+          </button>
+          <button class="nav-item" data-view="pronunciation" onclick="app.navigate('pronunciation')">
+            <span class="nav-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="svg-nav-icon"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg></span><span class="nav-text">Pronunciación</span>
+          </button>
+          <button class="nav-item" data-view="quick-quiz" onclick="app.navigate('quick-quiz')">
+            <span class="nav-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="svg-nav-icon"><circle cx="12" cy="12" r="10"/><polygon points="13 6 8 13 12 13 11 18 16 11 12 11 13 6"/></svg></span><span class="nav-text">Quiz Rápido</span>
+          </button>
+
+          <div class="sidebar-group-header">IMMERSION</div>
+          <button class="nav-item cyber-highlight-nav" data-view="video-lab" onclick="app.navigate('video-lab')">
+            <span class="nav-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="svg-nav-icon"><rect x="2" y="3" width="20" height="18" rx="3"/><polygon points="10 8 16 12 10 16 10 8"/></svg></span><span class="nav-text">Video Lab</span>
+          </button>
+
+          <div class="sidebar-group-header">REVIEW</div>
+          <button class="nav-item cyber-highlight-nav" data-view="anki-srs" onclick="app.navigate('anki-srs')">
+            <span class="nav-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="svg-nav-icon"><rect x="3" y="4" width="18" height="13" rx="2"/><path d="M8 20h8M12 17v3M7 8h10M7 11h6"/></svg></span><span class="nav-text">Anki SRS</span>
+            <span class="badge-mini-glow" id="sidebar-anki-due-tag">0</span>
+          </button>
+          <button class="nav-item" data-view="mistakes" onclick="app.navigate('mistakes')">
+            <span class="nav-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="svg-nav-icon"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="9" y1="15" x2="15" y2="15"/></svg></span><span class="nav-text">Cuaderno de Errores</span>
+            <span class="badge-mini-glow" id="sidebar-mistakes-due-tag">0</span>
+          </button>
+
+          <div class="sidebar-group-header">PROGRESS</div>
+          <button class="nav-item" data-view="placement" onclick="app.navigate('placement')">
+            <span class="nav-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="svg-nav-icon"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg></span><span class="nav-text">Placement Test</span>
+            <span class="badge-mini-new">TEST</span>
+          </button>
+          <button class="nav-item" data-view="progress" onclick="app.navigate('progress')">
+            <span class="nav-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="svg-nav-icon"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg></span><span class="nav-text">Progreso & Plan</span>
+          </button>
+          <button class="nav-item" data-view="shop" onclick="app.navigate('shop')">
+            <span class="nav-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="svg-nav-icon"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg></span><span class="nav-text">Tienda</span>
+          </button>
+          <button class="nav-item" data-view="achievements" onclick="app.navigate('achievements')">
+            <span class="nav-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="svg-nav-icon"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.45 1-1 1H7c-.55 0-1-.45-1-1v-2.34"/><path d="M18 17v-2.34"/><path d="M6 2h12v7a6 6 0 0 1-12 0V2z"/></svg></span><span class="nav-text">Logros</span>
+          </button>
+          <button class="nav-item" data-view="profile" onclick="app.navigate('profile')">
+            <span class="nav-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="svg-nav-icon"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></span><span class="nav-text">Perfil</span>
+          </button></nav>
+
+        <div class="sidebar-footer">
+          <div class="level-mini-card">
+            <div class="level-mini-header">
+              <span class="level-mini-lbl" id="sidebar-level-label">Level 1</span>
+              <span class="level-mini-name" id="sidebar-level-name">Beginner</span>
+            </div>
+            <div class="level-mini-bar-wrap">
+              <div class="level-mini-bar-fill" id="sidebar-level-progress-bar" style="width: 0%"></div>
+            </div>
+            <div class="level-mini-xp" id="sidebar-level-xp-text">0 / 100 XP</div>
+          </div>
+          <div class="sidebar-version-tag">v4.0 ADAPTIVE EDITION</div>
+        </div>
+      </aside>
+
+      <!-- Main Content Area -->
+      <main class="main-content" id="main-content">
+
+        <!-- ============================================== -->
+        <!-- VIEW: DASHBOARD                               -->
+        <!-- ============================================== -->
+        <section id="view-dashboard" class="content-view active">
+
+          <!-- 1. Siguiente Paso Recomendado (Hero + Recomendación Adaptativa) -->
+          <div class="hero-welcome-card">
+            <div class="hero-text-side">
+              <div class="hero-eyebrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="svg-eyebrow-icon"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg> AURA100 ADAPTIVE ACADEMY</div>
+              <h1 class="hero-title">Welcome back, <span id="dash-username" class="gradient-text">Learner</span>!</h1>
+              <p class="hero-subtitle">Tu ruta personalizada de inglés A1–C2 con IA y repetición espaciada.</p>
+              <div class="hero-actions">
+                <button class="btn btn-primary btn-large btn-glow" onclick="app.continueLearning()">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="svg-btn-icon"><polygon points="5 3 19 12 5 21 5 3"/></svg> Continuar Lección
+                </button>
+                <button class="btn btn-secondary btn-large" onclick="app.startQuickQuiz()">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="svg-btn-icon"><circle cx="12" cy="12" r="10"/><polygon points="13 6 8 13 12 13 11 18 16 11 12 11 13 6"/></svg> Quiz Rápido
+                </button>
+              </div>
+            </div>
+            <div class="hero-graphic">
+              <div class="hero-orb">
+                <div class="orb-ring ring-1"></div>
+                <div class="orb-ring ring-2"></div>
+                <div class="orb-ring ring-3"></div>
+                <div class="orb-core">
+                  <span class="orb-emoji"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" style="width:52px;height:52px;filter:drop-shadow(0 0 12px var(--cyan-neon))"><circle cx="12" cy="12" r="10"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/><line x1="2" y1="12" x2="22" y2="12"/></svg></span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Adaptive Learning Recommendation Banner (Prioridad 1) -->
+          <div class="card adaptive-rec-card" id="dash-adaptive-recommendation-banner">
+            <div class="adaptive-rec-layout">
+              <div class="adaptive-rec-info">
+                <span class="badge-mini-glow adaptive-rec-pill" id="adaptive-rec-tag">🎯 SIGUIENTE PASO RECOMENDADO</span>
+                <h3 id="adaptive-rec-title" class="adaptive-rec-title">Diagnóstico Inicial Pendiente</h3>
+                <p id="adaptive-rec-reason" class="adaptive-rec-reason">Calibra tu nivel CEFR en 6 habilidades para desbloquear tu ruta y recomendaciones personalizadas.</p>
+              </div>
+              <button class="btn btn-primary btn-large" id="btn-adaptive-rec-action" onclick="app.navigate('placement')">Comenzar Placement Test →</button>
+            </div>
+          </div>
+
+          <!-- 2. Pulso Diario (Meta XP, Misiones y Métricas Clave) -->
+          <h2 class="section-title"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="svg-section-icon"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg> Pulso Diario</h2>
+          <div class="dashboard-section-grid">
+            <!-- Daily Goal & Missions -->
+            <div class="card">
+              <div class="card-header-row">
+                <h3>Meta Diaria de XP</h3>
+                <span class="badge-mini-glow" id="dash-daily-badge">0 / 50 XP</span>
+              </div>
+              <div class="progress-bar-wrap" style="margin: 0.85rem 0;">
+                <div class="progress-bar-fill daily-goal-fill" id="dash-daily-progress" style="width: 0%"></div>
+              </div>
+              <p class="card-subtitle" id="dash-daily-progress-text">Completa actividades para alcanzar tu meta diaria.</p>
+
+              <!-- Daily Missions (Actionable shortcuts) -->
+              <div class="daily-missions-list" id="daily-missions-list">
+                <button type="button" class="mission-item mission-action-btn" id="mission-anki" onclick="app.navigate('anki-srs')">
+                  <span class="mission-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="svg-mission-icon"><rect x="3" y="4" width="18" height="13" rx="2"/><path d="M8 20h8M12 17v3M7 8h10M7 11h5"/></svg></span>
+                  <span class="mission-text">Revisar 5 tarjetas Anki</span>
+                  <span class="mission-check" id="mission-check-anki">○</span>
+                </button>
+                <button type="button" class="mission-item mission-action-btn" id="mission-lesson" onclick="app.continueLearning()">
+                  <span class="mission-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="svg-mission-icon"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg></span>
+                  <span class="mission-text">Completar 1 lección</span>
+                  <span class="mission-check" id="mission-check-lesson">○</span>
+                </button>
+                <button type="button" class="mission-item mission-action-btn" id="mission-video" onclick="app.navigate('video-lab')">
+                  <span class="mission-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="svg-mission-icon"><rect x="2" y="3" width="20" height="18" rx="3"/><polygon points="10 8 16 12 10 16 10 8"/></svg></span>
+                  <span class="mission-text">Ver 1 video en Video Lab</span>
+                  <span class="mission-check" id="mission-check-video">○</span>
+                </button>
+              </div>
+            </div>
+
+            <!-- Compact Stats & Direct SRS/Mistakes Access -->
+            <div class="card">
+              <div class="card-header-row">
+                <h3>Estado y Repaso Pendiente</h3>
+                <span class="badge-diff" id="dash-level">Level 1</span>
+              </div>
+              <div class="dashboard-stats-grid dashboard-stats-compact">
+                <div class="stat-card">
+                  <div class="stat-card-icon xp-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="svg-dash-icon"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg></div>
+                  <div class="stat-card-body">
+                    <div class="stat-card-val" id="dash-total-xp">0</div>
+                    <div class="stat-card-lbl">Total XP</div>
+                  </div>
+                </div>
+                <div class="stat-card">
+                  <div class="stat-card-icon streak-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="svg-dash-icon"><path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z"/></svg></div>
+                  <div class="stat-card-body">
+                    <div class="stat-card-val" id="dash-streak">0</div>
+                    <div class="stat-card-lbl">Racha</div>
+                  </div>
+                </div>
+                <button type="button" class="stat-card anki-stat-card stat-card-btn" onclick="app.navigate('anki-srs')">
+                  <div class="stat-card-icon anki-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="svg-dash-icon"><rect x="3" y="4" width="18" height="13" rx="2"/><path d="M8 20h8M12 17v3M7 8h10M7 11h5"/></svg></div>
+                  <div class="stat-card-body">
+                    <div class="stat-card-val" id="dash-anki-due-count">0</div>
+                    <div class="stat-card-lbl" id="dash-anki-stat">Anki SRS →</div>
+                  </div>
+                </button>
+                <button type="button" class="stat-card stat-card-btn" onclick="app.navigate('mistakes')">
+                  <div class="stat-card-icon accuracy-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="svg-dash-icon"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></div>
+                  <div class="stat-card-body">
+                    <div class="stat-card-val" id="dash-mistakes-due-count">0</div>
+                    <div class="stat-card-lbl">Errores →</div>
+                  </div>
+                </button>
+                <div class="stat-card">
+                  <div class="stat-card-icon words-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="svg-dash-icon"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg></div>
+                  <div class="stat-card-body">
+                    <div class="stat-card-val" id="dash-words-learned">0</div>
+                    <div class="stat-card-lbl">Palabras</div>
+                  </div>
+                </div>
+                <div class="stat-card">
+                  <div class="stat-card-icon accuracy-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="svg-dash-icon"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg></div>
+                  <div class="stat-card-body">
+                    <div class="stat-card-val" id="dash-accuracy">0%</div>
+                    <div class="stat-card-lbl" id="dash-level-sub">Precisión</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- 3. Dominio por Habilidad, Nivel CEFR y Acceso Rápido -->
+          <div class="dashboard-section-grid">
+            <!-- Real Competencies Breakdown -->
+            <div class="card">
+              <div class="card-header-row">
+                <h3><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="svg-section-icon"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg> Dominio por Habilidad</h3>
+                <span class="badge-mini-glow" id="dash-competencies-sync-tag">0–100%</span>
+              </div>
+              <div class="placement-skills-grid" id="dash-competencies-grid" style="margin-top:0.85rem;margin-bottom:0.25rem">
+                <!-- Populated by JS -->
+              </div>
+            </div>
+
+            <!-- CEFR Level Selector -->
+            <div class="card">
+              <div class="card-header-row">
+                <h3><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="svg-section-icon"><circle cx="12" cy="12" r="10"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/><line x1="2" y1="12" x2="22" y2="12"/></svg> Nivel Objetivo CEFR</h3>
+                <span class="badge-diff" id="dash-current-cefr-display">B1</span>
+              </div>
+              <div class="cefr-chips-row">
+                <button class="cefr-chip-btn" data-cefr="A1" onclick="app.setTargetCefr('A1')">A1</button>
+                <button class="cefr-chip-btn" data-cefr="A2" onclick="app.setTargetCefr('A2')">A2</button>
+                <button class="cefr-chip-btn active" data-cefr="B1" onclick="app.setTargetCefr('B1')">B1</button>
+                <button class="cefr-chip-btn" data-cefr="B2" onclick="app.setTargetCefr('B2')">B2</button>
+                <button class="cefr-chip-btn" data-cefr="C1" onclick="app.setTargetCefr('C1')">C1</button>
+                <button class="cefr-chip-btn" data-cefr="C2" onclick="app.setTargetCefr('C2')">C2</button>
+              </div>
+              <p class="card-subtitle" style="margin-top:0.75rem">Personaliza lecciones, consignas de Writing Lab y Video Lab.</p>
+            </div>
+          </div>
+
+          <!-- Quick Pillars -->
+          <h2 class="section-title"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="svg-section-icon"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg> Acceso Rápido</h2>
+          <div class="pillars-grid">
+            <button type="button" class="pillar-card anki-pillar" onclick="app.navigate('anki-srs')">
+              <div class="pillar-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="svg-pillar-icon"><rect x="3" y="4" width="18" height="13" rx="2"/><path d="M8 20h8M12 17v3M7 8h10M7 11h5"/></svg></div>
+              <h3>Quantum Anki SRS</h3>
+              <p>Repaso espaciado SM-2. <span id="dash-pillar-anki-badge">0 tarjetas listas</span></p>
+              <span class="pillar-link">Iniciar Repaso →</span>
+            </button>
+            <button type="button" class="pillar-card video-pillar" onclick="app.navigate('video-lab')">
+              <div class="pillar-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="svg-pillar-icon"><rect x="2" y="3" width="20" height="18" rx="3"/><polygon points="10 8 16 12 10 16 10 8"/></svg></div>
+              <h3>Video Lab</h3>
+              <p>YouTube interactivo con subtítulos bilingües y sentence mining.</p>
+              <span class="pillar-link">Ver Videos →</span>
+            </button>
+            <button type="button" class="pillar-card chat-pillar" onclick="app.navigate('chatbot')">
+              <div class="pillar-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="svg-pillar-icon"><rect x="3" y="11" width="18" height="10" rx="2"/><circle cx="12" cy="5" r="2"/><path d="M12 7v4M8 15h.01M16 15h.01"/></svg></div>
+              <h3>AI Conversation</h3>
+              <p>Conversaciones reales por nivel CEFR con retroalimentación.</p>
+              <span class="pillar-link">Conversar →</span>
+            </button>
+            <button type="button" class="pillar-card mic-pillar" onclick="app.navigate('writing-lab')">
+              <div class="pillar-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="svg-pillar-icon"><path d="M12 19l7-7 3 3-7 7-3-3z"/><path d="M18 13l-1.5-7.5L2 2l3.5 14.5L13 18l5-5z"/></svg></div>
+              <h3>Writing Lab</h3>
+              <p>Redacción guiada y evaluación estructurada por criterios.</p>
+              <span class="pillar-link">Escribir →</span>
+            </button>
+          </div>
+
+          <!-- Motivational Quote -->
+          <div class="quote-card">
+            <div class="quote-mark">"</div>
+            <p class="quote-text" id="dash-quote">The limits of my language mean the limits of my world.</p>
+            <span class="quote-author" id="dash-quote-author">— Ludwig Wittgenstein</span>
+          </div>
+
+          <!-- Confetti canvas (for lesson completion effects) -->
+          <canvas id="confetti-canvas" class="confetti-canvas"></canvas>
+        </section>
+
+        <!-- ============================================== -->
+        <!-- VIEW: LESSONS (CEFR Path A1-C2)              -->
+        <!-- ============================================== -->
+        <section id="view-lessons" class="content-view">
+          <div class="view-header">
+            <div>
+              <h2 class="view-title"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="svg-view-title-icon"><polygon points="3 6 9 3 15 6 21 3 21 18 15 21 9 18 3 21"/><line x1="9" y1="3" x2="9" y2="18"/><line x1="15" y1="6" x2="15" y2="21"/></svg> Ruta de Aprendizaje A1 → C2</h2>
+              <p class="view-subtitle">Domina el inglés paso a paso con lecciones estructuradas por nivel CEFR.</p>
+            </div>
+            <div class="lessons-filter-bar">
+              <button class="filter-btn active" data-filter="all" onclick="app.filterLessons('all')">Todos</button>
+              <button class="filter-btn" data-filter="A1" onclick="app.filterLessons('A1')">A1</button>
+              <button class="filter-btn" data-filter="A2" onclick="app.filterLessons('A2')">A2</button>
+              <button class="filter-btn" data-filter="B1" onclick="app.filterLessons('B1')">B1</button>
+              <button class="filter-btn" data-filter="B2" onclick="app.filterLessons('B2')">B2</button>
+              <button class="filter-btn" data-filter="C1" onclick="app.filterLessons('C1')">C1</button>
+              <button class="filter-btn" data-filter="C2" onclick="app.filterLessons('C2')">C2</button>
+            </div>
+          </div>
+          <div class="lessons-path-grid" id="lessons-path-grid">
+            <!-- Populated by JS -->
+          </div>
+        </section>
+
+        <!-- ============================================== -->
+        <!-- VIEW: ANKI SRS                               -->
+        <!-- ============================================== -->
+        <section id="view-anki-srs" class="content-view">
+          <!-- Anki Dashboard (deck overview) -->
+          <div id="anki-dashboard-screen">
+            <div class="view-header">
+              <div>
+                <h2 class="view-title"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="svg-view-title-icon"><rect x="3" y="4" width="18" height="13" rx="2"/><path d="M8 20h8M12 17v3M7 8h10M7 11h6"/></svg> Quantum Anki SRS</h2>
+                <p class="view-subtitle">Repetición espaciada con el algoritmo SuperMemo SM-2. Presiona Espacio y 1-4.</p>
+              </div>
+              <button class="btn btn-secondary btn-sm" onclick="app.openCreateAnkiCardModal()">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="svg-btn-icon"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg> Nueva Tarjeta
+              </button>
+            </div>
+            <div class="anki-stats-hud" id="anki-stats-hud">
+              <!-- Populated by JS -->
+            </div>
+            <div class="anki-deck-actions">
+              <button class="btn btn-primary btn-large btn-glow" onclick="app.startAnkiSession(false)">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="svg-btn-icon"><polygon points="5 3 19 12 5 21 5 3"/></svg> Iniciar Repaso
+              </button>
+              <button class="btn btn-secondary btn-large" onclick="app.startAnkiSession(true)">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="svg-btn-icon"><path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z"/></svg> Modo Cram (Todos)
+              </button>
+            </div>
+            <!-- Due cards preview list -->
+            <div id="anki-due-preview-wrap" style="margin-top:1.5rem"></div>
+          </div>
+
+          <!-- Anki Review Screen -->
+          <div id="anki-review-screen" class="hidden">
+            <div class="anki-session-header">
+              <div class="anki-session-progress-wrap">
+                <div class="progress-bar-wrap">
+                  <div class="progress-bar-fill" id="anki-session-progress-bar" style="width: 0%"></div>
+                </div>
+              </div>
+              <span class="anki-session-counter" id="anki-session-counter">1 / 10</span>
+              <button class="btn btn-ghost btn-sm" onclick="app.finishAnkiSessionToDeck()">✕ Salir</button>
+            </div>
+
+            <div class="anki-card-container">
+              <div class="anki-card-box" id="anki-card-box">
+                <!-- Card Front + Back toggled by JS -->
+                <div class="anki-card-top-tags">
+                  <span class="anki-state-badge" id="anki-card-state-badge">review</span>
+                  <span class="anki-state-badge" id="anki-card-level-badge">B1</span>
+                </div>
+                <h3 class="anki-card-front-text" id="anki-card-front-text">Perseverance</h3>
+                <div class="anki-card-phonetic" id="anki-card-phonetic">/ˌpɜːrsɪˈvɪərəns/</div>
+                <button class="btn-audio-small" onclick="app.speakAnkiFront()" title="Pronunciar">🔊</button>
+
+                <!-- Back (hidden until revealed) -->
+                <div id="anki-card-back-wrap" class="hidden">
+                  <div class="anki-divider"></div>
+                  <h3 class="anki-card-back-text" id="anki-card-back-text">Perseverancia</h3>
+                  <p class="anki-card-explanation" id="anki-card-explanation">Continuar a pesar de las dificultades.</p>
+                  <div class="anki-card-example-box">
+                    <p class="anki-example-en" id="anki-example-en">"Through perseverance, she mastered English."</p>
+                    <p class="anki-example-es" id="anki-example-es">"A través de la perseverancia, dominó el inglés."</p>
+                  </div>
+                  <button class="btn-audio-small" onclick="app.speakText(document.getElementById('anki-card-back-text').textContent, 0.9, 'es-ES')" style="margin-top:0.5rem">🔊 ES</button>
+                </div>
+              </div>
+
+              <!-- Anki Bottom Action Bar -->
+              <div class="anki-action-bar">
+                <button class="btn btn-primary btn-large btn-block" id="btn-anki-show-answer" onclick="app.revealAnkiAnswer()">
+                  Mostrar Respuesta [Espacio]
+                </button>
+                <div class="anki-grades-grid hidden" id="anki-grades-grid">
+                  <button class="anki-grade-btn grade-again" onclick="app.gradeAnkiCard(1)">
+                    <span class="grade-title">Again</span><span class="grade-time">&lt;1min [1]</span>
+                  </button>
+                  <button class="anki-grade-btn grade-hard" onclick="app.gradeAnkiCard(2)">
+                    <span class="grade-title">Hard</span><span class="grade-time" id="anki-time-hard">12h [2]</span>
+                  </button>
+                  <button class="anki-grade-btn grade-good" onclick="app.gradeAnkiCard(3)">
+                    <span class="grade-title">Good</span><span class="grade-time" id="anki-time-good">3d [3]</span>
+                  </button>
+                  <button class="anki-grade-btn grade-easy" onclick="app.gradeAnkiCard(4)">
+                    <span class="grade-title">Easy</span><span class="grade-time" id="anki-time-easy">7d [4]</span>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Anki Session Complete -->
+          <div id="anki-complete-screen" class="anki-complete-screen hidden">
+            <div class="anki-complete-card">
+              <span class="complete-icon">🎉</span>
+              <h2>¡Mazo al día!</h2>
+              <p>Has fortalecido tu memoria a largo plazo. ¡Sigue así!</p>
+              <div class="results-summary-row">
+                <div class="result-stat-pill"><span class="pill-label">Repasadas</span><span class="pill-val" id="anki-done-count">0</span></div>
+                <div class="result-stat-pill"><span class="pill-label">XP Ganado</span><span class="pill-val xp-val" id="anki-done-xp">+0 XP</span></div>
+                <div class="result-stat-pill"><span class="pill-label">Retención</span><span class="pill-val coin-val" id="anki-done-retention">0%</span></div>
+              </div>
+              <div class="deck-actions-row">
+                <button class="btn btn-primary btn-large" onclick="app.finishAnkiSessionToDeck()">Volver al Mazo</button>
+                <button class="btn btn-secondary btn-large" onclick="app.navigate('dashboard')">Dashboard</button>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ============================================== -->
+        <!-- VIEW: VIDEO LAB (Language Reactor Style)     -->
+        <!-- ============================================== -->
+        <section id="view-video-lab" class="content-view">
+          <div class="view-header">
+            <div>
+              <h2 class="view-title"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="svg-view-title-icon"><rect x="2" y="3" width="20" height="18" rx="3"/><polygon points="10 8 16 12 10 16 10 8"/></svg> AuraCinema — Video Lab</h2>
+              <p class="view-subtitle">Videos reales de YouTube con subtítulos bilingües interactivos. Haz clic en cualquier palabra para explorarla y guardarla en Anki.</p>
+            </div>
+          </div>
+
+          <!-- ⚡ IMPORTANT: YouTube Playback Notice -->
+          <div class="video-notice-bar" id="video-notice-bar">
+            <span>⚠️</span>
+            <span>Si el video no carga automáticamente, usa el botón <strong>▶ Ver en YouTube</strong> para abrirlo en una nueva pestaña y practicar con los subtítulos de abajo.</span>
+            <button class="btn-close-notice" onclick="document.getElementById('video-notice-bar').style.display='none'">✕</button>
+          </div>
+
+          <!-- Video Selector Bar -->
+          <div class="video-catalog-strip">
+            <div class="video-catalog-header">
+              <span class="catalog-title">📺 Colección Curada:</span>
+              <div class="custom-video-input-wrap">
+                <input type="text" id="custom-youtube-url" class="text-input" placeholder="Pega URL o ID de YouTube...">
+                <button class="btn btn-primary btn-sm" onclick="app.loadCustomYoutubeVideo()">🔍 Cargar</button>
+              </div>
+            </div>
+            <div class="video-cards-carousel" id="video-cards-carousel">
+              <!-- Populated by JS -->
+            </div>
+          </div>
+
+          <!-- Video Player + Subtitles Stage -->
+          <div class="video-player-stage">
+            <div class="video-main-column">
+              <!-- Player Frame -->
+              <div class="video-frame-wrapper" id="video-frame-wrapper">
+                <!-- ✅ Static YouTube embed — official format per Google guide.
+                     No JS API needed. Works on file://, localhost, and any origin.
+                     src is set dynamically via app.updateEmbedSrc(videoId) -->
+                <iframe
+                  id="yt-embed-iframe"
+                  class="yt-embed-iframe"
+                  src="about:blank"
+                  title="YouTube video player"
+                  frameborder="0"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                  referrerpolicy="strict-origin-when-cross-origin"
+                  allowfullscreen>
+                </iframe>
+                <!-- Cyber Cinema Player (100% offline & file:// compatible) -->
+                <div id="cyber-cinema-container" class="cyber-cinema-canvas-wrap hidden">
+                  <canvas id="cinema-equalizer-canvas" class="cinema-equalizer-canvas"></canvas>
+                  <div class="cinema-hud-overlay">
+                    <div class="cinema-top-row">
+                      <span class="cinema-status-badge" id="cinema-status-badge">⚡ CYBER CINEMA HUD</span>
+                      <button class="btn btn-ghost btn-sm" onclick="app.setVideoPlayerMode('youtube')">Cambiar a YouTube</button>
+                    </div>
+                    <div class="cinema-center-karaoke">
+                      <div class="cinema-karaoke-en" id="cinema-karaoke-en">Welcome to AuraCinema</div>
+                      <div class="cinema-karaoke-es" id="cinema-karaoke-es">Bienvenido a AuraCinema</div>
+                    </div>
+                    <div class="cinema-controls-row">
+                      <button class="btn btn-secondary btn-sm" onclick="app.prevSubtitleLine()">⏮ Anterior</button>
+                      <button class="btn-cinema-play" id="btn-cinema-play-toggle" onclick="app.toggleCinemaPlayback()">▶</button>
+                      <button class="btn btn-secondary btn-sm" onclick="app.nextSubtitleLine()">Siguiente ⏭</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Primary Video Action Bar (clean & focused) -->
+              <div class="video-actions-bar">
+                <button class="btn btn-primary btn-sm" id="btn-open-yt" onclick="app.openVideoInYouTube()">
+                  ▶ Ver en YouTube
+                </button>
+                <button class="btn btn-secondary btn-sm" onclick="app.speakCurrentSubtitle()">🔊 Audio</button>
+                <details class="video-advanced-controls">
+                  <summary class="btn btn-ghost btn-sm">⚙️ Opciones avanzadas</summary>
+                  <div class="video-advanced-panel">
+                    <div class="video-mode-switch-wrap">
+                      <button id="btn-mode-yt" class="btn-mode-toggle active" onclick="app.setVideoPlayerMode('youtube')">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="svg-btn-icon"><rect x="2" y="3" width="20" height="18" rx="3"/><polygon points="10 8 16 12 10 16 10 8"/></svg> YouTube
+                      </button>
+                      <button id="btn-mode-cinema" class="btn-mode-toggle" onclick="app.setVideoPlayerMode('cinema')">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="svg-btn-icon"><path d="M3 18v-6a9 9 0 0 1 18 0v6"/><path d="M21 19a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3zM3 19a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2v-3a2 2 0 0 0-2-2H3z"/></svg> Cyber Cinema
+                      </button>
+                    </div>
+                    <select id="video-speed-select" class="custom-select-mini" aria-label="Velocidad de reproducción" onchange="app.changePlaybackSpeed(this.value)">
+                      <option value="0.5">0.5x</option>
+                      <option value="0.75">0.75x Lento</option>
+                      <option value="1.0" selected>1.0x Normal</option>
+                      <option value="1.25">1.25x</option>
+                      <option value="1.5">1.5x Rápido</option>
+                    </select>
+                    <button class="btn btn-secondary btn-sm" id="btn-loop-mode" onclick="app.toggleLoopMode()">🔁 Loop OFF</button>
+                    <div class="loop-count-wrap">
+                      <label for="loop-count-select">Repetir:</label>
+                      <select id="loop-count-select" class="custom-select-mini">
+                        <option value="1">1x</option>
+                        <option value="3" selected>3x</option>
+                        <option value="5">5x</option>
+                        <option value="10">10x</option>
+                      </select>
+                    </div>
+                    <button class="btn btn-secondary btn-sm" id="btn-shadowing" onclick="app.startShadowingMode()">🎤 Shadowing</button>
+                    <button class="btn-sub-toggle" id="btn-toggle-blur" onclick="app.toggleBlurEnglish()">👁️ Blur EN</button>
+                    <button class="btn-sub-toggle" id="btn-toggle-es-sub" onclick="app.toggleSpanishSubtitle()">🌐 Ocultar ES</button>
+                  </div>
+                </details>
+              </div>
+
+              <!-- Interactive Subtitle Reactor Display -->
+              <div class="dual-subtitle-reactor-card">
+                <div class="sub-line-counter" id="sub-line-counter">Línea 1 / 1</div>
+
+                <!-- English tokens -->
+                <div class="subtitle-en-tokens-wrap" id="subtitle-en-tokens">
+                  <span class="sub-token" onclick="app.inspectSubtitleWord('Welcome','Welcome to Aura100')">Welcome</span>
+                  <span class="sub-token" onclick="app.inspectSubtitleWord('to','Welcome to Aura100')">to</span>
+                  <span class="sub-token" onclick="app.inspectSubtitleWord('Aura100','Welcome to Aura100')">Aura100</span>
+                  <span class="sub-token" onclick="app.inspectSubtitleWord('Video','Video Lab')">Video</span>
+                  <span class="sub-token" onclick="app.inspectSubtitleWord('Lab','Video Lab')">Lab</span>
+                </div>
+
+                <!-- Sentence mining highlight -->
+                <div class="sentence-mine-bar">
+                  <button class="btn-mine" onclick="app.mineCurrentSentence()" title="Guardar frase completa en Anki">
+                    ⛏️ Mine Frase Completa → Anki
+                  </button>
+                </div>
+
+                <!-- Spanish translation -->
+                <div class="subtitle-es-translation" id="subtitle-es-translation">
+                  Bienvenido al laboratorio de videos interactivos de Aura100
+                </div>
+
+                <!-- Controls bar -->
+                <div class="subtitle-controls-bar">
+                  <div class="sub-nav-btns">
+                    <button class="btn-sub-control" onclick="app.prevSubtitleLine()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="svg-btn-icon"><polyline points="15 18 9 12 15 6"/></svg> <span>Anterior</span></button>
+                    <button class="btn-sub-control btn-repeat" onclick="app.repeatCurrentSubtitleLine()">🔁 Repetir</button>
+                    <button class="btn-sub-control" onclick="app.nextSubtitleLine()"><span>Siguiente</span> <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="svg-btn-icon"><polyline points="9 18 15 12 9 6"/></svg></button>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Shadowing Mode Panel (hidden by default) -->
+              <div class="shadowing-panel hidden" id="shadowing-panel">
+                <div class="shadowing-header">🎤 MODO SHADOWING</div>
+                <div class="shadowing-instruction" id="shadowing-instruction">Escucha la frase y repítela en voz alta...</div>
+                <div class="shadowing-phrase" id="shadowing-phrase"></div>
+                <div class="shadowing-controls">
+                  <button class="btn btn-primary" onclick="app.nextShadowingRound()">▶ Siguiente ronda</button>
+                  <button class="btn btn-secondary" onclick="app.stopShadowingMode()">✕ Salir</button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Transcript Sidebar -->
+            <div class="video-transcript-sidebar">
+              <div class="transcript-header">
+                <h4>📝 Transcripción</h4>
+                <span class="transcript-sub">Toca cualquier línea para ir a ese momento:</span>
+              </div>
+              <!-- Mined Words Panel -->
+              <div class="mined-words-panel" id="mined-words-panel">
+                <div class="mined-header">⛏️ Palabras Minadas</div>
+                <div class="mined-list" id="mined-words-list"></div>
+              </div>
+              <div class="transcript-lines-list" id="transcript-lines-list">
+                <!-- Populated by JS -->
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ============================================== -->
+        <!-- VIEW: CHAT BOT (AI Conversation Simulator)   -->
+        <!-- ============================================== -->
+        <section id="view-chatbot" class="content-view">
+          <div class="view-header">
+            <div>
+              <h2 class="view-title"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="svg-view-title-icon"><rect x="3" y="11" width="18" height="10" rx="2"/><circle cx="12" cy="5" r="2"/><path d="M12 7v4M8 15h.01M16 15h.01"/></svg> AI Conversation Bot</h2>
+              <p class="view-subtitle">Practica inglés real con un compañero de conversación simulado. Elige un escenario y escribe en inglés.</p>
+            </div>
+          </div>
+
+          <!-- Scenario Selector -->
+          <div class="chatbot-scenarios-bar" id="chatbot-scenarios-bar">
+            <button class="scenario-btn active" data-scenario="restaurant" onclick="app.selectChatScenario('restaurant')">🍽️ Restaurante</button>
+            <button class="scenario-btn" data-scenario="hotel" onclick="app.selectChatScenario('hotel')">🏨 Hotel</button>
+            <button class="scenario-btn" data-scenario="directions" onclick="app.selectChatScenario('directions')">🗺️ Directions</button>
+            <button class="scenario-btn" data-scenario="job" onclick="app.selectChatScenario('job')">💼 Job Interview</button>
+            <button class="scenario-btn" data-scenario="friends" onclick="app.selectChatScenario('friends')">👥 Making Friends</button>
+          </div>
+
+          <!-- Chat Window -->
+          <div class="chatbot-window">
+            <div class="chat-messages" id="chat-messages">
+              <!-- Populated by JS -->
+            </div>
+            <div class="chat-input-area">
+              <div class="chat-grammar-hint" id="chat-grammar-hint"></div>
+              <div class="chat-input-row">
+                <input type="text" id="chat-input" class="text-input chat-text-input" placeholder="Type your response in English..." onkeydown="if(event.key==='Enter') app.sendChatMessage()">
+                <button class="btn btn-primary btn-large" onclick="app.sendChatMessage()">Send ▶</button>
+                <button class="btn btn-secondary btn-sm" onclick="app.speakText(document.getElementById('chat-input').value)">🔊</button>
+              </div>
+              <div class="chat-hints-row">
+                <button class="btn-hint" onclick="app.getChatHint()">💡 Hint</button>
+                <button class="btn-hint" onclick="app.resetChat()">🔄 Reset</button>
+                <span class="chat-xp-earned" id="chat-xp-total">+0 XP earned</span>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ============================================== -->
+        <!-- VIEW: PRONUNCIATION TRAINER                  -->
+        <!-- ============================================== -->
+        <section id="view-pronunciation" class="content-view">
+          <div class="view-header">
+            <div>
+              <h2 class="view-title"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="svg-view-title-icon"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg> Pronunciation Trainer</h2>
+              <p class="view-subtitle">Entrena tu pronunciación con reconocimiento de voz en tiempo real. Verde = correcto, Amarillo = parcial, Rojo = practica más.</p>
+            </div>
+          </div>
+
+          <!-- Level filter for pronunciation -->
+          <div class="pronun-filter-bar">
+            <button class="filter-btn active" data-filter="all" onclick="app.filterPronunciation('all')">All</button>
+            <button class="filter-btn" data-filter="A1" onclick="app.filterPronunciation('A1')">A1</button>
+            <button class="filter-btn" data-filter="A2" onclick="app.filterPronunciation('A2')">A2</button>
+            <button class="filter-btn" data-filter="B1" onclick="app.filterPronunciation('B1')">B1</button>
+            <button class="filter-btn" data-filter="B2" onclick="app.filterPronunciation('B2')">B2</button>
+            <button class="filter-btn" data-filter="C1" onclick="app.filterPronunciation('C1')">C1</button>
+          </div>
+
+          <!-- Main Pronunciation Card -->
+          <div class="pronun-stage">
+            <div class="pronun-main-card">
+              <div class="pronun-progress-counter" id="pronun-counter">1 / 50</div>
+              <div class="pronun-phrase-box" id="pronun-phrase-box">
+                <div class="pronun-phrase-en" id="pronun-phrase-en">Hello, how are you today?</div>
+                <div class="pronun-phrase-phonetic" id="pronun-phrase-phonetic">/həˈloʊ haʊ ɑːr juː/</div>
+                <div class="pronun-phrase-es" id="pronun-phrase-es">Hola, ¿cómo estás hoy?</div>
+              </div>
+
+              <!-- Result feedback -->
+              <div class="pronun-result-box hidden" id="pronun-result-box">
+                <div class="pronun-result-text" id="pronun-result-text"></div>
+                <div class="pronun-heard-text" id="pronun-heard-text"></div>
+              </div>
+
+              <div class="pronun-controls">
+                <button class="btn btn-secondary btn-large" onclick="app.speakPronunPhrase()">🔊 Escuchar Modelo</button>
+                <button class="btn btn-primary btn-large btn-glow" id="btn-pronun-mic" onclick="app.startPronunciationRecognition()">
+                  🎤 Hablar
+                </button>
+                <button class="btn btn-ghost btn-large" onclick="app.nextPronunPhrase()">⏭️ Siguiente</button>
+              </div>
+
+              <!-- Recognition status -->
+              <div class="pronun-status" id="pronun-status">Listo para escuchar...</div>
+            </div>
+
+            <!-- Pronunciation history panel -->
+            <div class="pronun-history-panel">
+              <h4>📊 Historial de Sesión</h4>
+              <div class="pronun-score-row">
+                <div class="pronun-score-item green">
+                  <span class="score-num" id="pronun-correct-count">0</span>
+                  <span class="score-lbl">Correcto ✅</span>
+                </div>
+                <div class="pronun-score-item yellow">
+                  <span class="score-num" id="pronun-partial-count">0</span>
+                  <span class="score-lbl">Parcial 🟡</span>
+                </div>
+                <div class="pronun-score-item red">
+                  <span class="score-num" id="pronun-wrong-count">0</span>
+                  <span class="score-lbl">Practicar 🔴</span>
+                </div>
+              </div>
+              <div class="pronun-history-list" id="pronun-history-list">
+                <p style="color:#94a3b8;font-size:0.85rem;text-align:center;padding:1rem">Practica frases para ver el historial</p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ============================================== -->
+        <!-- VIEW: MODULES (5 Skill Categories)           -->
+        <!-- ============================================== -->
+        <section id="view-modules" class="content-view">
+          <div class="view-header">
+            <div>
+              <h2 class="view-title"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="svg-view-title-icon"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg> Módulos Especializados</h2>
+              <p class="view-subtitle">Profundiza en cada uno de los 9 módulos especializados del idioma.</p>
+            </div>
+          </div>
+          <div class="module-tabs">
+            <button class="module-tab-btn active" data-tab="vocabulary" onclick="app.setModuleTab('vocabulary')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="svg-tab-icon"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M7 8h10M7 12h7M7 16h4"/></svg><span>Vocabulary</span></button>
+            <button class="module-tab-btn" data-tab="grammar" onclick="app.setModuleTab('grammar')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="svg-tab-icon"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/><line x1="14" y1="4" x2="10" y2="20"/></svg><span>Grammar</span></button>
+            <button class="module-tab-btn" data-tab="reading" onclick="app.setModuleTab('reading')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="svg-tab-icon"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg><span>Reading</span></button>
+            <button class="module-tab-btn" data-tab="listening" onclick="app.setModuleTab('listening')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="svg-tab-icon"><path d="M3 18v-6a9 9 0 0 1 18 0v6"/><path d="M21 19a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3zM3 19a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2v-3a2 2 0 0 0-2-2H3z"/></svg><span>Listening</span></button>
+            <button class="module-tab-btn" data-tab="writing" onclick="app.setModuleTab('writing')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="svg-tab-icon"><path d="M12 19l7-7 3 3-7 7-3-3z"/><path d="M18 13l-1.5-7.5L2 2l3.5 14.5L13 18l5-5z"/><path d="M2 2l7.586 7.586"/><circle cx="11" cy="11" r="2"/></svg><span>Writing</span></button>
+            <button class="module-tab-btn" data-tab="speaking" onclick="app.setModuleTab('speaking')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="svg-tab-icon"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/><path d="M8 10h.01M12 10h.01M16 10h.01"/></svg><span>Speaking</span></button>
+            <button class="module-tab-btn" data-tab="idioms" onclick="app.setModuleTab('idioms')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="svg-tab-icon"><path d="M9 18h6M10 22h4M12 2a7 7 0 0 0-7 7c0 2.38 1.19 4.47 3 5.74V17a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1v-2.26c1.81-1.27 3-3.36 3-5.74a7 7 0 0 0-7-7z"/></svg><span>Idioms</span></button>
+            <button class="module-tab-btn" data-tab="verbs" onclick="app.setModuleTab('verbs')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="svg-tab-icon"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg><span>Verbs</span></button>
+            <button class="module-tab-btn" data-tab="business" onclick="app.setModuleTab('business')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="svg-tab-icon"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg><span>Business</span></button>
+          </div>
+
+          <!-- Vocabulary Tab -->
+          <div id="module-content-vocabulary" class="module-tab-content active">
+            <div class="module-intro-box">
+              <h3><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="svg-section-icon"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M7 8h10M7 12h7M7 16h4"/></svg> Tarjetas de Vocabulario (Flashcards)</h3>
+              <p>Toca la tarjeta para ver su traducción. Usa el audio para escuchar la pronunciación nativa.</p>
+            </div>
+            <div class="flashcard-system-container">
+              <div class="flashcard-toolbar">
+                <div class="flashcard-category-filter">
+                  <label for="flashcard-category-select">Categoría:</label>
+                  <select id="flashcard-category-select" class="custom-select" onchange="app.filterFlashcards()">
+                    <option value="all">Todas las categorías</option>
+                    <option value="Greetings">Greetings</option>
+                    <option value="Conversations">Conversations</option>
+                    <option value="Family">Family</option>
+                    <option value="Food">Food</option>
+                    <option value="Travel">Travel</option>
+                    <option value="Technology">Technology</option>
+                    <option value="Academic">Academic</option>
+                    <option value="Emotions">Emotions</option>
+                    <option value="Business">Business</option>
+                  </select>
+                </div>
+                <div class="flashcard-level-filter">
+                  <label for="flashcard-level-select">Nivel:</label>
+                  <select id="flashcard-level-select" class="custom-select" onchange="app.filterFlashcards()">
+                    <option value="all">Todos los niveles</option>
+                    <option value="A1">A1</option>
+                    <option value="A2">A2</option>
+                    <option value="B1">B1</option>
+                    <option value="B2">B2</option>
+                    <option value="C1">C1</option>
+                    <option value="C2">C2</option>
+                  </select>
+                </div>
+              </div>
+              <div class="flashcard-viewport" id="flashcard-viewport">
+                <div class="flashcard" id="main-flashcard">
+                  <div class="flashcard-inner" id="flashcard-inner">
+                    <div class="flashcard-front" id="flashcard-front">
+                      <div class="fc-level-badge" id="fc-level-badge">A1</div>
+                      <div class="fc-word" id="fc-word">Hello</div>
+                      <div class="fc-phonetic" id="fc-phonetic">/həˈloʊ/</div>
+                      <div class="fc-category" id="fc-category">Greetings</div>
+                    </div>
+                    <div class="flashcard-back" id="flashcard-back">
+                      <div class="fc-translation" id="fc-translation">Hola</div>
+                      <div class="fc-example-en" id="fc-example-en">"Hello, how are you?"</div>
+                      <div class="fc-example-es" id="fc-example-es">"Hola, ¿cómo estás?"</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="flashcard-controls">
+                <button class="btn btn-secondary" onclick="app.prevFlashcard()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="svg-btn-icon"><polyline points="15 18 9 12 15 6"/></svg> <span>Anterior</span></button>
+                <button class="btn btn-primary btn-glow" onclick="app.flipFlashcard()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="svg-btn-icon"><path d="M21.5 2v6h-6M2.5 22v-6h6M2 11.5a10 10 0 0 1 18.8-4.3M22 12.5a10 10 0 0 1-18.8 4.2"/></svg> <span>Voltear</span></button>
+                <button class="btn btn-secondary" onclick="app.nextFlashcard()"><span>Siguiente</span> <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="svg-btn-icon"><polyline points="9 18 15 12 9 6"/></svg></button>
+              </div>
+              <div class="fc-actions-row">
+                <button class="btn-speak-small" onclick="app.speakCurrentFlashcard()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="svg-btn-icon"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"/></svg> <span>Pronunciar</span></button>
+                <button class="btn-speak-small" onclick="app.addCurrentFlashcardToAnki()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="svg-btn-icon"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg> <span>Añadir a Anki</span></button>
+                <button class="btn-speak-small" onclick="app.markWordLearned()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="svg-btn-icon"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg> <span>Marcar como aprendida</span></button>
+              </div>
+              <div class="fc-counter" id="fc-counter">0 / 0</div>
+            </div>
+          </div>
+
+          <!-- Grammar Tab -->
+          <div id="module-content-grammar" class="module-tab-content">
+            <div id="grammar-module-content">
+              <!-- Populated by JS -->
+            </div>
+          </div>
+
+          <!-- Reading Tab -->
+          <div id="module-content-reading" class="module-tab-content">
+            <div id="reading-module-content">
+              <!-- Populated by JS -->
+            </div>
+          </div>
+
+          <!-- Listening Tab -->
+          <div id="module-content-listening" class="module-tab-content">
+            <div id="listening-module-content">
+              <!-- Populated by JS -->
+            </div>
+          </div>
+
+          <!-- Writing Tab -->
+          <div id="module-content-writing" class="module-tab-content">
+            <div id="writing-module-content">
+              <!-- Populated by JS -->
+            </div>
+          </div>
+
+          <!-- Speaking Tab -->
+          <div id="module-content-speaking" class="module-tab-content">
+            <div id="speaking-module-content">
+              <!-- Populated by JS -->
+            </div>
+          </div>
+
+          <!-- Idioms & Phrasal Verbs Tab -->
+          <div id="module-content-idioms" class="module-tab-content">
+            <div id="idioms-module-content">
+              <!-- Populated by JS -->
+            </div>
+          </div>
+
+          <!-- Irregular Verbs Tab -->
+          <div id="module-content-verbs" class="module-tab-content">
+            <div id="verbs-module-content">
+              <!-- Populated by JS -->
+            </div>
+          </div>
+
+          <!-- Business English Tab -->
+          <div id="module-content-business" class="module-tab-content">
+            <div id="business-module-content">
+              <!-- Populated by JS -->
+            </div>
+          </div>
+        </section>
+
+        <!-- ============================================== -->
+        <!-- VIEW: QUICK QUIZ                             -->
+        <!-- ============================================== -->
+        <section id="view-quick-quiz" class="content-view">
+          <div class="view-header">
+            <h2 class="view-title"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="svg-view-title-icon"><circle cx="12" cy="12" r="10"/><polygon points="13 6 8 13 12 13 11 18 16 11 12 11 13 6"/></svg> Quick Quiz</h2>
+            <p class="view-subtitle">10 preguntas aleatorias para evaluar tu progreso. ¡Pon a prueba lo que has aprendido!</p>
+          </div>
+          <div id="quick-quiz-intro-screen">
+            <div class="quiz-intro-card">
+              <span class="quiz-intro-icon">⚡</span>
+              <h2>Quick Quiz</h2>
+              <p>10 preguntas aleatorias de vocabulario, gramática y comprensión. Al finalizar verás tu score, XP ganado y recomendaciones.</p>
+              <button class="btn btn-primary btn-large btn-glow" onclick="app.startQuickQuiz()" style="margin-top:1.5rem">
+                🚀 Iniciar Quiz
+              </button>
+            </div>
+          </div>
+          <div id="quick-quiz-play-screen" class="hidden">
+            <!-- Populated by JS -->
+          </div>
+          <div id="quick-quiz-results-screen" class="hidden">
+            <div id="quick-quiz-results-box"></div>
+          </div>
+        </section>
+
+        <!-- ============================================== -->
+        <!-- VIEW: WORD BANK                              -->
+        <!-- ============================================== -->
+        <section id="view-word-bank" class="content-view">
+          <div class="view-header">
+            <div>
+              <h2 class="view-title"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="svg-view-title-icon"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/><line x1="9" y1="7" x2="15" y2="7"/><line x1="9" y1="11" x2="13" y2="11"/></svg> Word Bank</h2>
+              <p class="view-subtitle">Tu banco de vocabulario con todas las palabras aprendidas y por aprender.</p>
+            </div>
+            <span class="badge-diff" id="word-bank-total-badge">0 Palabras</span>
+          </div>
+          <div class="word-bank-toolbar">
+            <input type="text" id="word-bank-search" class="text-input" placeholder="🔍 Buscar palabra o traducción..." oninput="app.renderWordBank()">
+            <select id="word-bank-category-filter" class="custom-select" onchange="app.renderWordBank()">
+              <option value="all">Todas las categorías</option>
+              <option value="Greetings">Greetings</option>
+              <option value="Conversations">Conversations</option>
+              <option value="Family">Family</option>
+              <option value="Food">Food</option>
+              <option value="Travel">Travel</option>
+              <option value="Technology">Technology</option>
+              <option value="Academic">Academic</option>
+            </select>
+            <select id="word-bank-level-filter" class="custom-select" onchange="app.renderWordBank()">
+              <option value="all">Todos los niveles</option>
+              <option value="A1">A1</option>
+              <option value="A2">A2</option>
+              <option value="B1">B1</option>
+              <option value="B2">B2</option>
+              <option value="C1">C1</option>
+              <option value="C2">C2</option>
+            </select>
+            <button class="btn btn-secondary btn-sm" onclick="app.exportWordBankCSV()">⬇️ Exportar CSV</button>
+          </div>
+          <div class="word-bank-grid" id="word-bank-grid">
+            <!-- Populated by JS -->
+          </div>
+        </section>
+
+        <!-- ============================================== -->
+        <!-- VIEW: SHOP                                   -->
+        <!-- ============================================== -->
+        <section id="view-shop" class="content-view">
+          <div class="view-header">
+            <h2 class="view-title"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="svg-view-title-icon"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg> Tienda AuraQuest</h2>
+            <div class="shop-coins-display">
+              🪙 <span id="shop-coins-val">0</span> Aura Coins
+            </div>
+          </div>
+
+          <!-- Daily Login Bonus -->
+          <div class="card login-bonus-card" id="login-bonus-card">
+            <h3><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="svg-section-icon"><polyline points="20 12 20 22 4 22 4 12"/><rect x="2" y="7" width="20" height="5"/><line x1="12" y1="22" x2="12" y2="7"/><path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z"/><path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"/></svg> Bonus de Login Diario</h3>
+            <div class="login-days-row" id="login-days-row">
+              <!-- Populated by JS -->
+            </div>
+            <button class="btn btn-primary" id="btn-claim-bonus" onclick="app.claimDailyBonus()">Reclamar Bonus</button>
+          </div>
+
+          <!-- Quantum Lucky Wheel (Upgraded) -->
+          <div class="card lucky-wheel-card">
+            <div class="wheel-card-header">
+              <div>
+                <h3 style="margin-bottom:0.25rem"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="svg-section-icon"><circle cx="12" cy="12" r="10"/><path d="M12 2v20M2 12h20M4.93 4.93l14.14 14.14M4.93 19.07l14.14-14.14"/></svg> Ruleta Cuántica de la Suerte</h3>
+                <p class="card-subtitle">Gira 1 vez gratis cada día, o desbloquea giros adicionales por 20 Coins.</p>
+              </div>
+              <span class="badge-mini-glow" id="wheel-streak-badge">✦ PREMIOS ACTIVOS</span>
+            </div>
+
+            <div class="lucky-wheel-container">
+              <!-- Golden Pointer Arrow with Needle -->
+              <div class="wheel-pointer-container">
+                <svg viewBox="0 0 32 42" class="svg-wheel-pointer">
+                  <path d="M16 40 L4 10 Q2 6 6 4 L26 4 Q30 6 28 10 Z" fill="#ffd700" stroke="#b45309" stroke-width="2" filter="drop-shadow(0 4px 6px rgba(0,0,0,0.5))"/>
+                  <circle cx="16" cy="12" r="4.5" fill="#dc2626" stroke="#fff" stroke-width="1.5"/>
+                </svg>
+              </div>
+
+              <!-- Rotating Disc with 6 Slices -->
+              <div class="lucky-wheel-disc-wrap" id="lucky-wheel-disc-wrap">
+                <!-- SVG Wheel Disc with High Definition Radial Slices -->
+                <svg id="lucky-wheel-svg" viewBox="0 0 280 280" class="wheel-svg-disc">
+                  <defs>
+                    <linearGradient id="wheel-slice-0" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#f59e0b"/><stop offset="100%" stop-color="#d97706"/></linearGradient>
+                    <linearGradient id="wheel-slice-1" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#8b5cf6"/><stop offset="100%" stop-color="#6d28d9"/></linearGradient>
+                    <linearGradient id="wheel-slice-2" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#ef4444"/><stop offset="100%" stop-color="#b91c1c"/></linearGradient>
+                    <linearGradient id="wheel-slice-3" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#06b6d4"/><stop offset="100%" stop-color="#0891b2"/></linearGradient>
+                    <linearGradient id="wheel-slice-4" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#f97316"/><stop offset="100%" stop-color="#c2410c"/></linearGradient>
+                    <linearGradient id="wheel-slice-5" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#10b981"/><stop offset="100%" stop-color="#047857"/></linearGradient>
+                    <filter id="hub-shadow"><feDropShadow dx="0" dy="2" stdDeviation="4" flood-color="rgba(0,0,0,0.6)"/></filter>
+                  </defs>
+                  <!-- 6 Wedges -->
+                  <path d="M 140 140 L 140.00 10.00 A 130 130 0 0 1 252.58 75.00 Z" fill="url(#wheel-slice-0)" stroke="rgba(255,255,255,0.35)" stroke-width="1.5" />
+                  <g transform="rotate(30 140 140)"><text x="140" y="48" text-anchor="middle" fill="#ffffff" font-size="12" font-weight="900" font-family="sans-serif" filter="drop-shadow(0 1px 2px rgba(0,0,0,0.8))">+50 Coins</text><text x="140" y="66" text-anchor="middle" fill="rgba(255,255,255,0.9)" font-size="9" font-weight="700" font-family="sans-serif">ORO 🪙</text></g>
+
+                  <path d="M 140 140 L 252.58 75.00 A 130 130 0 0 1 252.58 205.00 Z" fill="url(#wheel-slice-1)" stroke="rgba(255,255,255,0.35)" stroke-width="1.5" />
+                  <g transform="rotate(90 140 140)"><text x="140" y="48" text-anchor="middle" fill="#ffffff" font-size="12" font-weight="900" font-family="sans-serif" filter="drop-shadow(0 1px 2px rgba(0,0,0,0.8))">+100 XP</text><text x="140" y="66" text-anchor="middle" fill="rgba(255,255,255,0.9)" font-size="9" font-weight="700" font-family="sans-serif">BOOST ⚡</text></g>
+
+                  <path d="M 140 140 L 252.58 205.00 A 130 130 0 0 1 140.00 270.00 Z" fill="url(#wheel-slice-2)" stroke="rgba(255,255,255,0.35)" stroke-width="1.5" />
+                  <g transform="rotate(150 140 140)"><text x="140" y="48" text-anchor="middle" fill="#ffffff" font-size="12" font-weight="900" font-family="sans-serif" filter="drop-shadow(0 1px 2px rgba(0,0,0,0.8))">+3 Vidas</text><text x="140" y="66" text-anchor="middle" fill="rgba(255,255,255,0.9)" font-size="9" font-weight="700" font-family="sans-serif">FULL ❤️</text></g>
+
+                  <path d="M 140 140 L 140.00 270.00 A 130 130 0 0 1 27.42 205.00 Z" fill="url(#wheel-slice-3)" stroke="rgba(255,255,255,0.35)" stroke-width="1.5" />
+                  <g transform="rotate(210 140 140)"><text x="140" y="48" text-anchor="middle" fill="#ffffff" font-size="12" font-weight="900" font-family="sans-serif" filter="drop-shadow(0 1px 2px rgba(0,0,0,0.8))">Freeze</text><text x="140" y="66" text-anchor="middle" fill="rgba(255,255,255,0.9)" font-size="9" font-weight="700" font-family="sans-serif">ESCUDO 🛡️</text></g>
+
+                  <path d="M 140 140 L 27.42 205.00 A 130 130 0 0 1 27.42 75.00 Z" fill="url(#wheel-slice-4)" stroke="rgba(255,255,255,0.35)" stroke-width="1.5" />
+                  <g transform="rotate(270 140 140)"><text x="140" y="48" text-anchor="middle" fill="#ffffff" font-size="12" font-weight="900" font-family="sans-serif" filter="drop-shadow(0 1px 2px rgba(0,0,0,0.8))">+25 Coins</text><text x="140" y="66" text-anchor="middle" fill="rgba(255,255,255,0.9)" font-size="9" font-weight="700" font-family="sans-serif">PLATA 🪙</text></g>
+
+                  <path d="M 140 140 L 27.42 75.00 A 130 130 0 0 1 140.00 10.00 Z" fill="url(#wheel-slice-5)" stroke="rgba(255,255,255,0.35)" stroke-width="1.5" />
+                  <g transform="rotate(330 140 140)"><text x="140" y="48" text-anchor="middle" fill="#ffffff" font-size="12" font-weight="900" font-family="sans-serif" filter="drop-shadow(0 1px 2px rgba(0,0,0,0.8))">+50 XP</text><text x="140" y="66" text-anchor="middle" fill="rgba(255,255,255,0.9)" font-size="9" font-weight="700" font-family="sans-serif">ENERGÍA ⚡</text></g>
+
+                  <!-- 12 Rim Bulbs -->
+                  <circle cx="140.0" cy="5.0" r="3.5" fill="#ffd700" stroke="#fff" stroke-width="1" />
+                  <circle cx="207.5" cy="23.1" r="3.5" fill="#ffd700" stroke="#fff" stroke-width="1" />
+                  <circle cx="256.9" cy="72.5" r="3.5" fill="#ffd700" stroke="#fff" stroke-width="1" />
+                  <circle cx="275.0" cy="140.0" r="3.5" fill="#ffd700" stroke="#fff" stroke-width="1" />
+                  <circle cx="256.9" cy="207.5" r="3.5" fill="#ffd700" stroke="#fff" stroke-width="1" />
+                  <circle cx="207.5" cy="256.9" r="3.5" fill="#ffd700" stroke="#fff" stroke-width="1" />
+                  <circle cx="140.0" cy="275.0" r="3.5" fill="#ffd700" stroke="#fff" stroke-width="1" />
+                  <circle cx="72.5" cy="256.9" r="3.5" fill="#ffd700" stroke="#fff" stroke-width="1" />
+                  <circle cx="23.1" cy="207.5" r="3.5" fill="#ffd700" stroke="#fff" stroke-width="1" />
+                  <circle cx="5.0" cy="140.0" r="3.5" fill="#ffd700" stroke="#fff" stroke-width="1" />
+                  <circle cx="23.1" cy="72.5" r="3.5" fill="#ffd700" stroke="#fff" stroke-width="1" />
+                  <circle cx="72.5" cy="23.1" r="3.5" fill="#ffd700" stroke="#fff" stroke-width="1" />
+
+                  <!-- Center Hub -->
+                  <circle cx="140" cy="140" r="38" fill="#0f111e" stroke="#ffd700" stroke-width="3" filter="url(#hub-shadow)"/>
+                  <circle cx="140" cy="140" r="31" fill="#1e1838" stroke="rgba(255,255,255,0.2)" stroke-width="1"/>
+                  <text x="140" y="144" text-anchor="middle" fill="#ffd700" font-size="12" font-weight="900" font-family="sans-serif" letter-spacing="1.5">SPIN</text>
+                </svg>
+              </div>
+            </div>
+
+            <!-- Prize Announcement Banner -->
+            <div id="wheel-prize-banner" class="wheel-prize-banner hidden">
+              <span class="prize-tag-icon">🎉</span>
+              <div>
+                <strong id="wheel-prize-text" style="font-size:1.1rem;display:block">¡Premio obtenido!</strong>
+                <span id="wheel-prize-sub" style="font-size:0.85rem;color:var(--text-muted)">Se añadió a tu progreso.</span>
+              </div>
+            </div>
+
+            <!-- Action Controls -->
+            <div class="wheel-controls-wrap">
+              <button class="btn btn-primary btn-large btn-glow" id="btn-spin-wheel" onclick="app.spinLuckyWheel()">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="svg-btn-icon"><circle cx="12" cy="12" r="10"/><path d="M12 2v20M2 12h20M4.93 4.93l14.14 14.14M4.93 19.07l14.14-14.14"/></svg>
+                <span id="btn-spin-label">¡Girar Gratis Hoy!</span>
+              </button>
+              <button class="btn btn-secondary btn-large hidden" id="btn-spin-paid" onclick="app.spinLuckyWheelPaid()">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="svg-btn-icon"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><path d="M12 8v8M9.5 10.5h5M9.5 13.5h5"/></svg>
+                Girar de nuevo (20 Coins)
+              </button>
+            </div>
+            <p class="wheel-cooldown" id="wheel-cooldown">✨ ¡Giro diario disponible!</p>
+          </div>
+
+          <!-- Shop Items Grid — Consumibles -->
+          <h3 class="section-title" style="margin-top:1.5rem"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="svg-section-icon"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg> ⚡ Consumibles</h3>
+          <div class="shop-grid">
+            <div class="shop-item-card">
+              <div class="shop-item-icon">🛡️</div>
+              <h4>Streak Freeze</h4>
+              <p>Protege tu racha por un día aunque no practiques.</p>
+              <div class="shop-item-footer">
+                <span class="shop-price">🪙 50</span>
+                <button class="btn btn-primary btn-sm" onclick="app.buyShopItem('streakFreeze')">Comprar</button>
+              </div>
+              <div class="shop-inventory-info" id="inventory-streak-freeze">Tienes: 0</div>
+            </div>
+            <div class="shop-item-card">
+              <div class="shop-item-icon">⚡</div>
+              <h4>Double XP</h4>
+              <p>Duplica el XP de las próximas 2 lecciones.</p>
+              <div class="shop-item-footer">
+                <span class="shop-price">🪙 40</span>
+                <button class="btn btn-primary btn-sm" onclick="app.buyShopItem('doubleXp')">Comprar</button>
+              </div>
+              <div class="shop-inventory-info" id="inventory-double-xp">Tienes: 0</div>
+            </div>
+            <div class="shop-item-card">
+              <div class="shop-item-icon">❤️</div>
+              <h4>Heart Refill</h4>
+              <p>Recarga todos tus corazones al instante.</p>
+              <div class="shop-item-footer">
+                <span class="shop-price">🪙 30</span>
+                <button class="btn btn-primary btn-sm" onclick="app.buyShopItem('heartRefill')">Comprar</button>
+              </div>
+              <div class="shop-inventory-info" id="inventory-hearts-info">Corazones: 3/3</div>
+            </div>
+            <div class="shop-item-card">
+              <div class="shop-item-icon">💖</div>
+              <h4>Extra Heart</h4>
+              <p>Aumenta tu máximo de corazones permanentemente en +1.</p>
+              <div class="shop-item-footer">
+                <span class="shop-price">🪙 80</span>
+                <button class="btn btn-primary btn-sm" onclick="app.buyShopItem('extraHeart')">Comprar</button>
+              </div>
+            </div>
+            <div class="shop-item-card mystery-card">
+              <div class="shop-item-icon">🎁</div>
+              <h4>Mystery Box</h4>
+              <p>¡Sorpresa! Contiene XP, monedas o potenciadores aleatorios.</p>
+              <div class="shop-item-footer">
+                <span class="shop-price">🪙 60</span>
+                <button class="btn btn-primary btn-sm" onclick="app.buyShopItem('mysteryBox')">Abrir</button>
+              </div>
+            </div>
+            <div class="shop-item-card">
+              <div class="shop-item-icon">🌟</div>
+              <h4>XP Boost x2</h4>
+              <p>Duplica el XP en las próximas 10 actividades.</p>
+              <div class="shop-item-footer">
+                <span class="shop-price">🪙 80</span>
+                <button class="btn btn-primary btn-sm" onclick="app.buyShopItem('xpBoost')">Comprar</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Shop: Anki Premium Packs -->
+          <h3 class="section-title" style="margin-top:2rem"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="svg-section-icon"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m9 10 2 2 4-4"/></svg> 🎴 Packs Anki Premium</h3>
+          <div class="shop-grid">
+            <div class="shop-item-card">
+              <div class="shop-item-icon">📗</div>
+              <h4>Anki Pack B1–B2</h4>
+              <p>10 tarjetas de vocabulario intermedio con fonética y ejemplos reales.</p>
+              <div class="shop-item-footer">
+                <span class="shop-price">🪙 45</span>
+                <button class="btn btn-primary btn-sm" onclick="app.buyShopItem('ankiPack')">Comprar</button>
+              </div>
+            </div>
+            <div class="shop-item-card">
+              <div class="shop-item-icon">📘</div>
+              <h4>Anki Pack C1–C2</h4>
+              <p>10 tarjetas avanzadas con vocabulario académico y literario.</p>
+              <div class="shop-item-footer">
+                <span class="shop-price">🪙 90</span>
+                <button class="btn btn-primary btn-sm" onclick="app.buyShopItem('ankiPackAdvanced')">Comprar</button>
+              </div>
+            </div>
+            <div class="shop-item-card">
+              <div class="shop-item-icon">🗣️</div>
+              <h4>Anki Idioms Pack</h4>
+              <p>10 expresiones idiomáticas esenciales con pronunciación y contexto.</p>
+              <div class="shop-item-footer">
+                <span class="shop-price">🪙 70</span>
+                <button class="btn btn-primary btn-sm" onclick="app.buyShopItem('ankiPackIdioms')">Comprar</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Shop: Herramientas Premium -->
+          <h3 class="section-title" style="margin-top:2rem"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="svg-section-icon"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg> 💎 Herramientas Premium</h3>
+          <div class="shop-grid">
+            <div class="shop-item-card premium-card">
+              <div class="shop-item-icon">📚</div>
+              <h4>Grammar Pro</h4>
+              <p>Acceso a unidades C1–C2 avanzadas con análisis sintáctico y ejercicios extendidos.</p>
+              <div class="shop-item-footer">
+                <span class="shop-price">🪙 100</span>
+                <button class="btn btn-primary btn-sm" onclick="app.buyShopItem('grammarUnlock')">Desbloquear</button>
+              </div>
+            </div>
+            <div class="shop-item-card premium-card">
+              <div class="shop-item-icon">🎤</div>
+              <h4>Pronunciation Pro</h4>
+              <p>Modo entrenador avanzado de pronunciación con más frases y análisis de ritmo.</p>
+              <div class="shop-item-footer">
+                <span class="shop-price">🪙 75</span>
+                <button class="btn btn-primary btn-sm" onclick="app.buyShopItem('pronunciationPro')">Desbloquear</button>
+              </div>
+            </div>
+            <div class="shop-item-card premium-card">
+              <div class="shop-item-icon">🎨</div>
+              <h4>Temas Premium</h4>
+              <p>Desbloquea variantes exclusivas de los 4 temas de diseño en Configuración.</p>
+              <div class="shop-item-footer">
+                <span class="shop-price">🪙 50</span>
+                <button class="btn btn-primary btn-sm" onclick="app.buyShopItem('darkThemeUnlock')">Desbloquear</button>
+              </div>
+            </div>
+            <div class="shop-item-card premium-card">
+              <div class="shop-item-icon">🪙</div>
+              <h4>Coin Multiplier</h4>
+              <p>Aumenta tus ganancias de monedas en +50% de forma permanente.</p>
+              <div class="shop-item-footer">
+                <span class="shop-price">🪙 150</span>
+                <button class="btn btn-primary btn-sm" onclick="app.buyShopItem('coinMultiplier')">Desbloquear</button>
+              </div>
+            </div>
+            <div class="shop-item-card premium-card">
+              <div class="shop-item-icon">🦊</div>
+              <h4>Avatares Premium</h4>
+              <p>Colección de avatares exclusivos para personalizar tu perfil.</p>
+              <div class="shop-item-footer">
+                <span class="shop-price">🪙 60</span>
+                <button class="btn btn-primary btn-sm" onclick="app.buyShopItem('customAvatar')">Desbloquear</button>
+              </div>
+            </div>
+            <div class="shop-item-card premium-card">
+              <div class="shop-item-icon">✍️</div>
+              <h4>Writing Pro</h4>
+              <p>Feedback avanzado en Writing Studio y acceso a 6 talleres extra de redacción.</p>
+              <div class="shop-item-footer">
+                <span class="shop-price">🪙 85</span>
+                <button class="btn btn-primary btn-sm" onclick="app.buyShopItem('writingPro')">Desbloquear</button>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ============================================== -->
+        <!-- VIEW: ACHIEVEMENTS                           -->
+        <!-- ============================================== -->
+        <section id="view-achievements" class="content-view">
+          <div class="view-header">
+            <h2 class="view-title"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="svg-view-title-icon"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.45 1-1 1H7c-.55 0-1-.45-1-1v-2.34"/><path d="M18 17v-2.34"/><path d="M6 2h12v7a6 6 0 0 1-12 0V2z"/></svg> Logros</h2>
+            <p class="view-subtitle">Tus trofeos conseguidos en Aura100. ¡Desbloquéalos todos!</p>
+          </div>
+          <div class="achievements-summary-bar">
+            <span id="achievements-unlocked-count">0</span> / <span id="achievements-total-count">0</span> Desbloqueados
+          </div>
+          <div class="achievements-grid" id="achievements-grid">
+            <!-- Populated by JS -->
+          </div>
+        </section>
+
+        <!-- ============================================== -->
+        <!-- VIEW: PROGRESS                               -->
+        <!-- ============================================== -->
+        <section id="view-progress" class="content-view">
+          <div class="view-header">
+            <h2 class="view-title"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="svg-view-title-icon"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg> Mi Progreso</h2>
+            <p class="view-subtitle">Estadísticas detalladas de tu rendimiento y evolución.</p>
+          </div>
+          <div id="progress-content">
+            <!-- Populated by JS -->
+          </div>
+        </section>
+
+        <!-- ============================================== -->
+        <!-- VIEW: PROFILE                                -->
+        <!-- ============================================== -->
+        <section id="view-profile" class="content-view">
+          <div class="view-header">
+            <h2 class="view-title"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="svg-view-title-icon"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg> Mi Perfil</h2>
+          </div>
+          <div class="profile-layout" id="profile-content">
+            <!-- Populated by JS -->
+          </div>
+        </section>
+
+              <!-- ============================================== -->
+        <!-- VIEW: PLACEMENT TEST (Diagnóstico Inicial)   -->
+        <!-- ============================================== -->
+        <section id="view-placement" class="content-view">
+          <div class="view-header">
+            <div>
+              <h2 class="view-title"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="svg-view-title-icon"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg> Placement Test Adaptativo</h2>
+              <p class="view-subtitle">Evaluación diagnóstica inicial en 6 habilidades para calibrar tu nivel CEFR de forma personalizada.</p>
+            </div>
+          </div>
+          <div id="placement-test-stage">
+            <!-- Populated by PlacementTestManager -->
+          </div>
+        </section>
+
+        <!-- ============================================== -->
+        <!-- VIEW: MISTAKE NOTEBOOK (Cuaderno de Errores) -->
+        <!-- ============================================== -->
+        <section id="view-mistakes" class="content-view">
+          <div class="view-header">
+            <div>
+              <h2 class="view-title"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="svg-view-title-icon"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="9" y1="15" x2="15" y2="15"/></svg> Cuaderno de Errores (Mistake Notebook)</h2>
+              <p class="view-subtitle">Tus dudas registradas automáticamente para repaso espaciado. Repasa aquí hasta consolidar cada tema.</p>
+            </div>
+            <div class="header-actions">
+              <button class="btn btn-primary btn-sm" onclick="app.adaptiveEngine.exportMistakesToAnki()">🧠 Exportar a Anki SRS</button>
+            </div>
+          </div>
+          <div class="achievements-summary-bar" style="margin-bottom:1.25rem">
+            <span>⏳ Pendientes: <strong id="mistakes-pending-count" style="color:#f87171">0</strong></span>
+            <span>•</span>
+            <span>✅ Consolidados: <strong id="mistakes-mastered-count" style="color:#34d399">0</strong></span>
+          </div>
+          <div id="mistakes-notebook-list">
+            <!-- Populated by AdaptiveLearningEngine -->
+          </div>
+        </section>
+
+        <!-- ============================================== -->
+        <!-- VIEW: WRITING LAB & AI EVALUATOR             -->
+        <!-- ============================================== -->
+        <section id="view-writing-lab" class="content-view">
+          <div class="view-header">
+            <div>
+              <h2 class="view-title"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="svg-view-title-icon"><path d="M12 19l7-7 3 3-7 7-3-3z"/><path d="M18 13l-1.5-7.5L2 2l3.5 14.5L13 18l5-5z"/><path d="M2 2l7.586 7.586"/><circle cx="11" cy="11" r="2"/></svg> Writing Lab & Evaluador IA</h2>
+              <p class="view-subtitle">Redacción graduada por nivel con evaluación pedagógica estructurada por IA (criterios, correcciones contextuales y versión mejorada).</p>
+            </div>
+          </div>
+
+          <div class="card" style="margin-bottom:1.5rem">
+            <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:0.75rem;margin-bottom:1rem">
+              <div style="flex:1;min-width:260px">
+                <label for="writing-task-selector" style="font-size:0.78rem;font-weight:700;color:var(--text-muted);display:block;margin-bottom:0.35rem">Selecciona una Consigna de Escritura:</label>
+                <select id="writing-task-selector" class="custom-select" style="width:100%" onchange="app.writingLab.setTask(this.value)">
+                  <!-- Populated by WritingLabManager -->
+                </select>
+              </div>
+              <div style="display:flex;gap:0.5rem;align-items:center">
+                <span class="skill-cefr-pill" id="writing-task-level-badge">B2</span>
+                <span class="badge-mini-glow" id="writing-task-type-badge">ESSAY</span>
+              </div>
+            </div>
+
+            <h3 id="writing-task-title" style="color:var(--text-main);margin-bottom:0.5rem">Writing Task</h3>
+            <p id="writing-task-prompt" style="font-size:0.95rem;line-height:1.6;color:var(--text-main);background:rgba(255,255,255,0.03);padding:1rem;border-left:3px solid var(--purple-neon);border-radius:0 var(--radius-md) var(--radius-md) 0"></p>
+
+            <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:0.75rem;margin:1rem 0;font-size:0.82rem;color:var(--text-muted)">
+              <div><strong>Destinatario:</strong> <span id="writing-task-audience">Evaluador</span></div>
+              <div><strong>Registro:</strong> <span id="writing-task-register">Formal</span></div>
+              <div><strong>Extensión:</strong> <span id="writing-task-words-range">140 - 220 palabras</span></div>
+            </div>
+            <div style="font-size:0.82rem;color:var(--text-muted);margin-bottom:1rem">
+              <strong>Criterios evaluados:</strong> <span id="writing-task-criteria">Task fulfilment, Coherence, Lexical resource, Grammar, Register.</span>
+            </div>
+
+            <textarea id="writing-main-input-area" class="text-input" rows="8" placeholder="Escribe tu redacción completa en inglés aquí..." style="width:100%;font-size:0.95rem;line-height:1.6"></textarea>
+
+            <div class="writing-footer-bar">
+              <div class="writing-word-meter">
+                <span id="writing-main-word-count" class="writing-word-count-badge">0 palabras</span>
+                <span id="writing-word-target-hint" class="writing-word-target-hint">Objetivo: 80–130 palabras</span>
+              </div>
+              <button id="btn-eval-writing" class="btn btn-primary btn-large" onclick="app.writingLab.evaluateText(document.getElementById('writing-main-input-area').value)">
+                ✨ Evaluar con IA (+35 XP)
+              </button>
+            </div>
+
+            <div id="writing-eval-loader" class="hidden" style="margin-top:1rem;text-align:center;padding:1.5rem;color:var(--cyan-neon)">
+              <div class="loading-spinner"></div>
+              <p style="margin-top:0.5rem">Analizando coherencia, vocabulario, gramática y registro con el tutor de IA...</p>
+            </div>
+          </div>
+
+          <!-- Evaluation Result Card -->
+          <div id="writing-eval-result-card" class="eval-result-card hidden"></div>
+
+          <!-- History of Submissions -->
+          <div class="card" style="margin-top:1.5rem">
+            <h4 style="margin-bottom:0.75rem">📜 Historial de Redacciones Entregadas</h4>
+            <div id="writing-history-container">
+              <!-- Populated by JS -->
+            </div>
+          </div>
+        </section>
+
+      </main>
+    </div>
+
+    <!-- ============================================== -->
+    <!-- LESSON SESSION OVERLAY (Full Screen)         -->
+    <!-- ============================================== -->
+    <div id="lesson-session-overlay" class="lesson-overlay hidden">
+      <div class="lesson-overlay-inner">
+        <!-- Session Header -->
+        <div class="lesson-session-header">
+          <div class="lesson-progress-wrap">
+            <div class="progress-bar-wrap session-progress-bar">
+              <div class="progress-bar-fill" id="session-progress-bar" style="width: 0%"></div>
+            </div>
+          </div>
+          <div class="session-xp-earned" id="session-xp-earned">+0 XP</div>
+          <div class="session-hearts-display" id="session-hearts-display">❤️❤️❤️</div>
+          <button class="btn-exit-session" onclick="app.exitLessonSession()">✕ Salir</button>
+        </div>
+
+        <!-- Exercise Content -->
+        <div class="lesson-exercise-container" id="lesson-exercise-container">
+          <!-- Populated by JS based on exercise type -->
+        </div>
+
+        <!-- Session Footer -->
+        <div class="lesson-session-footer">
+          <div class="footer-feedback-area" id="footer-feedback-area"></div>
+          <div class="footer-action-wrap">
+            <button class="btn btn-primary btn-large btn-block" id="btn-check-answer" onclick="app.checkLessonAnswer()">
+              Verificar →
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Lesson Complete Modal -->
+    <div id="modal-lesson-complete" class="modal-backdrop hidden">
+      <div class="modal-box lesson-complete-box">
+        <span class="complete-icon">🏆</span>
+        <h2>¡Lección Completada!</h2>
+        <div class="results-summary-row">
+          <div class="result-stat-pill"><span class="pill-label">XP Ganado</span><span class="pill-val xp-val" id="lc-xp">+25 XP</span></div>
+          <div class="result-stat-pill"><span class="pill-label">Precisión</span><span class="pill-val" id="lc-accuracy">100%</span></div>
+          <div class="result-stat-pill"><span class="pill-label">Monedas</span><span class="pill-val coin-val" id="lc-coins">+15 🪙</span></div>
+        </div>
+        <div class="lesson-complete-actions">
+          <button class="btn btn-primary btn-large btn-glow" onclick="app.closeLessonComplete()">Continuar 🚀</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Out of Hearts Modal -->
+    <div id="modal-out-of-hearts" class="modal-backdrop hidden">
+      <div class="modal-box">
+        <span style="font-size:4rem">💔</span>
+        <h2>¡Sin Corazones!</h2>
+        <p style="color:#94a3b8">Has usado todos tus corazones en esta sesión.</p>
+        <div style="display:flex;gap:1rem;justify-content:center;margin-top:1.5rem;flex-wrap:wrap">
+          <button class="btn btn-primary" onclick="app.refillHeartsWithCoins()">❤️ Recargar por 🪙 30</button>
+          <button class="btn btn-secondary" onclick="app.closeHeartModal()">Salir de la lección</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- CEFR Selector Modal -->
+    <div id="modal-cefr-picker" class="modal-backdrop hidden">
+      <div class="modal-box">
+        <h3><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="svg-section-icon"><circle cx="12" cy="12" r="10"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/><line x1="2" y1="12" x2="22" y2="12"/></svg> Selecciona tu Nivel CEFR</h3>
+        <p class="modal-sub">Elige el nivel que quieres practicar. Esto personaliza el contenido.</p>
+        <div class="cefr-levels-grid">
+          <button class="cefr-level-card" onclick="app.setTargetCefr('A1');app.closeCefrSelectorModal()">
+            <span class="cefr-level-code">A1</span><span class="cefr-level-name">Breakthrough</span>
+          </button>
+          <button class="cefr-level-card" onclick="app.setTargetCefr('A2');app.closeCefrSelectorModal()">
+            <span class="cefr-level-code">A2</span><span class="cefr-level-name">Waystage</span>
+          </button>
+          <button class="cefr-level-card" onclick="app.setTargetCefr('B1');app.closeCefrSelectorModal()">
+            <span class="cefr-level-code">B1</span><span class="cefr-level-name">Threshold</span>
+          </button>
+          <button class="cefr-level-card" onclick="app.setTargetCefr('B2');app.closeCefrSelectorModal()">
+            <span class="cefr-level-code">B2</span><span class="cefr-level-name">Vantage</span>
+          </button>
+          <button class="cefr-level-card" onclick="app.setTargetCefr('C1');app.closeCefrSelectorModal()">
+            <span class="cefr-level-code">C1</span><span class="cefr-level-name">Advanced</span>
+          </button>
+          <button class="cefr-level-card" onclick="app.setTargetCefr('C2');app.closeCefrSelectorModal()">
+            <span class="cefr-level-code">C2</span><span class="cefr-level-name">Mastery</span>
+          </button>
+        </div>
+        <button class="btn btn-secondary btn-block mt-4" onclick="app.closeCefrSelectorModal()">Cerrar</button>
+      </div>
+    </div>
+
+    <!-- Word Inspection Modal (Language Reactor) -->
+    <div id="modal-inspect-word" class="modal-backdrop hidden">
+      <div class="modal-box word-inspect-box">
+        <div class="inspect-header">
+          <div class="inspect-word-group">
+            <h2 id="inspect-word-title">Word</h2>
+            <span class="inspect-phonetic" id="inspect-word-phonetic">/wɜːrd/</span>
+          </div>
+          <button class="btn-audio-circle" onclick="app.speakInspectedWord()" title="Escuchar">🔊</button>
+        </div>
+        <div class="inspect-details">
+          <div class="inspect-translation" id="inspect-word-translation">Traducción</div>
+          <div class="inspect-type" id="inspect-word-pos">Sustantivo • B1</div>
+          <div class="inspect-example-box" id="inspect-word-example-box">
+            <p id="inspect-example-en">"Example sentence in English."</p>
+            <p id="inspect-example-es">"Oración de ejemplo en español."</p>
+          </div>
+        </div>
+        <div class="inspect-actions">
+          <button class="btn btn-primary btn-block btn-glow" onclick="app.saveInspectedWordToAnki()">
+            ➕ Guardar en Anki + Word Bank
+          </button>
+          <button class="btn btn-secondary btn-block" onclick="app.closeInspectWordModal()">
+            Continuar Video
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Create Anki Card Modal -->
+    <div id="modal-create-anki-card" class="modal-backdrop hidden">
+      <div class="modal-box create-anki-box">
+        <h3><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="svg-section-icon"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg> Crear Tarjeta Anki</h3>
+        <p class="modal-sub">Añade vocabulario personalizado a tu mazo cuántico:</p>
+        <div class="anki-form-group">
+          <label>Frente (Inglés):</label>
+          <input type="text" id="anki-form-front" class="text-input" placeholder="Ej: Serendipity">
+        </div>
+        <div class="anki-form-group">
+          <label>Dorso (Español / Significado):</label>
+          <input type="text" id="anki-form-back" class="text-input" placeholder="Ej: Hallazgo afortunado">
+        </div>
+        <div class="anki-form-group">
+          <label>Ejemplo en Inglés (Opcional):</label>
+          <input type="text" id="anki-form-example" class="text-input" placeholder="Ej: Finding this book was pure serendipity.">
+        </div>
+        <div class="anki-form-group">
+          <label>Nivel CEFR:</label>
+          <select id="anki-form-level" class="custom-select">
+            <option value="A1">A1</option><option value="A2">A2</option>
+            <option value="B1">B1</option><option value="B2" selected>B2</option>
+            <option value="C1">C1</option><option value="C2">C2</option>
+          </select>
+        </div>
+        <div class="modal-actions-stacked mt-4">
+          <button class="btn btn-primary btn-block btn-glow" onclick="app.submitNewAnkiCard()">Crear y Añadir a SRS</button>
+          <button class="btn btn-secondary btn-block" onclick="app.closeCreateAnkiCardModal()">Cancelar</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Theme Selector Modal (Figma 4 Themes) -->
+    <div id="modal-theme-picker" class="modal-backdrop hidden">
+      <div class="modal-box theme-picker-modal-box">
+        <div class="modal-header-row">
+          <h3><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="svg-section-icon"><circle cx="13.5" cy="6.5" r=".5" fill="currentColor"/><circle cx="17.5" cy="10.5" r=".5" fill="currentColor"/><circle cx="8.5" cy="7.5" r=".5" fill="currentColor"/><circle cx="6.5" cy="12.5" r=".5" fill="currentColor"/><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.926 0 1.648-.746 1.648-1.688 0-.437-.18-.835-.437-1.125-.29-.289-.438-.652-.438-1.125a1.64 1.64 0 0 1 1.668-1.668h1.996c3.051 0 5.555-2.503 5.555-5.554C21.965 6.012 17.461 2 12 2z"/></svg> Estilos Visuales (Figma Themes)</h3>
+          <button class="btn-icon-close" onclick="app.closeThemeModal()">✕</button>
+        </div>
+        <p class="modal-sub">Elige entre los 4 sistemas de diseño extraídos directamente de Figma. Se aplicará a toda la academia.</p>
+        <div class="theme-picker-grid" id="theme-picker-grid">
+          <!-- Populated by JS -->
+        </div>
+        <div class="modal-actions-stacked mt-4">
+          <button class="btn btn-secondary btn-block" onclick="app.closeThemeModal()">Cerrar</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Avatar Picker Modal -->
+    <div id="modal-avatar-picker" class="modal-backdrop hidden">
+      <div class="modal-box">
+        <h3><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="svg-section-icon"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg> Elige tu Avatar</h3>
+        <div class="avatar-grid" id="avatar-grid"></div>
+        <button class="btn btn-secondary btn-block mt-4" onclick="document.getElementById('modal-avatar-picker').classList.add('hidden')">Cerrar</button>
+      </div>
+    </div>
+
+    <!-- Toast Container -->
+    <div id="toast-container" class="toast-container"></div>
+
+  </div>
+
+  <!-- Aura100 v4.0 Modular Architecture Services -->
+  <script src="ai-client.js"></script>
+  <script src="js/adaptive-engine.js"></script>
+  <script src="js/placement-test.js"></script>
+  <script src="js/writing-evaluator.js"></script>
+  <script src="js/grammar-ai.js"></script>
+  <script src="js/vocabulary-ai.js"></script>
+  <script src="js/audio-adapter.js"></script>
+  <script src="js/learning-plan-ai.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>
