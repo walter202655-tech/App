@@ -293,7 +293,8 @@
       if (section === "reading") {
         this.hub.startQuestionRun("mock-reading", 10, "Original Cambridge B2 First mixed Reading and Use of English practice. Include inference, collocations, grammar and word formation.", "use_of_english");
       } else if (section === "writing") {
-        this.hub.setCambridgeTab("coach-adaptive");
+        this.hub.cambridgeTab = "coach-mock";
+        this.hub.renderCambridge();
         this.renderWriting();
       } else if (section === "listening") {
         this.renderListening();
@@ -325,30 +326,32 @@
         if (status) status.textContent = "Escribe un ensayo más desarrollado antes de solicitar la evaluación. El objetivo de esta tarea es 140-190 palabras.";
         return;
       }
-      const lab = this.app.writingLab;
-      if (!lab || typeof lab.evaluateText !== "function") {
-        if (status) status.textContent = "El evaluador de Writing no está disponible.";
+      if (!global.Aura100AI || typeof global.Aura100AI.evaluateWriting !== "function") {
+        if (status) status.textContent = "El evaluador de IA no está disponible. Comprueba la conexión con el servidor.";
         return;
       }
-      const task = {
-        id: "cambridge_b2_first_essay",
-        level: "B2",
-        taskType: "essay",
-        title: "Cambridge B2 First - Part 1 Essay",
-        prompt: "[CAMBRIDGE_B2_FIRST_RUBRIC] " + "Some people believe that schools should spend more time teaching practical skills, while others think traditional academic subjects should remain the main priority. Discuss both views and give your opinion. Assess using the four Cambridge B2 First criteria. Target length: 140-190 words."
-      };
-      const originalGetTask = lab.getTask;
-      const originalTaskId = lab.currentTaskId;
-      lab.getTask = function () { return task; };
-      lab.currentTaskId = task.id;
-      if (status) status.textContent = "Evaluando tu ensayo...";
+      if (status) status.textContent = "Evaluando con los cuatro criterios de Cambridge B2 First...";
+      const taskPrompt = "[CAMBRIDGE_B2_FIRST_RUBRIC] Some people believe that schools should spend more time teaching practical skills, while others think traditional academic subjects should remain the main priority. Discuss both views and give your opinion. Target length: 140-190 words.";
       try {
-        await lab.evaluateText(text);
-        this.markSection("writing", { wordCount: words, source: "writing-lab" });
-        if (status) status.textContent = "Ensayo enviado al evaluador. La retroalimentación aparece en el panel de Writing Lab.";
-      } finally {
-        lab.getTask = originalGetTask;
-        lab.currentTaskId = originalTaskId;
+        const evaluation = await global.Aura100AI.evaluateWriting({
+          text,
+          taskType: "essay",
+          level: "B2",
+          taskPrompt,
+          language: "es"
+        });
+        this.markSection("writing", { wordCount: words, overallScore: Number(evaluation.overallScore || 0), criteria: evaluation.criteria || [] });
+        const box = document.getElementById("cambridge-b2-panel");
+        if (box) {
+          const criteria = (evaluation.criteria || []).map(item =>
+            '<article class="cc-skill-card"><strong>' + escapeHTML(item.name) + '</strong><div class="cc-skill-top"><span>' + escapeHTML(item.score) + '/' + escapeHTML(item.maxScore) + '</span></div><p>' + escapeHTML(item.feedback) + '</p></article>'
+          ).join("");
+          const steps = (evaluation.nextSteps || []).map(step => '<li>' + escapeHTML(step) + '</li>').join("");
+          box.innerHTML = '<section class="cc-panel"><span class="academy-eyebrow">FEEDBACK DE WRITING</span><h3>Resultado de tu ensayo</h3><div class="cc-total"><strong>' + escapeHTML(evaluation.overallScore) + '%</strong><span>estimación formativa</span></div><p>' + escapeHTML(evaluation.summary || "") + '</p><div class="cc-skill-grid">' + criteria + '</div><h4>Próximos pasos</h4><ul>' + steps + '</ul><p class="academy-disclaimer">Esta valoración se basa únicamente en el texto enviado. No es una calificación oficial de Cambridge.</p><button class="btn btn-secondary" onclick="app.academyHub.setCambridgeTab(\'coach-mock\')">Volver al simulacro integrado</button></section>';
+        }
+        if (status) status.textContent = "Evaluación completada y registrada.";
+      } catch (error) {
+        if (status) status.textContent = "No se pudo evaluar el ensayo. Inténtalo de nuevo cuando la IA esté disponible.";
       }
     }
   }
