@@ -5,7 +5,7 @@ export const cefrLevelSchema = z.enum(["A1", "A2", "B1", "B2", "C1", "C2"]);
 export const chatRequestSchema = z.object({
   message: z.string().trim().min(1).max(2000),
   level: cefrLevelSchema.default("B1"),
-  scenario: z.enum(["free", "restaurant", "hotel", "directions", "job", "friends", "academic_debate", "presentation", "cambridge_exam", "study_coach"]).default("free"),
+  scenario: z.enum(["free", "restaurant", "hotel", "directions", "job", "friends", "academic_debate", "presentation", "cambridge_exam", "cambridge_speaking", "study_coach"]).default("free"),
   history: z.array(z.object({
     role: z.enum(["user", "assistant"]),
     content: z.string().max(1500)

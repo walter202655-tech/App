@@ -3,6 +3,17 @@
 ## [Unreleased]
 
 ### Added
+- Adaptive Cambridge B2 diagnostic dashboard and skill-prioritised practice sessions.
+- Cambridge B2 First Writing feedback aligned with Content, Communicative Achievement, Organisation and Language.
+- AI-led text-based Speaking practice for all four parts, with transparent pronunciation limitations.
+- Integrated four-paper formative mock with Reading and Use of English, Writing, Listening and Speaking progress tracking.
+- Browser text-to-speech Listening practice with a limited replay count.
+
+### Improved
+- Cambridge study recommendations now use recorded skill attempts and avoid interpreting missing data as low ability.
+
+
+### Added
 - Direct keyboard navigation: Alt+1 Inicio, Alt+2 Cursos, Alt+3 Calendario, Alt+4 Cambridge B2, Alt+5 Vocabulario y Alt+6 Tienda.
 - Keyboard shortcut guide in the quick navigation palette.
 
