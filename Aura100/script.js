@@ -5291,6 +5291,19 @@ Warm regards,
       accent2: '#884069',
       accent3: '#a95831',
       tagline: 'Fondo lila suave, tarjetas blancas con curvas generosas de 20px, atmósfera zen y moderna.'
+    },
+    'aurora-flow': {
+      id: 'aurora-flow',
+      name: '04 · Aurora Flow',
+      subtitle: 'Digital Academy · Midnight & Mint',
+      badge: 'NEW',
+      font: 'Space Grotesk & DM Sans',
+      previewBg: '#0b1020',
+      previewCard: '#17213b',
+      accent1: '#9b8cff',
+      accent2: '#55e6c1',
+      accent3: '#ffad91',
+      tagline: 'Un espacio de aprendizaje inmersivo: azul medianoche, violeta luminoso, menta y tarjetas de alto contraste.'
     }
   };
 
@@ -7127,7 +7140,7 @@ Warm regards,
     applyTheme(themeId) {
       if (!themeId || !THEMES[themeId]) themeId = 'cyberpunk';
       const body = document.body;
-      body.classList.remove('cyber-theme', 'theme-cyberpunk', 'theme-field-notes', 'theme-night-signal', 'theme-soft-studio');
+      body.classList.remove('cyber-theme', 'theme-cyberpunk', 'theme-field-notes', 'theme-night-signal', 'theme-soft-studio', 'theme-aurora-flow');
       if (themeId === 'cyberpunk') {
         body.classList.add('cyber-theme', 'theme-cyberpunk');
       } else {
