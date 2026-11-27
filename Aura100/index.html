@@ -1307,64 +1307,37 @@
             </div>
           </div>
 
-          <!-- Shop: Herramientas Premium -->
-          <h3 class="section-title" style="margin-top:2rem"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="svg-section-icon"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg> 💎 Herramientas Premium</h3>
-          <div class="shop-grid">
-            <div class="shop-item-card premium-card">
-              <div class="shop-item-icon">📚</div>
-              <h4>Grammar Pro</h4>
-              <p>Acceso a unidades C1–C2 avanzadas con análisis sintáctico y ejercicios extendidos.</p>
-              <div class="shop-item-footer">
-                <span class="shop-price">🪙 100</span>
-                <button class="btn btn-primary btn-sm" onclick="app.buyShopItem('grammarUnlock')">Desbloquear</button>
-              </div>
-            </div>
-            <div class="shop-item-card premium-card">
-              <div class="shop-item-icon">🎤</div>
-              <h4>Pronunciation Pro</h4>
-              <p>Modo entrenador avanzado de pronunciación con más frases y análisis de ritmo.</p>
-              <div class="shop-item-footer">
-                <span class="shop-price">🪙 75</span>
-                <button class="btn btn-primary btn-sm" onclick="app.buyShopItem('pronunciationPro')">Desbloquear</button>
-              </div>
-            </div>
-            <div class="shop-item-card premium-card">
-              <div class="shop-item-icon">🎨</div>
-              <h4>Temas Premium</h4>
-              <p>Desbloquea variantes exclusivas de los 4 temas de diseño en Configuración.</p>
-              <div class="shop-item-footer">
-                <span class="shop-price">🪙 50</span>
-                <button class="btn btn-primary btn-sm" onclick="app.buyShopItem('darkThemeUnlock')">Desbloquear</button>
-              </div>
-            </div>
-            <div class="shop-item-card premium-card">
-              <div class="shop-item-icon">🪙</div>
-              <h4>Coin Multiplier</h4>
-              <p>Aumenta tus ganancias de monedas en +50% de forma permanente.</p>
-              <div class="shop-item-footer">
-                <span class="shop-price">🪙 150</span>
-                <button class="btn btn-primary btn-sm" onclick="app.buyShopItem('coinMultiplier')">Desbloquear</button>
-              </div>
-            </div>
-            <div class="shop-item-card premium-card">
-              <div class="shop-item-icon">🦊</div>
-              <h4>Avatares Premium</h4>
-              <p>Colección de avatares exclusivos para personalizar tu perfil.</p>
-              <div class="shop-item-footer">
-                <span class="shop-price">🪙 60</span>
-                <button class="btn btn-primary btn-sm" onclick="app.buyShopItem('customAvatar')">Desbloquear</button>
-              </div>
-            </div>
-            <div class="shop-item-card premium-card">
-              <div class="shop-item-icon">✍️</div>
-              <h4>Writing Pro</h4>
-              <p>Feedback avanzado en Writing Studio y acceso a 6 talleres extra de redacción.</p>
-              <div class="shop-item-footer">
-                <span class="shop-price">🪙 85</span>
-                <button class="btn btn-primary btn-sm" onclick="app.buyShopItem('writingPro')">Desbloquear</button>
-              </div>
-            </div>
+          <!-- Premium products: each benefit has its own section and activation panel -->
+          <div class="premium-store-intro">
+            <span class="premium-store-kicker">AURAQUEST EXCLUSIVES</span>
+            <h3>💎 Centro Premium</h3>
+            <p>Compra una mejora y abre su apartado para utilizarla. Cada beneficio muestra su estado y sus herramientas.</p>
           </div>
+          <section class="premium-product-section">
+            <div class="premium-product-heading"><div><span class="premium-product-index">01 / APRENDIZAJE</span><h3>Grammar Pro</h3><p>Práctica avanzada C2 con preguntas, explicación y puntuación por intento.</p></div><span class="premium-product-icon">📚</span></div>
+            <div class="shop-grid"><article class="shop-item-card premium-card" data-premium-feature="grammar"><div class="shop-item-icon">📚</div><h4>Grammar Pro · C2 Lab</h4><p>Desbloquea un laboratorio de gramática C2 con ejercicios de inversión, subjuntivo, elipsis, cleft sentences y estructuras avanzadas.</p><div class="shop-item-footer"><span class="shop-price">🪙 100</span><button class="btn btn-primary btn-sm" onclick="app.buyShopItem('grammarUnlock')">Desbloquear</button></div><button class="btn btn-secondary btn-sm premium-open-feature" data-feature="grammar" onclick="app.openPremiumFeature('grammar')" disabled>Disponible tras desbloquear</button></article></div>
+          </section>
+          <section class="premium-product-section">
+            <div class="premium-product-heading"><div><span class="premium-product-index">02 / COMUNICACIÓN</span><h3>Pronunciation Pro</h3><p>Entrenamiento de frases avanzadas con escucha, reconocimiento de voz y registro de intentos.</p></div><span class="premium-product-icon">🎤</span></div>
+            <div class="shop-grid"><article class="shop-item-card premium-card" data-premium-feature="pronunciation"><div class="shop-item-icon">🎤</div><h4>Pronunciation Pro · Studio</h4><p>Acceso a una colección exclusiva de frases C1, reproducción lenta y comparación de transcripción mediante el reconocimiento de voz del navegador.</p><div class="shop-item-footer"><span class="shop-price">🪙 75</span><button class="btn btn-primary btn-sm" onclick="app.buyShopItem('pronunciationPro')">Desbloquear</button></div><button class="btn btn-secondary btn-sm premium-open-feature" data-feature="pronunciation" onclick="app.openPremiumFeature('pronunciation')" disabled>Disponible tras desbloquear</button></article></div>
+          </section>
+          <section class="premium-product-section">
+            <div class="premium-product-heading"><div><span class="premium-product-index">03 / PERSONALIZACIÓN</span><h3>Temas Premium</h3><p>Tres combinaciones de acento adicionales que se aplican a toda la interfaz.</p></div><span class="premium-product-icon">🎨</span></div>
+            <div class="shop-grid"><article class="shop-item-card premium-card" data-premium-feature="themes"><div class="shop-item-icon">🎨</div><h4>Accent Skins · 3 estilos</h4><p>Desbloquea las paletas Obsidian Gold, Arctic Mint y Sakura Pulse. Puedes cambiar entre ellas sin perder tu tema principal.</p><div class="shop-item-footer"><span class="shop-price">🪙 50</span><button class="btn btn-primary btn-sm" onclick="app.buyShopItem('darkThemeUnlock')">Desbloquear</button></div><button class="btn btn-secondary btn-sm premium-open-feature" data-feature="themes" onclick="app.openPremiumFeature('themes')" disabled>Disponible tras desbloquear</button></article></div>
+          </section>
+          <section class="premium-product-section">
+            <div class="premium-product-heading"><div><span class="premium-product-index">04 / IDENTIDAD</span><h3>Avatares Premium</h3><p>Ocho avatares extra para tu perfil, con selección y guardado inmediato.</p></div><span class="premium-product-icon">🦊</span></div>
+            <div class="shop-grid"><article class="shop-item-card premium-card" data-premium-feature="avatars"><div class="shop-item-icon">🦊</div><h4>Avatar Collection</h4><p>Añade ocho iconos exclusivos a tu selector de perfil y cambia tu identidad visual cuando quieras.</p><div class="shop-item-footer"><span class="shop-price">🪙 60</span><button class="btn btn-primary btn-sm" onclick="app.buyShopItem('customAvatar')">Desbloquear</button></div><button class="btn btn-secondary btn-sm premium-open-feature" data-feature="avatars" onclick="app.openPremiumFeature('avatars')" disabled>Disponible tras desbloquear</button></article></div>
+          </section>
+          <section class="premium-product-section">
+            <div class="premium-product-heading"><div><span class="premium-product-index">05 / ESCRITURA</span><h3>Writing Pro</h3><p>Seis talleres guiados y evaluación formativa asistida por IA.</p></div><span class="premium-product-icon">✍️</span></div>
+            <div class="shop-grid"><article class="shop-item-card premium-card" data-premium-feature="writing"><div class="shop-item-icon">✍️</div><h4>Writing Pro · Workshop</h4><p>Seis tareas adicionales de essay, report, proposal, review, article y formal email, con instrucciones y feedback personalizado.</p><div class="shop-item-footer"><span class="shop-price">🪙 85</span><button class="btn btn-primary btn-sm" onclick="app.buyShopItem('writingPro')">Desbloquear</button></div><button class="btn btn-secondary btn-sm premium-open-feature" data-feature="writing" onclick="app.openPremiumFeature('writing')" disabled>Disponible tras desbloquear</button></article></div>
+          </section>
+          <section class="premium-product-section">
+            <div class="premium-product-heading"><div><span class="premium-product-index">06 / RECOMPENSAS</span><h3>Coin Multiplier</h3><p>Aumenta permanentemente las monedas obtenidas por actividades y recompensas.</p></div><span class="premium-product-icon">🪙</span></div>
+            <div class="shop-grid"><article class="shop-item-card premium-card" data-premium-feature="multiplier"><div class="shop-item-icon">🪙</div><h4>Coin Multiplier · Upgrade</h4><p>Mejora el multiplicador en tramos de x0.5 hasta x3. Cada compra suma un nivel y se aplica automáticamente al ganar monedas.</p><div class="shop-item-footer"><span class="shop-price">🪙 150 / nivel</span><button class="btn btn-primary btn-sm" onclick="app.buyShopItem('coinMultiplier')">Mejorar multiplicador</button></div><div class="premium-multiplier-meter" id="premium-multiplier-meter"></div></article></div>
+          </section>
+          <section class="card premium-feature-workspace hidden" id="premium-feature-workspace" aria-live="polite"></section>
         </section>
 
         <!-- ============================================== -->
