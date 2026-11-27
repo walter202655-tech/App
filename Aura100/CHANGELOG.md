@@ -1,6 +1,9 @@
 # Changelog - Aura100
 
 ## [Unreleased]
+- Corrige la concesión repetida de XP al desmarcar y volver a completar tareas del calendario.
+- Actualiza la etiqueta accesible del selector para reflejar los cinco temas visuales disponibles.
+- Añade una prueba de regresión para impedir la explotación de recompensas del calendario.
 - Renovación visual: jerarquía tipográfica, tarjetas, navegación, dashboard y espaciado adaptable.
 - Nuevo tema seleccionable Aurora Flow con paleta midnight, violeta y menta.
 - Transiciones más visibles entre secciones, entrada escalonada de componentes y animación del gráfico principal con Anime.js 4.

@@ -138,13 +138,14 @@
     }
 
     loadState() {
-      const fallback = { calendarChecks: {}, gameResults: {}, examResults: [], questionLog: [], notes: [], examChatHistory: [], progressSummary: "" };
+      const fallback = { calendarChecks: {}, calendarRewards: {}, gameResults: {}, examResults: [], questionLog: [], notes: [], examChatHistory: [], progressSummary: "" };
       try {
         const parsed = JSON.parse(localStorage.getItem(this.storageKey) || "null");
         if (!parsed || typeof parsed !== "object" || Array.isArray(parsed)) return fallback;
         return {
           ...fallback, ...parsed,
           calendarChecks: parsed.calendarChecks && typeof parsed.calendarChecks === "object" ? parsed.calendarChecks : {},
+          calendarRewards: parsed.calendarRewards && typeof parsed.calendarRewards === "object" ? parsed.calendarRewards : {},
           gameResults: parsed.gameResults && typeof parsed.gameResults === "object" ? parsed.gameResults : {},
           examResults: Array.isArray(parsed.examResults) ? parsed.examResults : [],
           questionLog: Array.isArray(parsed.questionLog) ? parsed.questionLog : [],
@@ -311,11 +312,11 @@
 
     toggleCalendarTask(id) {
       const checked = Boolean(this.state.calendarChecks[id]);
+      const shouldReward = !checked && !this.state.calendarRewards[id];
       this.state.calendarChecks[id] = !checked;
+      if (shouldReward) this.state.calendarRewards[id] = true;
       this.saveState();
-      if (!checked) {
-        this.app.addXp(3);
-      }
+      if (shouldReward) this.app.addXp(3);
       const plan = this.app.learningPlanManager && this.app.learningPlanManager.activePlan;
       if (plan) this.renderCalendarPlan(plan);
     }

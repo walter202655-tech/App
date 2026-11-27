@@ -3,7 +3,7 @@
 
 **Aura100 v4.0** es una plataforma educativa integral, adaptativa y personalizada de última generación para la adquisición acelerada del idioma inglés basada en el Marco Común Europeo de Referencia (**CEFR A1, A2, B1, B2, C1, C2**).
 
-Combina una arquitectura robusta orientada a la privacidad, un frontend modular con 4 sistemas de diseño intercambiables y un backend Node.js que orquesta 6 rutas de inteligencia artificial avanzadas con soporte para modelos OpenAI (`gpt-6.1-sol`), manteniendo una degradación elegante (*graceful fallback*) con rúbricas heurísticas locales cuando se opera sin conexión o sin clave de API.
+Combina una arquitectura robusta orientada a la privacidad, un frontend modular con 5 temas visuales intercambiables y un backend Node.js que orquesta 6 rutas de inteligencia artificial avanzadas con soporte para modelos OpenAI (`gpt-6.1-sol`), manteniendo una degradación elegante (*graceful fallback*) con rúbricas heurísticas locales cuando se opera sin conexión o sin clave de API.
 
 ---
 
@@ -58,12 +58,13 @@ Combina una arquitectura robusta orientada a la privacidad, un frontend modular 
 - **Modo Dual:** YouTube oficial con política de seguridad CSP corregida (previene Error 153) y reproductor Cyber Cinema 100% offline con visualizador sobre canvas y SpeechSynthesis nativo.
 - **Sentence Mining:** Haz clic en cualquier palabra para inspeccionar su etimología, traducción y enviarla a Anki con un toque.
 
-### 8. 🎨 4 Sistemas de Diseño Figma (100% WCAG Accesible)
+### 8. 🎨 5 temas visuales
 - **Cyberpunk HUD:** Estética futurista con partículas espaciales dinámicas y neón.
 - **01 · Field Notes:** Papel pergamino botánico, tipografía serif Lora y alto contraste (#1a3028).
 - **02 · Night Signal:** Pizarra oceánica profunda con acentos lima radar y tipografía Space Grotesk.
 - **03 · Soft Studio:** Minimalismo lila pastel, tarjetas suaves y tipografía Manrope.
-- Todos los textos de ejercicios y botones cuentan con contraste verificado para lectura sin fatiga visual.
+- **04 · Aurora Flow:** Azul medianoche, violeta y menta, con tipografías Space Grotesk y DM Sans.
+- Los temas comparten componentes y estados de foco; el contraste debe comprobarse en cada combinación de tema y componente.
 
 ---
 
