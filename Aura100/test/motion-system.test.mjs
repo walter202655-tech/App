@@ -18,12 +18,12 @@ test("Anime.js motion layer is loaded after its library and stylesheet", () => {
 
 test("motion layer degrades safely and respects reduced motion", () => {
   assert.match(motion, /prefers-reduced-motion/);
-  assert.match(motion, /typeof animate !== "function"\) return/);
+  assert.match(motion, /typeof animate!=="function"\)return/);
   assert.match(motion, /MutationObserver/);
 });
 
 test("motion layer covers staggered cards, progress bars and button feedback", () => {
-  assert.match(motion, /stagger\(48/);
+  assert.match(motion, /stagger\(68/);
   assert.match(motion, /animateProgress/);
   assert.match(motion, /pointerdown/);
   assert.match(css, /prefers-reduced-motion/);
