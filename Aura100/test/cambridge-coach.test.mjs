@@ -24,7 +24,6 @@ test("Speaking simulation has a dedicated age-appropriate AI scenario", () => {
 test("Cambridge Writing uses the four B2 First assessment criteria", () => {
   for (const criterion of ["Content", "Communicative Achievement", "Organisation", "Language"]) {
     assert.ok(prompts.includes(criterion));
-    assert.ok(prompts.includes(criterion));
   }
   assert.match(coach, /CAMBRIDGE_B2_FIRST_RUBRIC/);
 });
