@@ -5664,8 +5664,11 @@ Warm regards,
     }
 
     addCoins(amount) {
-      this.state.coinsEarnedTotal = (this.state.coinsEarnedTotal||0) + amount;
-      this.state.coins += amount;
+      const baseAmount = Number(amount) || 0;
+      const multiplier = Math.max(1, Math.min(3, Number(this.state.coinMultiplier) || 1));
+      const earned = Math.max(0, Math.round(baseAmount * multiplier));
+      this.state.coinsEarnedTotal = (this.state.coinsEarnedTotal || 0) + earned;
+      this.state.coins += earned;
       const coinEl = document.getElementById('header-coins');
       if (coinEl) {
         coinEl.textContent = this.state.coins;
