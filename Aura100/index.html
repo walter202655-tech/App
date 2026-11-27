@@ -11,7 +11,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=IBM+Plex+Sans:ital,wght@0,100..700;1,100..700&family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Lora:ital,wght@0,400..700;1,400..700&family=Manrope:wght@200..800&family=Rajdhani:wght@500;600;700&family=Space+Grotesk:wght@300..700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
-  <link rel="stylesheet" href="academy-hub.css">
+  <link rel="stylesheet" href="academy-hub.css">\n  <link rel="stylesheet" href="ux-refresh.css">
   <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>⚡</text></svg>">
 </head>
 <body class="cyber-theme">
@@ -174,6 +174,9 @@
           </button>
           <button class="nav-item" data-view="shop" onclick="app.navigate('shop')">
             <span class="nav-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="svg-nav-icon"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg></span><span class="nav-text">Tienda</span>
+          </button>
+          <button class="nav-item" data-view="changelog" onclick="app.navigate('changelog')">
+            <span class="nav-icon">↗</span><span class="nav-text">Novedades</span><span class="badge-mini-new">NEW</span>
           </button>
           <button class="nav-item" data-view="achievements" onclick="app.navigate('achievements')">
             <span class="nav-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="svg-nav-icon"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.45 1-1 1H7c-.55 0-1-.45-1-1v-2.34"/><path d="M18 17v-2.34"/><path d="M6 2h12v7a6 6 0 0 1-12 0V2z"/></svg></span><span class="nav-text">Logros</span>
@@ -1386,6 +1389,17 @@
         <!-- ============================================== -->
         <!-- VIEW: PROFILE                                -->
         <!-- ============================================== -->
+        <section id="view-changelog" class="content-view">
+          <div class="view-header">
+            <div><h2 class="view-title">Novedades de Aura100</h2><p class="view-subtitle">Un historial claro de las funciones nuevas, mejoras y ajustes de la plataforma.</p></div>
+          </div>
+          <p class="changelog-intro">Consulta las actualizaciones recientes de la academia. Las funciones marcadas como IA dependen de la disponibilidad del servicio de inteligencia artificial configurado en el servidor.</p>
+          <div class="changelog-list">
+            <article class="changelog-entry"><header><div><span class="changelog-version">VERSIÓN 4.1.0</span><h3>Navegación y experiencia renovadas</h3></div><time datetime="2026-11-26">26 de noviembre de 2026</time></header><ul><li>Buscador de secciones con Ctrl/Cmd + K o la tecla /.</li><li>Navegación con teclado, búsqueda por nombre y accesos directos a las áreas principales.</li><li>Vista de novedades integrada en el menú lateral.</li><li>Mejoras de legibilidad, foco accesible, diseño adaptable y respeto por la preferencia de movimiento reducido.</li></ul></article>
+            <article class="changelog-entry"><header><div><span class="changelog-version">VERSIÓN 4.0.0</span><h3>Academy Hub y preparación Cambridge</h3></div><time datetime="2026-11-26">26 de noviembre de 2026</time></header><ul><li>Calendario de estudio asistido por IA y minijuegos diarios de vocabulario.</li><li>Preparación Cambridge B2 First con guías, práctica personalizada, simulacros breves y Predictive Notes formativas.</li><li>Tutor para consultas del examen, vocabulario guardado, evaluación y seguimiento.</li><li>Registro de preguntas, notas y resumen del progreso.</li></ul></article>
+            <article class="changelog-entry"><header><div><span class="changelog-version">CURRÍCULO A1-C2</span><h3>Ampliación de la ruta de aprendizaje</h3></div><time datetime="2026-11-27">27 de noviembre de 2026</time></header><ul><li>Se añadieron 50 módulos, con lo que la ruta pasó de 15 a 65 lecciones.</li><li>Distribución de los nuevos módulos entre A1, A2, B1, B2, C1 y C2.</li><li>Cada módulo incorpora ejercicios interactivos y explicaciones.</li></ul></article>
+          </div>
+        </section>
         <section id="view-profile" class="content-view">
           <div class="view-header">
             <h2 class="view-title"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="svg-view-title-icon"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg> Mi Perfil</h2>
@@ -1697,6 +1711,6 @@
   <script src="js/audio-adapter.js"></script>
   <script src="js/learning-plan-ai.js"></script>
   <script src="script.js"></script>
-  <script src="js/academy-hub.js"></script>
+  <script src="js/academy-hub.js"></script>\n  <script src="js/ux-refresh.js"></script>
 </body>
 </html>
