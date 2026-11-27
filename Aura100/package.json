@@ -10,7 +10,7 @@
   "scripts": {
     "start": "node server.mjs",
     "dev": "node --watch server.mjs",
-    "check": "node --check server.mjs && node --check script.js && node --check ai-client.js && node --check src/ai-service.mjs && node --check src/prompts.mjs && node --check src/schemas.mjs && node --check js/adaptive-engine.js && node --check js/placement-test.js && node --check js/writing-evaluator.js && node --check js/ai-conversation.js && node --check js/grammar-ai.js && node --check js/vocabulary-ai.js && node --check js/audio-adapter.js && node --check js/learning-plan-ai.js && node --check js/academy-hub.js && node --check js/cambridge-coach.js && node --check js/motion-system.js && node --check js/interaction-motion-v2.js && node --check js/premium-store.js",
+    "check": "node --check server.mjs && node --check script.js && node --check ai-client.js && node --check src/ai-service.mjs && node --check src/prompts.mjs && node --check src/schemas.mjs && node --check js/adaptive-engine.js && node --check js/placement-test.js && node --check js/writing-evaluator.js && node --check js/ai-conversation.js && node --check js/grammar-ai.js && node --check js/vocabulary-ai.js && node --check js/audio-adapter.js && node --check js/learning-plan-ai.js && node --check js/academy-hub.js && node --check js/cambridge-coach.js && node --check js/motion-system.js && node --check js/interaction-motion-v2.js && node --check js/premium-store.js && node --check src/conversation.mjs && node --check src/talk-routes.mjs",
     "test": "node --test test/*.test.mjs"
   },
   "dependencies": {
@@ -21,4 +21,4 @@
     "openai": "^6.0.0",
     "zod": "^4.1.5"
   }
-}
+}\n
