@@ -1,5 +1,12 @@
 # Changelog - Aura100
 
+## [Unreleased]
+
+### Added
+- Direct keyboard navigation: Alt+1 Inicio, Alt+2 Cursos, Alt+3 Calendario, Alt+4 Cambridge B2, Alt+5 Vocabulario y Alt+6 Tienda.
+- Keyboard shortcut guide in the quick navigation palette.
+
+
 ## [4.2.0] - 2026-11-27
 
 ### Added

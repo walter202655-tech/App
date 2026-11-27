@@ -40,3 +40,8 @@ body.aura-command-open { overflow:hidden; }
 @media(max-width:900px) { .aura-command-trigger{min-width:0;padding:.55rem .65rem}.aura-command-trigger>span:nth-child(2){display:none}.header-stats .coins-badge,.header-stats .hearts-badge{display:none} }
 @media(max-width:640px) { .app-header{padding:.65rem .8rem}.header-stats{gap:.25rem}.header-stats .stat-badge{padding:.32rem .48rem}.header-stats .stat-lbl,.brand-text-col .logo-subtext{display:none}.aura-command-trigger{min-width:34px;justify-content:center;padding:.5rem}.aura-command-trigger kbd{display:none}.aura-command-overlay{padding:7vh .55rem 0}.aura-command-dialog{max-height:82vh}.aura-command-result{padding:.75rem .55rem} }
 @media(prefers-reduced-motion:reduce) { *,*::before,*::after{scroll-behavior:auto!important;animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important} }
+
+/* Keyboard shortcut guide in the navigation palette. */
+.aura-command-dialog footer { display:grid;grid-template-columns:1fr;justify-content:start;gap:.35rem;line-height:1.45; }
+.aura-command-dialog footer span:last-child { color:var(--cyan-neon); }
+@media(max-width:640px) { .aura-command-dialog footer { font-size:.66rem; } }
