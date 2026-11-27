@@ -7150,6 +7150,7 @@ Warm regards,
       // Manage stars canvas & scanline
       const stars = document.getElementById('stars-canvas');
       const scanline = document.querySelector('.cyber-scanline');
+      ['obsidian-gold','arctic-mint','sakura-pulse'].forEach(skin => body.classList.toggle('premium-skin-' + skin, Boolean(this.state.premiumThemes && this.state.premiumThemeSkin === skin)));
       const showFX = (themeId === 'cyberpunk' || themeId === 'night-signal');
       if (stars) stars.style.display = showFX ? 'block' : 'none';
       if (scanline) scanline.style.display = showFX ? 'block' : 'none';
@@ -8495,6 +8496,7 @@ Warm regards,
       });
       const history = document.getElementById('shop-purchase-history');
       if (history) { const entries = (this.state.shopPurchaseHistory || []).slice(0, 8); history.innerHTML = entries.length ? entries.map(entry => { const card = cards.find(node => node.dataset.shopItem === entry.itemId); const title = card && card.querySelector('h4') ? card.querySelector('h4').textContent : entry.itemId; const date = new Date(entry.date); const label = Number.isNaN(date.getTime()) ? '' : date.toLocaleDateString('es-PE', { day: '2-digit', month: 'short' }); return '<div class="shop-history-row"><span><strong>' + escapeHTML(String(title)) + '</strong><small>' + escapeHTML(String(label)) + '</small></span><b>-' + (Number(entry.cost) || 0) + ' Coins</b></div>'; }).join('') : '<p class="shop-empty-history">Tus compras aparecerán aquí.</p>'; }
+      this.renderPremiumStoreDashboard();
       this.renderLoginBonus(); this.renderWheelCooldown(); this.filterShopItems();
     }
 
@@ -8670,6 +8672,253 @@ Warm regards,
       }, 4600);
     }
 
+    premiumFeatureFlags() {
+      return { grammar: 'premiumGrammar', pronunciation: 'premiumPronunciation', themes: 'premiumThemes', avatars: 'premiumAvatars', writing: 'premiumWriting' };
+    }
+
+    renderPremiumStoreDashboard() {
+      const flags = this.premiumFeatureFlags();
+      document.querySelectorAll('#view-shop .premium-open-feature').forEach(button => {
+        const owned = Boolean(this.state[flags[button.dataset.feature]]);
+        button.disabled = !owned;
+        button.textContent = owned ? 'Abrir apartado' : 'Disponible tras desbloquear';
+      });
+      const meter = document.getElementById('premium-multiplier-meter');
+      if (meter) {
+        const value = Math.max(1, Math.min(3, Number(this.state.coinMultiplier) || 1));
+        meter.innerHTML = '<strong>Multiplicador actual: x' + value.toFixed(1) + '</strong><div class="premium-meter-track"><span style="width:' + ((value / 3) * 100) + '%"></span></div><small>' + (value >= 3 ? 'Nivel máximo alcanzado' : 'Siguiente mejora: +0.5x por 150 Coins') + '</small>';
+      }
+    }
+
+    openPremiumFeature(feature) {
+      const flags = this.premiumFeatureFlags();
+      if (feature !== 'multiplier' && !this.state[flags[feature]]) {
+        this.showToast('Primero debes desbloquear este apartado.', 'info');
+        return;
+      }
+      const workspace = document.getElementById('premium-feature-workspace');
+      if (!workspace) return;
+      workspace.classList.remove('hidden');
+      const renderers = {
+        grammar: () => this.renderPremiumGrammar(),
+        pronunciation: () => this.renderPremiumPronunciation(),
+        themes: () => this.renderPremiumThemes(),
+        avatars: () => this.renderPremiumAvatars(),
+        writing: () => this.renderPremiumWriting(),
+        multiplier: () => this.renderPremiumMultiplier()
+      };
+      if (!renderers[feature]) return;
+      renderers[feature]();
+      workspace.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+
+    renderPremiumGrammar() {
+      const workspace = document.getElementById('premium-feature-workspace');
+      const questions = [
+        { q: 'Rarely ___ such a convincing argument.', options: ['I have heard', 'have I heard', 'I heard'], answer: 1, why: 'Rarely al inicio exige inversión: auxiliar + sujeto + verbo.' },
+        { q: 'The committee recommended that he ___ immediately.', options: ['resigns', 'resigned', 'resign'], answer: 2, why: 'En el subjuntivo mandativo se utiliza la forma base del verbo.' },
+        { q: 'Not until the final chapter ___ the motive.', options: ['we understood', 'did we understand', 'we had understood'], answer: 1, why: 'Not until al inicio requiere inversión con did + sujeto + forma base.' },
+        { q: 'The proposal, ___ carefully, could solve the issue.', options: ['if implementing', 'if implemented', 'if it implement'], answer: 1, why: 'Es una cláusula condicional reducida en voz pasiva.' },
+        { q: 'So complex ___ that several experts disagreed.', options: ['the issue was', 'was the issue', 'the issue had'], answer: 1, why: 'So + adjetivo al inicio provoca inversión sujeto-verbo.' },
+        { q: 'She would rather you ___ the matter confidential.', options: ['keep', 'kept', 'to keep'], answer: 1, why: 'Would rather + sujeto diferente suele ir seguido de pasado simple.' }
+      ];
+      this.premiumGrammarQuestions = questions;
+      this.premiumGrammarAnswers = {};
+      workspace.innerHTML = '<div class="premium-workspace-heading"><div><span class="premium-product-index">GRAMMAR PRO / C2 LAB</span><h3>Laboratorio de gramática avanzada</h3><p>Seis preguntas con corrección explicada. Responde todas para calcular tu resultado.</p></div><button class="btn btn-secondary btn-sm" onclick="document.getElementById(\'premium-feature-workspace\').classList.add(\'hidden\')">Cerrar</button></div><div class="premium-grammar-list">' + questions.map((q,i) => '<article class="premium-exercise"><strong>' + (i+1) + '. ' + escapeHTML(q.q) + '</strong><div class="premium-options">' + q.options.map((o,j) => '<button type="button" class="btn btn-secondary btn-sm" data-premium-q="' + i + '" data-premium-a="' + j + '" onclick="app.answerPremiumGrammar(' + i + ',' + j + ')">' + escapeHTML(o) + '</button>').join('') + '</div><p class="premium-explanation hidden" id="premium-grammar-explain-' + i + '"></p></article>').join('') + '</div><div class="premium-workspace-footer"><button class="btn btn-primary" onclick="app.finishPremiumGrammar()">Comprobar respuestas</button><strong id="premium-grammar-score" aria-live="polite">0 / 6 respondidas</strong></div>';
+    }
+
+    answerPremiumGrammar(questionIndex, answerIndex) {
+      if (!this.premiumGrammarQuestions || !this.premiumGrammarQuestions[questionIndex]) return;
+      this.premiumGrammarAnswers[questionIndex] = answerIndex;
+      document.querySelectorAll('[data-premium-q="' + questionIndex + '"]').forEach(button => {
+        button.classList.toggle('btn-primary', Number(button.dataset.premiumA) === answerIndex);
+        button.classList.toggle('btn-secondary', Number(button.dataset.premiumA) !== answerIndex);
+      });
+      const score = document.getElementById('premium-grammar-score');
+      if (score) score.textContent = Object.keys(this.premiumGrammarAnswers).length + ' / 6 respondidas';
+    }
+
+    finishPremiumGrammar() {
+      if (!this.premiumGrammarQuestions || Object.keys(this.premiumGrammarAnswers || {}).length !== 6) {
+        this.showToast('Responde las seis preguntas antes de comprobar.', 'info');
+        return;
+      }
+      let score = 0;
+      this.premiumGrammarQuestions.forEach((q,i) => {
+        const correct = this.premiumGrammarAnswers[i] === q.answer;
+        if (correct) score++;
+        const explanation = document.getElementById('premium-grammar-explain-' + i);
+        if (explanation) { explanation.classList.remove('hidden'); explanation.textContent = (correct ? 'Correcto. ' : 'Respuesta correcta: ' + q.options[q.answer] + '. ') + q.why; }
+        document.querySelectorAll('[data-premium-q="' + i + '"]').forEach(button => { button.disabled = true; });
+      });
+      const result = document.getElementById('premium-grammar-score');
+      if (result) result.textContent = 'Resultado: ' + score + ' / 6 (' + Math.round(score / 6 * 100) + '%)';
+      this.state.premiumGrammarAttempts = (this.state.premiumGrammarAttempts || 0) + 1;
+      this.state.premiumGrammarBest = Math.max(this.state.premiumGrammarBest || 0, score);
+      this.saveState();
+    }
+
+    renderPremiumPronunciation() {
+      const workspace = document.getElementById('premium-feature-workspace');
+      const phrases = [
+        ['Had I known about the delay, I would have left earlier.', 'Inversión condicional'],
+        ['The findings were anything but conclusive.', 'Énfasis y matiz'],
+        ['What I find particularly compelling is the evidence.', 'Cleft sentence'],
+        ['The proposal was met with considerable scepticism.', 'Vocabulario académico'],
+        ['Notwithstanding the challenges, the project was completed.', 'Conectores formales'],
+        ['It is imperative that every participant be informed.', 'Subjuntivo formal'],
+        ['Little did they realise how significant the change would be.', 'Inversión narrativa'],
+        ['The implications should not be underestimated.', 'Pasiva y registro']
+      ];
+      this.premiumPronunciationPhrases = phrases;
+      this.premiumPronunciationIndex = 0;
+      this.renderPremiumPronunciationPhrase();
+      workspace.innerHTML = '<div class="premium-workspace-heading"><div><span class="premium-product-index">PRONUNCIATION PRO / STUDIO</span><h3>Entrenamiento de pronunciación C1</h3><p>Escucha el modelo y graba tu intento. La comparación mide similitud de transcripción, no acento ni calidad fonética.</p></div><button class="btn btn-secondary btn-sm" onclick="document.getElementById(\'premium-feature-workspace\').classList.add(\'hidden\')">Cerrar</button></div><div class="premium-pronunciation-card"><span id="premium-pronunciation-topic" class="premium-product-index"></span><p id="premium-pronunciation-phrase"></p><div class="premium-pronunciation-controls"><button class="btn btn-secondary" onclick="app.speakPremiumPronunciation()">Escuchar modelo</button><button class="btn btn-primary" id="premium-pronunciation-record" onclick="app.recordPremiumPronunciation()">Grabar intento</button><button class="btn btn-secondary" onclick="app.nextPremiumPronunciation()">Siguiente frase</button></div><p id="premium-pronunciation-status" aria-live="polite">Listo para practicar.</p><div id="premium-pronunciation-result" class="premium-result-line"></div></div><p class="academy-disclaimer">El reconocimiento depende del navegador y del micrófono. No se almacena audio ni se presenta la transcripción como una evaluación oficial de pronunciación.</p>';
+      this.renderPremiumPronunciationPhrase();
+    }
+
+    renderPremiumPronunciationPhrase() {
+      const phrase = this.premiumPronunciationPhrases?.[this.premiumPronunciationIndex];
+      if (!phrase) return;
+      const topic = document.getElementById('premium-pronunciation-topic');
+      const text = document.getElementById('premium-pronunciation-phrase');
+      const status = document.getElementById('premium-pronunciation-status');
+      const result = document.getElementById('premium-pronunciation-result');
+      if (topic) topic.textContent = phrase[1] + ' · ' + (this.premiumPronunciationIndex + 1) + '/' + this.premiumPronunciationPhrases.length;
+      if (text) text.textContent = phrase[0];
+      if (status) status.textContent = 'Listo para practicar.';
+      if (result) result.textContent = '';
+    }
+
+    speakPremiumPronunciation() {
+      const phrase = this.premiumPronunciationPhrases?.[this.premiumPronunciationIndex];
+      if (phrase) this.speakText(phrase[0], 0.78);
+    }
+
+    recordPremiumPronunciation() {
+      const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+      const status = document.getElementById('premium-pronunciation-status');
+      const button = document.getElementById('premium-pronunciation-record');
+      const phrase = this.premiumPronunciationPhrases?.[this.premiumPronunciationIndex]?.[0];
+      if (!phrase) return;
+      if (!SpeechRecognition) {
+        if (status) status.textContent = 'Este navegador no ofrece reconocimiento de voz. Prueba con Chrome o Edge y concede permiso al micrófono.';
+        return;
+      }
+      const recognition = new SpeechRecognition();
+      recognition.lang = 'en-US';
+      recognition.continuous = false;
+      recognition.interimResults = false;
+      if (button) button.disabled = true;
+      if (status) status.textContent = 'Escuchando...';
+      recognition.onresult = event => {
+        const transcript = String(event.results?.[0]?.[0]?.transcript || '').trim();
+        const normalise = value => value.toLowerCase().replace(/[^a-z0-9\s]/g,'').split(/\s+/).filter(Boolean);
+        const expected = normalise(phrase);
+        const actual = normalise(transcript);
+        const matched = expected.filter(word => actual.includes(word)).length;
+        const similarity = expected.length ? Math.round(matched / expected.length * 100) : 0;
+        const result = document.getElementById('premium-pronunciation-result');
+        if (result) result.textContent = 'Transcripción: "' + transcript + '" · Coincidencia de palabras: ' + similarity + '%.';
+        if (status) status.textContent = 'Intento registrado. Revisa las palabras omitidas o reconocidas de forma distinta.';
+        this.state.premiumPronunciationAttempts = (this.state.premiumPronunciationAttempts || 0) + 1;
+        this.saveState();
+      };
+      recognition.onerror = event => { if (status) status.textContent = 'No se pudo reconocer la voz (' + event.error + '). Comprueba los permisos del micrófono e inténtalo de nuevo.'; };
+      recognition.onend = () => { if (button) button.disabled = false; };
+      try { recognition.start(); } catch (error) { if (button) button.disabled = false; if (status) status.textContent = 'No se pudo iniciar el micrófono. Vuelve a intentarlo.'; }
+    }
+
+    nextPremiumPronunciation() {
+      this.premiumPronunciationIndex = (this.premiumPronunciationIndex + 1) % this.premiumPronunciationPhrases.length;
+      this.renderPremiumPronunciationPhrase();
+    }
+
+    renderPremiumThemes() {
+      const workspace = document.getElementById('premium-feature-workspace');
+      const skins = [{id:'obsidian-gold',name:'Obsidian Gold',desc:'Grafito y oro cálido',a:'#e7b85c',b:'#f0d28b',c:'#b87935'},{id:'arctic-mint',name:'Arctic Mint',desc:'Azul frío y menta',a:'#56d6c2',b:'#8bc8ff',c:'#d0f5ed'},{id:'sakura-pulse',name:'Sakura Pulse',desc:'Rosa cereza y violeta',a:'#f28ab2',b:'#b89aff',c:'#ffd1e2'}];
+      workspace.innerHTML = '<div class="premium-workspace-heading"><div><span class="premium-product-index">THEMES / ACCENT SKINS</span><h3>Paletas exclusivas</h3><p>Elige una paleta de acento. Se conserva tu tema principal y la selección queda guardada.</p></div><button class="btn btn-secondary btn-sm" onclick="document.getElementById(\'premium-feature-workspace\').classList.add(\'hidden\')">Cerrar</button></div><div class="premium-skin-grid">' + skins.map(skin => '<button class="premium-skin-option ' + (this.state.premiumThemeSkin === skin.id ? 'active' : '') + '" onclick="app.setPremiumThemeSkin(\'' + skin.id + '\')"><span class="premium-skin-swatches"><i style="background:' + skin.a + '"></i><i style="background:' + skin.b + '"></i><i style="background:' + skin.c + '"></i></span><strong>' + skin.name + '</strong><small>' + skin.desc + '</small><span>' + (this.state.premiumThemeSkin === skin.id ? 'Activa' : 'Aplicar paleta') + '</span></button>').join('') + '<button class="btn btn-secondary btn-sm" onclick="app.setPremiumThemeSkin(\'\')">Restaurar acentos originales</button></div>';
+    }
+
+    setPremiumThemeSkin(skin) {
+      const allowed = ['obsidian-gold','arctic-mint','sakura-pulse'];
+      if (skin && !allowed.includes(skin)) return;
+      if (!this.state.premiumThemes) { this.showToast('Desbloquea Temas Premium para usar estas paletas.', 'info'); return; }
+      document.body.classList.remove('premium-skin-obsidian-gold','premium-skin-arctic-mint','premium-skin-sakura-pulse');
+      if (skin) document.body.classList.add('premium-skin-' + skin);
+      this.state.premiumThemeSkin = skin || '';
+      this.saveState();
+      this.renderPremiumThemes();
+      this.showToast(skin ? 'Paleta premium aplicada.' : 'Acentos originales restaurados.', 'cyan');
+    }
+
+    renderPremiumAvatars() {
+      const extras = ['🐙','🦈','🦩','🦚','🦖','🐙','🪼','🦕'];
+      const workspace = document.getElementById('premium-feature-workspace');
+      workspace.innerHTML = '<div class="premium-workspace-heading"><div><span class="premium-product-index">AVATAR COLLECTION</span><h3>Avatares exclusivos</h3><p>Selecciona uno para actualizar tu perfil al instante.</p></div><button class="btn btn-secondary btn-sm" onclick="document.getElementById(\'premium-feature-workspace\').classList.add(\'hidden\')">Cerrar</button></div><div class="premium-avatar-grid">' + extras.map(emoji => '<button type="button" class="premium-avatar-choice ' + (this.state.avatar === emoji ? 'active' : '') + '" aria-label="Elegir avatar ' + emoji + '" onclick="app.setAvatar(\'' + emoji + '\')">' + emoji + '</button>').join('') + '</div>';
+    }
+
+    premiumWritingWorkshops() {
+      return [
+        {type:'Essay',title:'Technology and education',prompt:'Some people believe that technology has made education more effective, while others argue that it has created new distractions. Discuss both views and give your opinion.'},
+        {type:'Report',title:'Improving the school library',prompt:'Your school wants to make its library more useful for students. Write a report describing the current situation and recommending two improvements.'},
+        {type:'Proposal',title:'A student-led language club',prompt:'Your school is considering a student-led language club. Write a proposal explaining the activities it should offer and how students would benefit.'},
+        {type:'Review',title:'A learning resource you recommend',prompt:'Write a review of a book, website or application that has helped you learn something. Explain its strengths and weaknesses and say who would benefit from it.'},
+        {type:'Article',title:'Learning beyond the classroom',prompt:'Write an article for your school website explaining why learning outside the classroom can be valuable and suggesting practical ways to do it.'},
+        {type:'Formal email',title:'Requesting an academic opportunity',prompt:'Write a formal email to a programme coordinator requesting information about an academic opportunity and explaining why you are interested.'}
+      ];
+    }
+
+    renderPremiumWriting() {
+      const workspace = document.getElementById('premium-feature-workspace');
+      const workshops = this.premiumWritingWorkshops();
+      workspace.innerHTML = '<div class="premium-workspace-heading"><div><span class="premium-product-index">WRITING PRO / SIX WORKSHOPS</span><h3>Centro de redacción</h3><p>Elige una tarea, redacta tu respuesta y solicita feedback formativo de IA.</p></div><button class="btn btn-secondary btn-sm" onclick="document.getElementById(\'premium-feature-workspace\').classList.add(\'hidden\')">Cerrar</button></div><div class="premium-writing-workshop-grid">' + workshops.map((w,i) => '<button class="premium-writing-workshop" onclick="app.selectPremiumWritingWorkshop(' + i + ')"><span>' + w.type + '</span><strong>' + w.title + '</strong><small>' + (i+1) + ' / 6 · Abrir tarea</small></button>').join('') + '</div><div id="premium-writing-task" class="premium-writing-task"><p>Selecciona uno de los seis talleres para ver las instrucciones.</p></div>';
+    }
+
+    selectPremiumWritingWorkshop(index) {
+      const workshop = this.premiumWritingWorkshops()[index];
+      if (!workshop) return;
+      this.currentPremiumWritingWorkshop = index;
+      const task = document.getElementById('premium-writing-task');
+      if (!task) return;
+      task.innerHTML = '<span class="premium-product-index">' + workshop.type + '</span><h4>' + workshop.title + '</h4><p>' + workshop.prompt + '</p><label for="premium-writing-response">Tu respuesta (120-220 palabras)</label><textarea id="premium-writing-response" class="text-input" rows="9" maxlength="5000" placeholder="Escribe tu texto en inglés..."></textarea><div class="premium-writing-actions"><span id="premium-writing-count">0 palabras</span><button class="btn btn-primary" id="premium-writing-submit" onclick="app.evaluatePremiumWriting()">Evaluar con IA</button></div><div id="premium-writing-feedback" aria-live="polite"></div>';
+      const input = document.getElementById('premium-writing-response');
+      input?.addEventListener('input', () => { const count = input.value.trim() ? input.value.trim().split(/\s+/).length : 0; const label = document.getElementById('premium-writing-count'); if (label) label.textContent = count + ' palabras'; });
+    }
+
+    async evaluatePremiumWriting() {
+      const input = document.getElementById('premium-writing-response');
+      const feedback = document.getElementById('premium-writing-feedback');
+      const button = document.getElementById('premium-writing-submit');
+      const text = String(input?.value || '').trim();
+      const words = text ? text.split(/\s+/).length : 0;
+      if (words < 120 || words > 220) { if (feedback) feedback.textContent = 'La tarea requiere entre 120 y 220 palabras. Tu texto tiene ' + words + '.'; return; }
+      if (this.premiumWritingBusy) return;
+      if (!global.Aura100AI || typeof global.Aura100AI.evaluateWriting !== 'function') { if (feedback) feedback.textContent = 'El servicio de evaluación no está disponible. Comprueba la conexión e inténtalo más tarde.'; return; }
+      this.premiumWritingBusy = true;
+      if (button) button.disabled = true;
+      if (feedback) feedback.textContent = 'Evaluando organización, vocabulario, gramática y cumplimiento de la tarea...';
+      const workshop = this.premiumWritingWorkshops()[this.currentPremiumWritingWorkshop];
+      try {
+        const evaluation = await global.Aura100AI.evaluateWriting({ text, taskType: workshop.type.toLowerCase(), level: 'C1', taskPrompt: '[WRITING_PRO_WORKSHOP] ' + workshop.prompt + ' Target length: 120-220 words.', language: 'es' });
+        if (feedback) feedback.innerHTML = '<div class="premium-writing-feedback"><strong>Resultado formativo: ' + escapeHTML(String(evaluation.overallScore ?? '—')) + '%</strong><p>' + escapeHTML(String(evaluation.summary || 'Evaluación completada.')) + '</p><ul>' + (evaluation.nextSteps || []).map(step => '<li>' + escapeHTML(String(step)) + '</li>').join('') + '</ul><small>Evaluación orientativa generada por IA; no es una calificación oficial.</small></div>';
+        this.state.premiumWritingSubmissions = (this.state.premiumWritingSubmissions || 0) + 1;
+        this.saveState();
+      } catch (error) {
+        if (feedback) feedback.textContent = 'No se pudo evaluar el texto. Comprueba la conexión con la IA e inténtalo de nuevo.';
+      } finally {
+        this.premiumWritingBusy = false;
+        const currentButton = document.getElementById('premium-writing-submit');
+        if (currentButton) currentButton.disabled = false;
+      }
+    }
+
+    renderPremiumMultiplier() {
+      const workspace = document.getElementById('premium-feature-workspace');
+      const value = Math.max(1, Math.min(3, Number(this.state.coinMultiplier) || 1));
+      workspace.innerHTML = '<div class="premium-workspace-heading"><div><span class="premium-product-index">COIN MULTIPLIER / UPGRADES</span><h3>Mejora tus recompensas</h3><p>El multiplicador se aplica automáticamente a las monedas ganadas mediante actividades y objetivos.</p></div><button class="btn btn-secondary btn-sm" onclick="document.getElementById(\'premium-feature-workspace\').classList.add(\'hidden\')">Cerrar</button></div><div class="premium-multiplier-detail"><strong>x' + value.toFixed(1) + '</strong><span>de x3.0 máximo</span><div class="premium-meter-track"><span style="width:' + (value/3*100) + '%"></span></div><p>' + (value >= 3 ? 'Has alcanzado el multiplicador máximo.' : 'Cada mejora cuesta 150 Coins y aumenta el multiplicador en x0.5.') + '</p><button class="btn btn-primary" onclick="app.buyShopItem(\'coinMultiplier\')" ' + (value >= 3 ? 'disabled' : '') + '>Comprar mejora · 150 Coins</button></div>';
+    }
+
     buyShopItem(itemId) {
       this.sound.playClick();
       const permanent = { grammarUnlock: 'premiumGrammar', pronunciationPro: 'premiumPronunciation', darkThemeUnlock: 'premiumThemes', customAvatar: 'premiumAvatars', writingPro: 'premiumWriting' };
@@ -8706,6 +8955,8 @@ Warm regards,
       if (!Object.prototype.hasOwnProperty.call(actions, itemId)) { this.showToast('Artículo no válido.', 'info'); return; }
       const purchased = actions[itemId](); if (!purchased) return;
       this.saveState(); this.renderShop();
+      const purchasedFeature = { grammarUnlock: 'grammar', pronunciationPro: 'pronunciation', darkThemeUnlock: 'themes', customAvatar: 'avatars', writingPro: 'writing', coinMultiplier: 'multiplier' }[itemId];
+      if (purchasedFeature) this.openPremiumFeature(purchasedFeature);
     }
     addAnkiPowerPack(packType = 'basic') {
       const PACKS = {
@@ -8922,7 +9173,7 @@ Warm regards,
       const { username, avatar, xp, streak, bestStreak, coins, hearts, maxHearts, targetCefr, completedLessons, knownWords, unlockedAchievements } = this.state;
       const li = this.getLevelInfo();
       const acc = this.state.stats.totalAnswers > 0 ? Math.round((this.state.stats.correctAnswers / this.state.stats.totalAnswers) * 100) : 0;
-      const avatarEmojis = ['🦊','🐼','🦁','🐯','🦅','🐸','🦝','🐺','🦋','🐉','🦄','⚡','🌟','🎯','🔮','🚀'];
+      const avatarEmojis = ['🦊','🐼','🦁','🐯','🦅','🐸','🦝','🐺','🦋','🐉','🦄','⚡','🌟','🎯','🔮','🚀', ...(this.state.premiumAvatars ? ['🐙','🦈','🦩','🦚','🦖','🪼','🦕','🦥'] : [])];
 
       container.innerHTML = `
         <div class="card" style="text-align:center">
@@ -9009,8 +9260,9 @@ Warm regards,
     }
 
     setAvatar(emoji) {
-      const allowedAvatars = ['🦊','🐼','🦁','🐯','🦅','🐸','🦝','🐺','🦋','🐉','🦄','⚡','🌟','🎯','🔮','🚀'];
+      const allowedAvatars = ['🦊','🐼','🦁','🐯','🦅','🐸','🦝','🐺','🦋','🐉','🦄','⚡','🌟','🎯','🔮','🚀', ...(this.state.premiumAvatars ? ['🐙','🦈','🦩','🦚','🦖','🪼','🦕','🦥'] : [])];
       if (!allowedAvatars.includes(emoji)) return;
+      if (['🐙','🦈','🦩','🦚','🦖','🪼','🦕','🦥'].includes(emoji) && !this.state.premiumAvatars) { this.showToast('Este avatar pertenece a la colección Premium.', 'info'); return; }
       this.state.avatar = emoji;
       this.saveState();
       document.getElementById('modal-avatar-picker')?.classList.add('hidden');
