@@ -28,7 +28,7 @@ export async function moderateText(text) {
 export async function generateText({ instructions, input, maxOutputTokens = 700 }) {
   const api = getClient();
   const response = await api.responses.create({
-    model: process.env.OPENAI_MODEL || "gpt-6.1-sol",
+    model: model || process.env.OPENAI_MODEL || "gpt-6.1-sol",
     instructions,
     input,
     max_output_tokens: maxOutputTokens,
