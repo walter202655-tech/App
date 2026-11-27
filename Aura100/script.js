@@ -725,6 +725,1862 @@
     }
   ];
 
+  // 50 additional CEFR lessons (modules 16-65), with two exercises each.
+  const ADDITIONAL_CEFR_LESSONS =   [
+    {
+      "id": "lesson_extra_16",
+      "number": 16,
+      "cefr": "A1",
+      "title": "The Alphabet & Spelling",
+      "subtitle": "The Alphabet & Spelling (A1)",
+      "icon": "🔤",
+      "description": "Deletrear nombres y palabras frecuentes.",
+      "category": "A1 Beginner",
+      "time": "~6 min",
+      "exercises": [
+        {
+          "type": "multiple-choice",
+          "instruction": "Selecciona la respuesta correcta:",
+          "question": "How do you spell the word 'name'?",
+          "options": [
+            "N-A-M-E",
+            "N-E-M-A",
+            "N-A-M-E"
+          ],
+          "correctAnswer": "N-A-M-E",
+          "explanation": "The letters are pronounced in this order: N, A, M, E."
+        },
+        {
+          "type": "fill-blank",
+          "instruction": "Completa la oración:",
+          "sentence": "My surname is _____.",
+          "options": [
+            "Smith",
+            "Smits",
+            "Smith"
+          ],
+          "correctAnswer": "Smith",
+          "explanation": "A common English spelling is Smith."
+        }
+      ]
+    },
+    {
+      "id": "lesson_extra_17",
+      "number": 17,
+      "cefr": "A1",
+      "title": "Numbers, Dates & Prices",
+      "subtitle": "Numbers, Dates & Prices (A1)",
+      "icon": "🔢",
+      "description": "Usar números, fechas y precios cotidianos.",
+      "category": "A1 Beginner",
+      "time": "~6 min",
+      "exercises": [
+        {
+          "type": "multiple-choice",
+          "instruction": "Selecciona la respuesta correcta:",
+          "question": "What number is 'thirty-four'?",
+          "options": [
+            "34",
+            "43",
+            "13"
+          ],
+          "correctAnswer": "34",
+          "explanation": "Thirty-four is written as 34."
+        },
+        {
+          "type": "fill-blank",
+          "instruction": "Completa la oración:",
+          "sentence": "The meeting is on the ____ of May.",
+          "options": [
+            "fifth",
+            "five",
+            "fiveth"
+          ],
+          "correctAnswer": "fifth",
+          "explanation": "Ordinal numbers use fifth for 5th."
+        }
+      ]
+    },
+    {
+      "id": "lesson_extra_18",
+      "number": 18,
+      "cefr": "A1",
+      "title": "Family Members",
+      "subtitle": "Family Members (A1)",
+      "icon": "👨‍👩‍👧",
+      "description": "Identificar relaciones familiares básicas.",
+      "category": "A1 Beginner",
+      "time": "~6 min",
+      "exercises": [
+        {
+          "type": "multiple-choice",
+          "instruction": "Selecciona la respuesta correcta:",
+          "question": "Your mother's brother is your _____.",
+          "options": [
+            "uncle",
+            "cousin",
+            "nephew"
+          ],
+          "correctAnswer": "uncle",
+          "explanation": "Your mother's brother is your uncle."
+        },
+        {
+          "type": "fill-blank",
+          "instruction": "Completa la oración:",
+          "sentence": "My sister's son is my _____.",
+          "options": [
+            "nephew",
+            "niece",
+            "uncle"
+          ],
+          "correctAnswer": "nephew",
+          "explanation": "A nephew is the son of your sibling."
+        }
+      ]
+    },
+    {
+      "id": "lesson_extra_19",
+      "number": 19,
+      "cefr": "A1",
+      "title": "Countries & Nationalities",
+      "subtitle": "Countries & Nationalities (A1)",
+      "icon": "🌍",
+      "description": "Hablar del origen y la nacionalidad.",
+      "category": "A1 Beginner",
+      "time": "~6 min",
+      "exercises": [
+        {
+          "type": "multiple-choice",
+          "instruction": "Selecciona la respuesta correcta:",
+          "question": "A person from Japan is _____.",
+          "options": [
+            "Japanese",
+            "Japanish",
+            "Japanian"
+          ],
+          "correctAnswer": "Japanese",
+          "explanation": "Japanese is both the adjective and nationality noun."
+        },
+        {
+          "type": "fill-blank",
+          "instruction": "Completa la oración:",
+          "sentence": "They are from Peru. They are _____.",
+          "options": [
+            "Peruvian",
+            "Peruish",
+            "Peruer"
+          ],
+          "correctAnswer": "Peruvian",
+          "explanation": "Peruvian describes someone from Peru."
+        }
+      ]
+    },
+    {
+      "id": "lesson_extra_20",
+      "number": 20,
+      "cefr": "A1",
+      "title": "Classroom Language",
+      "subtitle": "Classroom Language (A1)",
+      "icon": "📚",
+      "description": "Comprender instrucciones habituales del aula.",
+      "category": "A1 Beginner",
+      "time": "~6 min",
+      "exercises": [
+        {
+          "type": "multiple-choice",
+          "instruction": "Selecciona la respuesta correcta:",
+          "question": "What does 'Open your book' mean?",
+          "options": [
+            "Abre tu libro",
+            "Cierra tu libro",
+            "Escribe tu nombre"
+          ],
+          "correctAnswer": "Abre tu libro",
+          "explanation": "Open is the opposite of close."
+        },
+        {
+          "type": "fill-blank",
+          "instruction": "Completa la oración:",
+          "sentence": "Please ____ to page ten.",
+          "options": [
+            "turn",
+            "turns",
+            "turning"
+          ],
+          "correctAnswer": "turn",
+          "explanation": "Use the base verb after please in an instruction."
+        }
+      ]
+    },
+    {
+      "id": "lesson_extra_21",
+      "number": 21,
+      "cefr": "A1",
+      "title": "Articles: A, An & The",
+      "subtitle": "Articles: A, An & The (A1)",
+      "icon": "📝",
+      "description": "Elegir artículos para sustantivos comunes.",
+      "category": "A1 Beginner",
+      "time": "~6 min",
+      "exercises": [
+        {
+          "type": "multiple-choice",
+          "instruction": "Selecciona la respuesta correcta:",
+          "question": "Choose the correct phrase:",
+          "options": [
+            "an apple",
+            "a apple",
+            "the apple (for any first mention)"
+          ],
+          "correctAnswer": "an apple",
+          "explanation": "Use an before a vowel sound."
+        },
+        {
+          "type": "fill-blank",
+          "instruction": "Completa la oración:",
+          "sentence": "She has ____ blue pen.",
+          "options": [
+            "a",
+            "an",
+            "the"
+          ],
+          "correctAnswer": "a",
+          "explanation": "Use a before the consonant sound /b/ in blue."
+        }
+      ]
+    },
+    {
+      "id": "lesson_extra_22",
+      "number": 22,
+      "cefr": "A1",
+      "title": "Plural Nouns",
+      "subtitle": "Plural Nouns (A1)",
+      "icon": "🧩",
+      "description": "Formar plurales regulares e irregulares.",
+      "category": "A1 Beginner",
+      "time": "~6 min",
+      "exercises": [
+        {
+          "type": "multiple-choice",
+          "instruction": "Selecciona la respuesta correcta:",
+          "question": "What is the plural of 'child'?",
+          "options": [
+            "children",
+            "childs",
+            "childes"
+          ],
+          "correctAnswer": "children",
+          "explanation": "Child has the irregular plural children."
+        },
+        {
+          "type": "fill-blank",
+          "instruction": "Completa la oración:",
+          "sentence": "There are three ____ in the garden.",
+          "options": [
+            "boxes",
+            "boxs",
+            "boxies"
+          ],
+          "correctAnswer": "boxes",
+          "explanation": "Nouns ending in -x usually take -es."
+        }
+      ]
+    },
+    {
+      "id": "lesson_extra_23",
+      "number": 23,
+      "cefr": "A1",
+      "title": "Have Got: Possessions",
+      "subtitle": "Have Got: Possessions (A1)",
+      "icon": "🎒",
+      "description": "Describir objetos y pertenencias.",
+      "category": "A1 Beginner",
+      "time": "~6 min",
+      "exercises": [
+        {
+          "type": "multiple-choice",
+          "instruction": "Selecciona la respuesta correcta:",
+          "question": "Choose the correct sentence:",
+          "options": [
+            "She has got a bicycle.",
+            "She have got a bicycle.",
+            "She got have a bicycle."
+          ],
+          "correctAnswer": "She has got a bicycle.",
+          "explanation": "Use has got with he, she and it."
+        },
+        {
+          "type": "fill-blank",
+          "instruction": "Completa la oración:",
+          "sentence": "We ____ two English books.",
+          "options": [
+            "have got",
+            "has got",
+            "having got"
+          ],
+          "correctAnswer": "have got",
+          "explanation": "Use have got with we."
+        }
+      ]
+    },
+    {
+      "id": "lesson_extra_24",
+      "number": 24,
+      "cefr": "A1",
+      "title": "There Is & There Are",
+      "subtitle": "There Is & There Are (A1)",
+      "icon": "🏠",
+      "description": "Describir lo que existe en un lugar.",
+      "category": "A1 Beginner",
+      "time": "~6 min",
+      "exercises": [
+        {
+          "type": "multiple-choice",
+          "instruction": "Selecciona la respuesta correcta:",
+          "question": "Choose the correct sentence:",
+          "options": [
+            "There are two chairs.",
+            "There is two chairs.",
+            "There are a chair."
+          ],
+          "correctAnswer": "There are two chairs.",
+          "explanation": "Use there are with plural nouns."
+        },
+        {
+          "type": "fill-blank",
+          "instruction": "Completa la oración:",
+          "sentence": "____ a supermarket near my house.",
+          "options": [
+            "There is",
+            "There are",
+            "It are"
+          ],
+          "correctAnswer": "There is",
+          "explanation": "Use there is with a singular noun."
+        }
+      ]
+    },
+    {
+      "id": "lesson_extra_25",
+      "number": 25,
+      "cefr": "A2",
+      "title": "Daily Routines & Frequency",
+      "subtitle": "Daily Routines & Frequency (A2)",
+      "icon": "⏰",
+      "description": "Expresar hábitos con adverbios de frecuencia.",
+      "category": "A2 Elementary",
+      "time": "~6 min",
+      "exercises": [
+        {
+          "type": "multiple-choice",
+          "instruction": "Selecciona la respuesta correcta:",
+          "question": "Which sentence places the adverb correctly?",
+          "options": [
+            "I usually walk to school.",
+            "I walk usually to school.",
+            "Usually I to school walk."
+          ],
+          "correctAnswer": "I usually walk to school.",
+          "explanation": "Frequency adverbs usually go before the main verb."
+        },
+        {
+          "type": "fill-blank",
+          "instruction": "Completa la oración:",
+          "sentence": "She ____ drinks coffee in the evening.",
+          "options": [
+            "rarely",
+            "rare",
+            "rarer"
+          ],
+          "correctAnswer": "rarely",
+          "explanation": "Rarely is the adverb form."
+        }
+      ]
+    },
+    {
+      "id": "lesson_extra_26",
+      "number": 26,
+      "cefr": "A2",
+      "title": "Present Continuous",
+      "subtitle": "Present Continuous (A2)",
+      "icon": "🎨",
+      "description": "Describir acciones que ocurren ahora.",
+      "category": "A2 Elementary",
+      "time": "~6 min",
+      "exercises": [
+        {
+          "type": "multiple-choice",
+          "instruction": "Selecciona la respuesta correcta:",
+          "question": "Choose the correct form: 'They ____ dinner now.'",
+          "options": [
+            "are cooking",
+            "cook",
+            "is cooking"
+          ],
+          "correctAnswer": "are cooking",
+          "explanation": "Use are + verb-ing with they."
+        },
+        {
+          "type": "fill-blank",
+          "instruction": "Completa la oración:",
+          "sentence": "Look! The children ____ in the park.",
+          "options": [
+            "are playing",
+            "plays",
+            "is play"
+          ],
+          "correctAnswer": "are playing",
+          "explanation": "Present continuous describes an action happening now."
+        }
+      ]
+    },
+    {
+      "id": "lesson_extra_27",
+      "number": 27,
+      "cefr": "A2",
+      "title": "Countable & Uncountable Nouns",
+      "subtitle": "Countable & Uncountable Nouns (A2)",
+      "icon": "🥛",
+      "description": "Usar much, many, some y any.",
+      "category": "A2 Elementary",
+      "time": "~6 min",
+      "exercises": [
+        {
+          "type": "multiple-choice",
+          "instruction": "Selecciona la respuesta correcta:",
+          "question": "Which phrase is correct?",
+          "options": [
+            "much water",
+            "many water",
+            "a few water"
+          ],
+          "correctAnswer": "much water",
+          "explanation": "Water is uncountable, so use much."
+        },
+        {
+          "type": "fill-blank",
+          "instruction": "Completa la oración:",
+          "sentence": "How ____ apples do we need?",
+          "options": [
+            "many",
+            "much",
+            "little"
+          ],
+          "correctAnswer": "many",
+          "explanation": "Use many with plural countable nouns."
+        }
+      ]
+    },
+    {
+      "id": "lesson_extra_28",
+      "number": 28,
+      "cefr": "A2",
+      "title": "Comparatives & Superlatives",
+      "subtitle": "Comparatives & Superlatives (A2)",
+      "icon": "📏",
+      "description": "Comparar personas, lugares y objetos.",
+      "category": "A2 Elementary",
+      "time": "~6 min",
+      "exercises": [
+        {
+          "type": "multiple-choice",
+          "instruction": "Selecciona la respuesta correcta:",
+          "question": "Complete: 'This road is ____ than that one.'",
+          "options": [
+            "wider",
+            "widest",
+            "more wide"
+          ],
+          "correctAnswer": "wider",
+          "explanation": "Use -er with many short adjectives."
+        },
+        {
+          "type": "fill-blank",
+          "instruction": "Completa la oración:",
+          "sentence": "Mount Everest is the ____ mountain on Earth.",
+          "options": [
+            "highest",
+            "higher",
+            "most high"
+          ],
+          "correctAnswer": "highest",
+          "explanation": "Use the superlative form to compare one with all others."
+        }
+      ]
+    },
+    {
+      "id": "lesson_extra_29",
+      "number": 29,
+      "cefr": "A2",
+      "title": "Past Simple: Time Expressions",
+      "subtitle": "Past Simple: Time Expressions (A2)",
+      "icon": "🕰️",
+      "description": "Relatar actividades terminadas en el pasado.",
+      "category": "A2 Elementary",
+      "time": "~6 min",
+      "exercises": [
+        {
+          "type": "multiple-choice",
+          "instruction": "Selecciona la respuesta correcta:",
+          "question": "Yesterday, we ____ a museum.",
+          "options": [
+            "visited",
+            "visit",
+            "visiting"
+          ],
+          "correctAnswer": "visited",
+          "explanation": "Yesterday signals the past simple."
+        },
+        {
+          "type": "fill-blank",
+          "instruction": "Completa la oración:",
+          "sentence": "I ____ my keys last night.",
+          "options": [
+            "lost",
+            "lose",
+            "losing"
+          ],
+          "correctAnswer": "lost",
+          "explanation": "The past simple of lose is lost."
+        }
+      ]
+    },
+    {
+      "id": "lesson_extra_30",
+      "number": 30,
+      "cefr": "A2",
+      "title": "Be Going To: Plans",
+      "subtitle": "Be Going To: Plans (A2)",
+      "icon": "🗓️",
+      "description": "Hablar de planes e intenciones futuras.",
+      "category": "A2 Elementary",
+      "time": "~6 min",
+      "exercises": [
+        {
+          "type": "multiple-choice",
+          "instruction": "Selecciona la respuesta correcta:",
+          "question": "We ____ visit our grandparents this weekend.",
+          "options": [
+            "are going to",
+            "is going to",
+            "going"
+          ],
+          "correctAnswer": "are going to",
+          "explanation": "Use are going to with we."
+        },
+        {
+          "type": "fill-blank",
+          "instruction": "Completa la oración:",
+          "sentence": "He is going to ____ a new language.",
+          "options": [
+            "learn",
+            "learns",
+            "learning"
+          ],
+          "correctAnswer": "learn",
+          "explanation": "After going to, use the base form."
+        }
+      ]
+    },
+    {
+      "id": "lesson_extra_31",
+      "number": 31,
+      "cefr": "A2",
+      "title": "Asking for & Giving Directions",
+      "subtitle": "Asking for & Giving Directions (A2)",
+      "icon": "🧭",
+      "description": "Pedir y explicar cómo llegar a un lugar.",
+      "category": "A2 Elementary",
+      "time": "~6 min",
+      "exercises": [
+        {
+          "type": "multiple-choice",
+          "instruction": "Selecciona la respuesta correcta:",
+          "question": "What does 'Turn left at the corner' mean?",
+          "options": [
+            "Gira a la izquierda en la esquina",
+            "Sigue recto hasta la esquina",
+            "Gira a la derecha en la esquina"
+          ],
+          "correctAnswer": "Gira a la izquierda en la esquina",
+          "explanation": "Turn left gives a left-side direction."
+        },
+        {
+          "type": "fill-blank",
+          "instruction": "Completa la oración:",
+          "sentence": "Go ____ ahead for two blocks.",
+          "options": [
+            "straight",
+            "straightly",
+            "straightly"
+          ],
+          "correctAnswer": "straight",
+          "explanation": "The natural expression is go straight ahead."
+        }
+      ]
+    },
+    {
+      "id": "lesson_extra_32",
+      "number": 32,
+      "cefr": "A2",
+      "title": "Can, Could & Requests",
+      "subtitle": "Can, Could & Requests (A2)",
+      "icon": "🙋",
+      "description": "Pedir permiso y formular solicitudes corteses.",
+      "category": "A2 Elementary",
+      "time": "~6 min",
+      "exercises": [
+        {
+          "type": "multiple-choice",
+          "instruction": "Selecciona la respuesta correcta:",
+          "question": "Which is the most polite request?",
+          "options": [
+            "Could you help me, please?",
+            "You help me now.",
+            "Can you helping me?"
+          ],
+          "correctAnswer": "Could you help me, please?",
+          "explanation": "Could makes a request more polite."
+        },
+        {
+          "type": "fill-blank",
+          "instruction": "Completa la oración:",
+          "sentence": "____ I borrow your pen, please?",
+          "options": [
+            "Could",
+            "Am",
+            "Do"
+          ],
+          "correctAnswer": "Could",
+          "explanation": "Could is a polite way to ask permission."
+        }
+      ]
+    },
+    {
+      "id": "lesson_extra_33",
+      "number": 33,
+      "cefr": "A2",
+      "title": "Invitations & Suggestions",
+      "subtitle": "Invitations & Suggestions (A2)",
+      "icon": "🎟️",
+      "description": "Invitar, aceptar y rechazar cordialmente.",
+      "category": "A2 Elementary",
+      "time": "~6 min",
+      "exercises": [
+        {
+          "type": "multiple-choice",
+          "instruction": "Selecciona la respuesta correcta:",
+          "question": "Choose a natural invitation:",
+          "options": [
+            "Would you like to come with us?",
+            "Do you like come with us?",
+            "Would you like coming us?"
+          ],
+          "correctAnswer": "Would you like to come with us?",
+          "explanation": "Would you like to + base verb is a common invitation."
+        },
+        {
+          "type": "fill-blank",
+          "instruction": "Completa la oración:",
+          "sentence": "That sounds great! I'd love to _____.",
+          "options": [
+            "come",
+            "coming",
+            "came"
+          ],
+          "correctAnswer": "come",
+          "explanation": "After to in this expression, use the base verb."
+        }
+      ]
+    },
+    {
+      "id": "lesson_extra_34",
+      "number": 34,
+      "cefr": "B1",
+      "title": "Present Perfect Experiences",
+      "subtitle": "Present Perfect Experiences (B1)",
+      "icon": "🌐",
+      "description": "Hablar de experiencias sin indicar cuándo ocurrieron.",
+      "category": "B1 Intermediate",
+      "time": "~7 min",
+      "exercises": [
+        {
+          "type": "multiple-choice",
+          "instruction": "Selecciona la respuesta correcta:",
+          "question": "I ____ never ____ sushi.",
+          "options": [
+            "have / tried",
+            "did / tried",
+            "has / try"
+          ],
+          "correctAnswer": "have / tried",
+          "explanation": "Present perfect uses have/has + past participle."
+        },
+        {
+          "type": "fill-blank",
+          "instruction": "Completa la oración:",
+          "sentence": "She has ____ visited London.",
+          "options": [
+            "already",
+            "yet (affirmative here)",
+            "still yet"
+          ],
+          "correctAnswer": "already",
+          "explanation": "Already commonly appears in affirmative present-perfect sentences."
+        }
+      ]
+    },
+    {
+      "id": "lesson_extra_35",
+      "number": 35,
+      "cefr": "B1",
+      "title": "Past Continuous & Interruptions",
+      "subtitle": "Past Continuous & Interruptions (B1)",
+      "icon": "🌧️",
+      "description": "Narrar acciones en progreso interrumpidas por otra.",
+      "category": "B1 Intermediate",
+      "time": "~7 min",
+      "exercises": [
+        {
+          "type": "multiple-choice",
+          "instruction": "Selecciona la respuesta correcta:",
+          "question": "I ____ when the phone rang.",
+          "options": [
+            "was studying",
+            "studied",
+            "am studying"
+          ],
+          "correctAnswer": "was studying",
+          "explanation": "Past continuous sets the background action."
+        },
+        {
+          "type": "fill-blank",
+          "instruction": "Completa la oración:",
+          "sentence": "While they were walking, it ____ to rain.",
+          "options": [
+            "started",
+            "was start",
+            "starts"
+          ],
+          "correctAnswer": "started",
+          "explanation": "The shorter interrupting event commonly uses past simple."
+        }
+      ]
+    },
+    {
+      "id": "lesson_extra_36",
+      "number": 36,
+      "cefr": "B1",
+      "title": "First Conditional",
+      "subtitle": "First Conditional (B1)",
+      "icon": "🌦️",
+      "description": "Expresar consecuencias reales o posibles.",
+      "category": "B1 Intermediate",
+      "time": "~7 min",
+      "exercises": [
+        {
+          "type": "multiple-choice",
+          "instruction": "Selecciona la respuesta correcta:",
+          "question": "If it rains, we ____ at home.",
+          "options": [
+            "will stay",
+            "would stayed",
+            "stay will"
+          ],
+          "correctAnswer": "will stay",
+          "explanation": "First conditional: if + present, will + base verb."
+        },
+        {
+          "type": "fill-blank",
+          "instruction": "Completa la oración:",
+          "sentence": "If you study, you ____ the test.",
+          "options": [
+            "will pass",
+            "would pass",
+            "passed"
+          ],
+          "correctAnswer": "will pass",
+          "explanation": "Use will for a likely future result."
+        }
+      ]
+    },
+    {
+      "id": "lesson_extra_37",
+      "number": 37,
+      "cefr": "B1",
+      "title": "Defining Relative Clauses",
+      "subtitle": "Defining Relative Clauses (B1)",
+      "icon": "🔎",
+      "description": "Añadir información esencial con who, which y that.",
+      "category": "B1 Intermediate",
+      "time": "~7 min",
+      "exercises": [
+        {
+          "type": "multiple-choice",
+          "instruction": "Selecciona la respuesta correcta:",
+          "question": "A mechanic is someone ____ repairs cars.",
+          "options": [
+            "who",
+            "where",
+            "whose"
+          ],
+          "correctAnswer": "who",
+          "explanation": "Use who for people."
+        },
+        {
+          "type": "fill-blank",
+          "instruction": "Completa la oración:",
+          "sentence": "This is the book ____ I told you about.",
+          "options": [
+            "that",
+            "where",
+            "who"
+          ],
+          "correctAnswer": "that",
+          "explanation": "That can introduce a defining clause about a thing."
+        }
+      ]
+    },
+    {
+      "id": "lesson_extra_38",
+      "number": 38,
+      "cefr": "B1",
+      "title": "Common Phrasal Verbs",
+      "subtitle": "Common Phrasal Verbs (B1)",
+      "icon": "🔗",
+      "description": "Comprender verbos compuestos de uso frecuente.",
+      "category": "B1 Intermediate",
+      "time": "~7 min",
+      "exercises": [
+        {
+          "type": "multiple-choice",
+          "instruction": "Selecciona la respuesta correcta:",
+          "question": "What does 'give up' mean?",
+          "options": [
+            "stop trying",
+            "distribute",
+            "discover"
+          ],
+          "correctAnswer": "stop trying",
+          "explanation": "Give up means to stop trying or quit."
+        },
+        {
+          "type": "fill-blank",
+          "instruction": "Completa la oración:",
+          "sentence": "Please ____ the lights before leaving.",
+          "options": [
+            "turn off",
+            "turn into",
+            "turn over"
+          ],
+          "correctAnswer": "turn off",
+          "explanation": "Turn off means switch off a device or light."
+        }
+      ]
+    },
+    {
+      "id": "lesson_extra_39",
+      "number": 39,
+      "cefr": "B1",
+      "title": "Reported Speech",
+      "subtitle": "Reported Speech (B1)",
+      "icon": "🗣️",
+      "description": "Transmitir lo que otra persona dijo.",
+      "category": "B1 Intermediate",
+      "time": "~7 min",
+      "exercises": [
+        {
+          "type": "multiple-choice",
+          "instruction": "Selecciona la respuesta correcta:",
+          "question": "Direct: 'I am tired.' Reported: She said she ____ tired.",
+          "options": [
+            "was",
+            "is",
+            "has"
+          ],
+          "correctAnswer": "was",
+          "explanation": "The present form commonly shifts back to past in reported speech."
+        },
+        {
+          "type": "fill-blank",
+          "instruction": "Completa la oración:",
+          "sentence": "He said that he ____ the answer.",
+          "options": [
+            "knew",
+            "knows",
+            "know"
+          ],
+          "correctAnswer": "knew",
+          "explanation": "In reported speech, know shifts to knew in this context."
+        }
+      ]
+    },
+    {
+      "id": "lesson_extra_40",
+      "number": 40,
+      "cefr": "B1",
+      "title": "The Passive Voice",
+      "subtitle": "The Passive Voice (B1)",
+      "icon": "🏗️",
+      "description": "Destacar la acción o el resultado en lugar del agente.",
+      "category": "B1 Intermediate",
+      "time": "~7 min",
+      "exercises": [
+        {
+          "type": "multiple-choice",
+          "instruction": "Selecciona la respuesta correcta:",
+          "question": "Choose the passive sentence:",
+          "options": [
+            "The bridge was built in 1990.",
+            "Workers built the bridge.",
+            "The bridge built in 1990."
+          ],
+          "correctAnswer": "The bridge was built in 1990.",
+          "explanation": "Passive past simple uses was/were + past participle."
+        },
+        {
+          "type": "fill-blank",
+          "instruction": "Completa la oración:",
+          "sentence": "English ____ in many countries.",
+          "options": [
+            "is spoken",
+            "speaks",
+            "is speaking"
+          ],
+          "correctAnswer": "is spoken",
+          "explanation": "Present simple passive uses is/are + past participle."
+        }
+      ]
+    },
+    {
+      "id": "lesson_extra_41",
+      "number": 41,
+      "cefr": "B1",
+      "title": "Travel Problems & Solutions",
+      "subtitle": "Travel Problems & Solutions (B1)",
+      "icon": "🧳",
+      "description": "Explicar inconvenientes durante un viaje.",
+      "category": "B1 Intermediate",
+      "time": "~7 min",
+      "exercises": [
+        {
+          "type": "multiple-choice",
+          "instruction": "Selecciona la respuesta correcta:",
+          "question": "Your flight leaves later than planned. It is _____.",
+          "options": [
+            "delayed",
+            "cancelled forever",
+            "boarded"
+          ],
+          "correctAnswer": "delayed",
+          "explanation": "A delayed flight departs later than scheduled."
+        },
+        {
+          "type": "fill-blank",
+          "instruction": "Completa la oración:",
+          "sentence": "We missed the train because we arrived _____.",
+          "options": [
+            "late",
+            "lately",
+            "latest"
+          ],
+          "correctAnswer": "late",
+          "explanation": "Late describes arriving after the expected time."
+        }
+      ]
+    },
+    {
+      "id": "lesson_extra_42",
+      "number": 42,
+      "cefr": "B2",
+      "title": "Second & Third Conditionals",
+      "subtitle": "Second & Third Conditionals (B2)",
+      "icon": "🧠",
+      "description": "Distinguir situaciones hipotéticas presentes y pasadas.",
+      "category": "B2 Upper-Intermediate",
+      "time": "~7 min",
+      "exercises": [
+        {
+          "type": "multiple-choice",
+          "instruction": "Selecciona la respuesta correcta:",
+          "question": "If I had more time, I ____ another course.",
+          "options": [
+            "would take",
+            "will take",
+            "would have taken"
+          ],
+          "correctAnswer": "would take",
+          "explanation": "Second conditional: if + past, would + base verb."
+        },
+        {
+          "type": "fill-blank",
+          "instruction": "Completa la oración:",
+          "sentence": "If she had left earlier, she ____ the bus.",
+          "options": [
+            "would have caught",
+            "would catch",
+            "will catch"
+          ],
+          "correctAnswer": "would have caught",
+          "explanation": "Third conditional describes an unreal past result."
+        }
+      ]
+    },
+    {
+      "id": "lesson_extra_43",
+      "number": 43,
+      "cefr": "B2",
+      "title": "Gerunds & Infinitives",
+      "subtitle": "Gerunds & Infinitives (B2)",
+      "icon": "✍️",
+      "description": "Reconocer patrones verbales con gerundio e infinitivo.",
+      "category": "B2 Upper-Intermediate",
+      "time": "~7 min",
+      "exercises": [
+        {
+          "type": "multiple-choice",
+          "instruction": "Selecciona la respuesta correcta:",
+          "question": "I enjoy ____ historical novels.",
+          "options": [
+            "reading",
+            "to read",
+            "read"
+          ],
+          "correctAnswer": "reading",
+          "explanation": "Enjoy is followed by a gerund."
+        },
+        {
+          "type": "fill-blank",
+          "instruction": "Completa la oración:",
+          "sentence": "They decided ____ the project next week.",
+          "options": [
+            "to postpone",
+            "postponing",
+            "postpone"
+          ],
+          "correctAnswer": "to postpone",
+          "explanation": "Decide is normally followed by an infinitive."
+        }
+      ]
+    },
+    {
+      "id": "lesson_extra_44",
+      "number": 44,
+      "cefr": "B2",
+      "title": "Modals of Deduction",
+      "subtitle": "Modals of Deduction (B2)",
+      "icon": "🕵️",
+      "description": "Deducir posibilidades y certezas con modales.",
+      "category": "B2 Upper-Intermediate",
+      "time": "~7 min",
+      "exercises": [
+        {
+          "type": "multiple-choice",
+          "instruction": "Selecciona la respuesta correcta:",
+          "question": "The lights are off and nobody answers. They ____ be out.",
+          "options": [
+            "might",
+            "mustn't",
+            "can't to"
+          ],
+          "correctAnswer": "might",
+          "explanation": "Might expresses a possible explanation."
+        },
+        {
+          "type": "fill-blank",
+          "instruction": "Completa la oración:",
+          "sentence": "She has worked all day; she ____ be exhausted.",
+          "options": [
+            "must",
+            "can't",
+            "shouldn't"
+          ],
+          "correctAnswer": "must",
+          "explanation": "Must expresses a strong logical deduction."
+        }
+      ]
+    },
+    {
+      "id": "lesson_extra_45",
+      "number": 45,
+      "cefr": "B2",
+      "title": "Contrast & Concession Linkers",
+      "subtitle": "Contrast & Concession Linkers (B2)",
+      "icon": "⚖️",
+      "description": "Conectar ideas contrastantes con precisión.",
+      "category": "B2 Upper-Intermediate",
+      "time": "~7 min",
+      "exercises": [
+        {
+          "type": "multiple-choice",
+          "instruction": "Selecciona la respuesta correcta:",
+          "question": "____ the heavy rain, the event continued.",
+          "options": [
+            "Despite",
+            "Although of",
+            "However of"
+          ],
+          "correctAnswer": "Despite",
+          "explanation": "Despite is followed by a noun phrase."
+        },
+        {
+          "type": "fill-blank",
+          "instruction": "Completa la oración:",
+          "sentence": "____ it was expensive, they bought it.",
+          "options": [
+            "Although",
+            "Despite",
+            "In spite"
+          ],
+          "correctAnswer": "Although",
+          "explanation": "Although introduces a clause with subject and verb."
+        }
+      ]
+    },
+    {
+      "id": "lesson_extra_46",
+      "number": 46,
+      "cefr": "B2",
+      "title": "Collocations for Work & Study",
+      "subtitle": "Collocations for Work & Study (B2)",
+      "icon": "💼",
+      "description": "Ampliar combinaciones léxicas naturales.",
+      "category": "B2 Upper-Intermediate",
+      "time": "~7 min",
+      "exercises": [
+        {
+          "type": "multiple-choice",
+          "instruction": "Selecciona la respuesta correcta:",
+          "question": "Which collocation is correct?",
+          "options": [
+            "make a decision",
+            "do a decision",
+            "take a homework"
+          ],
+          "correctAnswer": "make a decision",
+          "explanation": "Make a decision is the standard collocation."
+        },
+        {
+          "type": "fill-blank",
+          "instruction": "Completa la oración:",
+          "sentence": "Students must ____ research before writing the report.",
+          "options": [
+            "conduct",
+            "make up",
+            "do out"
+          ],
+          "correctAnswer": "conduct",
+          "explanation": "Conduct research is a natural academic collocation."
+        }
+      ]
+    },
+    {
+      "id": "lesson_extra_47",
+      "number": 47,
+      "cefr": "B2",
+      "title": "Formal Emails & Register",
+      "subtitle": "Formal Emails & Register (B2)",
+      "icon": "📨",
+      "description": "Redactar solicitudes con un registro formal.",
+      "category": "B2 Upper-Intermediate",
+      "time": "~7 min",
+      "exercises": [
+        {
+          "type": "multiple-choice",
+          "instruction": "Selecciona la respuesta correcta:",
+          "question": "Which opening is most appropriate for a formal email?",
+          "options": [
+            "Dear Ms Patel,",
+            "Hey Patel!",
+            "What's up, Patel?"
+          ],
+          "correctAnswer": "Dear Ms Patel,",
+          "explanation": "Dear + title and surname is a conventional formal opening."
+        },
+        {
+          "type": "fill-blank",
+          "instruction": "Completa la oración:",
+          "sentence": "I am writing to ____ about the internship.",
+          "options": [
+            "enquire",
+            "ask to",
+            "questioning"
+          ],
+          "correctAnswer": "enquire",
+          "explanation": "Enquire about is a formal way to request information."
+        }
+      ]
+    },
+    {
+      "id": "lesson_extra_48",
+      "number": 48,
+      "cefr": "B2",
+      "title": "Reporting Verbs & Passive Structures",
+      "subtitle": "Reporting Verbs & Passive Structures (B2)",
+      "icon": "📰",
+      "description": "Usar estructuras impersonales para informar hallazgos.",
+      "category": "B2 Upper-Intermediate",
+      "time": "~7 min",
+      "exercises": [
+        {
+          "type": "multiple-choice",
+          "instruction": "Selecciona la respuesta correcta:",
+          "question": "Choose the correct structure: 'The report ____ to be accurate.'",
+          "options": [
+            "is believed",
+            "believes",
+            "is believing"
+          ],
+          "correctAnswer": "is believed",
+          "explanation": "It is believed + infinitive is an impersonal reporting structure."
+        },
+        {
+          "type": "fill-blank",
+          "instruction": "Completa la oración:",
+          "sentence": "The company is said ____ its policy.",
+          "options": [
+            "to have changed",
+            "changing",
+            "that changed"
+          ],
+          "correctAnswer": "to have changed",
+          "explanation": "Is said to have changed reports an earlier action."
+        }
+      ]
+    },
+    {
+      "id": "lesson_extra_49",
+      "number": 49,
+      "cefr": "B2",
+      "title": "Environmental Arguments",
+      "subtitle": "Environmental Arguments (B2)",
+      "icon": "🌱",
+      "description": "Expresar causas, consecuencias y propuestas ambientales.",
+      "category": "B2 Upper-Intermediate",
+      "time": "~7 min",
+      "exercises": [
+        {
+          "type": "multiple-choice",
+          "instruction": "Selecciona la respuesta correcta:",
+          "question": "Which phrase introduces a consequence?",
+          "options": [
+            "As a result",
+            "In contrast to",
+            "For instance of"
+          ],
+          "correctAnswer": "As a result",
+          "explanation": "As a result signals a consequence."
+        },
+        {
+          "type": "fill-blank",
+          "instruction": "Completa la oración:",
+          "sentence": "Governments should invest ____ renewable energy.",
+          "options": [
+            "in",
+            "on",
+            "at"
+          ],
+          "correctAnswer": "in",
+          "explanation": "The standard collocation is invest in."
+        }
+      ]
+    },
+    {
+      "id": "lesson_extra_50",
+      "number": 50,
+      "cefr": "C1",
+      "title": "Inversion for Emphasis",
+      "subtitle": "Inversion for Emphasis (C1)",
+      "icon": "🎓",
+      "description": "Emplear inversión para enfatizar ideas formales.",
+      "category": "C1 Advanced",
+      "time": "~9 min",
+      "exercises": [
+        {
+          "type": "multiple-choice",
+          "instruction": "Selecciona la respuesta correcta:",
+          "question": "Choose the correct inversion: 'Never ____ such a complex case.'",
+          "options": [
+            "have I seen",
+            "I have seen",
+            "I saw have"
+          ],
+          "correctAnswer": "have I seen",
+          "explanation": "Negative adverbials at the start trigger subject-auxiliary inversion."
+        },
+        {
+          "type": "fill-blank",
+          "instruction": "Completa la oración:",
+          "sentence": "Rarely ____ the committee reach a unanimous decision.",
+          "options": [
+            "does",
+            "do",
+            "is"
+          ],
+          "correctAnswer": "does",
+          "explanation": "With the singular subject committee, use does."
+        }
+      ]
+    },
+    {
+      "id": "lesson_extra_51",
+      "number": 51,
+      "cefr": "C1",
+      "title": "Cleft Sentences",
+      "subtitle": "Cleft Sentences (C1)",
+      "icon": "💡",
+      "description": "Enfatizar información mediante estructuras escindidas.",
+      "category": "C1 Advanced",
+      "time": "~9 min",
+      "exercises": [
+        {
+          "type": "multiple-choice",
+          "instruction": "Selecciona la respuesta correcta:",
+          "question": "Choose the cleft sentence emphasizing 'the timing':",
+          "options": [
+            "What matters is the timing.",
+            "The timing what matters.",
+            "It matter the timing."
+          ],
+          "correctAnswer": "What matters is the timing.",
+          "explanation": "What-clause clefts focus attention on a specific element."
+        },
+        {
+          "type": "fill-blank",
+          "instruction": "Completa la oración:",
+          "sentence": "It was Maria ____ identified the error.",
+          "options": [
+            "who",
+            "which",
+            "where"
+          ],
+          "correctAnswer": "who",
+          "explanation": "Use who when emphasizing a person."
+        }
+      ]
+    },
+    {
+      "id": "lesson_extra_52",
+      "number": 52,
+      "cefr": "C1",
+      "title": "Hedging & Academic Caution",
+      "subtitle": "Hedging & Academic Caution (C1)",
+      "icon": "🔬",
+      "description": "Matizar afirmaciones y evitar generalizaciones absolutas.",
+      "category": "C1 Advanced",
+      "time": "~9 min",
+      "exercises": [
+        {
+          "type": "multiple-choice",
+          "instruction": "Selecciona la respuesta correcta:",
+          "question": "Which phrase expresses cautious interpretation?",
+          "options": [
+            "The findings may suggest that...",
+            "This proves beyond any doubt that...",
+            "Everyone knows that..."
+          ],
+          "correctAnswer": "The findings may suggest that...",
+          "explanation": "May suggest signals a tentative interpretation."
+        },
+        {
+          "type": "fill-blank",
+          "instruction": "Completa la oración:",
+          "sentence": "The results appear ____ a modest improvement.",
+          "options": [
+            "to indicate",
+            "indicating to",
+            "indicated"
+          ],
+          "correctAnswer": "to indicate",
+          "explanation": "Appear can be followed by a to-infinitive."
+        }
+      ]
+    },
+    {
+      "id": "lesson_extra_53",
+      "number": 53,
+      "cefr": "C1",
+      "title": "Nominalisation in Academic English",
+      "subtitle": "Nominalisation in Academic English (C1)",
+      "icon": "📖",
+      "description": "Convertir verbos y adjetivos en sustantivos formales.",
+      "category": "C1 Advanced",
+      "time": "~9 min",
+      "exercises": [
+        {
+          "type": "multiple-choice",
+          "instruction": "Selecciona la respuesta correcta:",
+          "question": "Choose the nominal form of 'analyse'.",
+          "options": [
+            "analysis",
+            "analytical",
+            "analysing"
+          ],
+          "correctAnswer": "analysis",
+          "explanation": "Analysis is the noun form of analyse."
+        },
+        {
+          "type": "fill-blank",
+          "instruction": "Completa la oración:",
+          "sentence": "The rapid ____ of the sector changed the market.",
+          "options": [
+            "expansion",
+            "expand",
+            "expansive"
+          ],
+          "correctAnswer": "expansion",
+          "explanation": "Expansion is the noun corresponding to expand."
+        }
+      ]
+    },
+    {
+      "id": "lesson_extra_54",
+      "number": 54,
+      "cefr": "C1",
+      "title": "Advanced Discourse Markers",
+      "subtitle": "Advanced Discourse Markers (C1)",
+      "icon": "🧵",
+      "description": "Organizar argumentos complejos con conectores precisos.",
+      "category": "C1 Advanced",
+      "time": "~9 min",
+      "exercises": [
+        {
+          "type": "multiple-choice",
+          "instruction": "Selecciona la respuesta correcta:",
+          "question": "Which connector introduces a qualification?",
+          "options": [
+            "Admittedly",
+            "Consequently",
+            "Likewise"
+          ],
+          "correctAnswer": "Admittedly",
+          "explanation": "Admittedly concedes a point before qualifying an argument."
+        },
+        {
+          "type": "fill-blank",
+          "instruction": "Completa la oración:",
+          "sentence": "The proposal is costly; ____ , it could save time.",
+          "options": [
+            "nevertheless",
+            "therefore",
+            "for example"
+          ],
+          "correctAnswer": "nevertheless",
+          "explanation": "Nevertheless introduces contrast with the preceding point."
+        }
+      ]
+    },
+    {
+      "id": "lesson_extra_55",
+      "number": 55,
+      "cefr": "C1",
+      "title": "Register & Nuance",
+      "subtitle": "Register & Nuance (C1)",
+      "icon": "🎭",
+      "description": "Adaptar el lenguaje al contexto y al interlocutor.",
+      "category": "C1 Advanced",
+      "time": "~9 min",
+      "exercises": [
+        {
+          "type": "multiple-choice",
+          "instruction": "Selecciona la respuesta correcta:",
+          "question": "Which phrase is most suitable in a formal report?",
+          "options": [
+            "The evidence indicates a decline.",
+            "Things got pretty bad.",
+            "It's a total mess."
+          ],
+          "correctAnswer": "The evidence indicates a decline.",
+          "explanation": "The first option uses precise, formal wording."
+        },
+        {
+          "type": "fill-blank",
+          "instruction": "Completa la oración:",
+          "sentence": "We would appreciate your ____ response.",
+          "options": [
+            "prompt",
+            "quickly",
+            "hurry"
+          ],
+          "correctAnswer": "prompt",
+          "explanation": "Prompt is an appropriate formal adjective meaning timely."
+        }
+      ]
+    },
+    {
+      "id": "lesson_extra_56",
+      "number": 56,
+      "cefr": "C1",
+      "title": "Mixed Conditionals",
+      "subtitle": "Mixed Conditionals (C1)",
+      "icon": "🔀",
+      "description": "Relacionar condiciones pasadas con resultados presentes.",
+      "category": "C1 Advanced",
+      "time": "~9 min",
+      "exercises": [
+        {
+          "type": "multiple-choice",
+          "instruction": "Selecciona la respuesta correcta:",
+          "question": "If I had accepted the offer, I ____ in Madrid now.",
+          "options": [
+            "would be living",
+            "will live",
+            "would have lived"
+          ],
+          "correctAnswer": "would be living",
+          "explanation": "A past condition can have a present result in a mixed conditional."
+        },
+        {
+          "type": "fill-blank",
+          "instruction": "Completa la oración:",
+          "sentence": "If he were more organised, he ____ the deadline yesterday.",
+          "options": [
+            "would have met",
+            "will meet",
+            "would meet"
+          ],
+          "correctAnswer": "would have met",
+          "explanation": "Present condition + past result uses would have + participle."
+        }
+      ]
+    },
+    {
+      "id": "lesson_extra_57",
+      "number": 57,
+      "cefr": "C1",
+      "title": "Paraphrasing & Synthesis",
+      "subtitle": "Paraphrasing & Synthesis (C1)",
+      "icon": "📝",
+      "description": "Reformular ideas sin alterar su significado esencial.",
+      "category": "C1 Advanced",
+      "time": "~9 min",
+      "exercises": [
+        {
+          "type": "multiple-choice",
+          "instruction": "Selecciona la respuesta correcta:",
+          "question": "Which option best paraphrases 'The results were inconclusive'?",
+          "options": [
+            "The findings did not lead to a definite conclusion.",
+            "The results were completely wrong.",
+            "The research was never completed."
+          ],
+          "correctAnswer": "The findings did not lead to a definite conclusion.",
+          "explanation": "Inconclusive means not producing a definite answer."
+        },
+        {
+          "type": "fill-blank",
+          "instruction": "Completa la oración:",
+          "sentence": "The study ____ that further research is necessary.",
+          "options": [
+            "suggests",
+            "suggestion",
+            "suggested to"
+          ],
+          "correctAnswer": "suggests",
+          "explanation": "Suggests introduces the study's implication."
+        }
+      ]
+    },
+    {
+      "id": "lesson_extra_58",
+      "number": 58,
+      "cefr": "C2",
+      "title": "Idiomatic Meaning in Context",
+      "subtitle": "Idiomatic Meaning in Context (C2)",
+      "icon": "🗝️",
+      "description": "Interpretar expresiones idiomáticas según su contexto.",
+      "category": "C2 Proficiency",
+      "time": "~9 min",
+      "exercises": [
+        {
+          "type": "multiple-choice",
+          "instruction": "Selecciona la respuesta correcta:",
+          "question": "If a plan is 'up in the air', it is _____.",
+          "options": [
+            "undecided",
+            "very successful",
+            "already finished"
+          ],
+          "correctAnswer": "undecided",
+          "explanation": "Up in the air means unsettled or undecided."
+        },
+        {
+          "type": "fill-blank",
+          "instruction": "Completa la oración:",
+          "sentence": "The negotiations are still ____; no agreement has been reached.",
+          "options": [
+            "up in the air",
+            "under the weather",
+            "over the moon"
+          ],
+          "correctAnswer": "up in the air",
+          "explanation": "Up in the air describes an unresolved situation."
+        }
+      ]
+    },
+    {
+      "id": "lesson_extra_59",
+      "number": 59,
+      "cefr": "C2",
+      "title": "Connotation & Lexical Choice",
+      "subtitle": "Connotation & Lexical Choice (C2)",
+      "icon": "🎨",
+      "description": "Distinguir matices valorativos entre palabras cercanas.",
+      "category": "C2 Proficiency",
+      "time": "~9 min",
+      "exercises": [
+        {
+          "type": "multiple-choice",
+          "instruction": "Selecciona la respuesta correcta:",
+          "question": "Which adjective has the most negative connotation?",
+          "options": [
+            "meddlesome",
+            "curious",
+            "inquisitive"
+          ],
+          "correctAnswer": "meddlesome",
+          "explanation": "Meddlesome suggests unwanted interference."
+        },
+        {
+          "type": "fill-blank",
+          "instruction": "Completa la oración:",
+          "sentence": "His ____ remarks made the discussion unnecessarily hostile.",
+          "options": [
+            "inflammatory",
+            "insightful",
+            "measured"
+          ],
+          "correctAnswer": "inflammatory",
+          "explanation": "Inflammatory language is likely to provoke anger."
+        }
+      ]
+    },
+    {
+      "id": "lesson_extra_60",
+      "number": 60,
+      "cefr": "C2",
+      "title": "Concessive Structures",
+      "subtitle": "Concessive Structures (C2)",
+      "icon": "🧩",
+      "description": "Construir concesiones complejas con estructuras avanzadas.",
+      "category": "C2 Proficiency",
+      "time": "~9 min",
+      "exercises": [
+        {
+          "type": "multiple-choice",
+          "instruction": "Selecciona la respuesta correcta:",
+          "question": "Choose the correct structure: 'Much as I ____ the proposal, I cannot support it.'",
+          "options": [
+            "admire",
+            "am admire",
+            "admiring"
+          ],
+          "correctAnswer": "admire",
+          "explanation": "Much as introduces a strong concession followed by a clause."
+        },
+        {
+          "type": "fill-blank",
+          "instruction": "Completa la oración:",
+          "sentence": "Try as she ____, she could not reproduce the result.",
+          "options": [
+            "might",
+            "may to",
+            "does"
+          ],
+          "correctAnswer": "might",
+          "explanation": "Try as she might is a fixed concessive construction."
+        }
+      ]
+    },
+    {
+      "id": "lesson_extra_61",
+      "number": 61,
+      "cefr": "C2",
+      "title": "Ellipsis & Substitution",
+      "subtitle": "Ellipsis & Substitution (C2)",
+      "icon": "✂️",
+      "description": "Evitar repeticiones mediante elipsis y sustitución.",
+      "category": "C2 Proficiency",
+      "time": "~9 min",
+      "exercises": [
+        {
+          "type": "multiple-choice",
+          "instruction": "Selecciona la respuesta correcta:",
+          "question": "Choose the natural response: 'I thought the lecture was useful.' 'So ____ I.'",
+          "options": [
+            "did",
+            "was",
+            "have"
+          ],
+          "correctAnswer": "did",
+          "explanation": "So did I agrees with a past-simple statement."
+        },
+        {
+          "type": "fill-blank",
+          "instruction": "Completa la oración:",
+          "sentence": "She can speak French, and her brother can ____ .",
+          "options": [
+            "too",
+            "also to",
+            "either"
+          ],
+          "correctAnswer": "too",
+          "explanation": "Can is retained as an auxiliary in this elliptical response."
+        }
+      ]
+    },
+    {
+      "id": "lesson_extra_62",
+      "number": 62,
+      "cefr": "C2",
+      "title": "Rhetorical Devices & Effect",
+      "subtitle": "Rhetorical Devices & Effect (C2)",
+      "icon": "🎙️",
+      "description": "Analizar recursos retóricos y sus efectos discursivos.",
+      "category": "C2 Proficiency",
+      "time": "~9 min",
+      "exercises": [
+        {
+          "type": "multiple-choice",
+          "instruction": "Selecciona la respuesta correcta:",
+          "question": "A question asked to make a point rather than obtain an answer is _____.",
+          "options": [
+            "rhetorical",
+            "hypothetical",
+            "indirect"
+          ],
+          "correctAnswer": "rhetorical",
+          "explanation": "A rhetorical question is designed to persuade or emphasize."
+        },
+        {
+          "type": "fill-blank",
+          "instruction": "Completa la oración:",
+          "sentence": "The repeated opening phrase is an example of _____.",
+          "options": [
+            "anaphora",
+            "irony",
+            "understatement"
+          ],
+          "correctAnswer": "anaphora",
+          "explanation": "Anaphora repeats a word or phrase at the beginning of clauses."
+        }
+      ]
+    },
+    {
+      "id": "lesson_extra_63",
+      "number": 63,
+      "cefr": "C2",
+      "title": "Precision & Near-Synonyms",
+      "subtitle": "Precision & Near-Synonyms (C2)",
+      "icon": "🔍",
+      "description": "Elegir vocabulario preciso entre términos próximos.",
+      "category": "C2 Proficiency",
+      "time": "~9 min",
+      "exercises": [
+        {
+          "type": "multiple-choice",
+          "instruction": "Selecciona la respuesta correcta:",
+          "question": "Which verb means to deliberately make something seem less important?",
+          "options": [
+            "downplay",
+            "undermine",
+            "overstate"
+          ],
+          "correctAnswer": "downplay",
+          "explanation": "Downplay means to present something as less significant."
+        },
+        {
+          "type": "fill-blank",
+          "instruction": "Completa la oración:",
+          "sentence": "The spokesperson tried to ____ the scale of the disruption.",
+          "options": [
+            "downplay",
+            "overwhelm",
+            "overlook"
+          ],
+          "correctAnswer": "downplay",
+          "explanation": "Downplay accurately describes minimising perceived importance."
+        }
+      ]
+    },
+    {
+      "id": "lesson_extra_64",
+      "number": 64,
+      "cefr": "C2",
+      "title": "Ambiguity & Sentence Interpretation",
+      "subtitle": "Ambiguity & Sentence Interpretation (C2)",
+      "icon": "🧠",
+      "description": "Reconocer ambigüedades sintácticas y resolverlas por contexto.",
+      "category": "C2 Proficiency",
+      "time": "~9 min",
+      "exercises": [
+        {
+          "type": "multiple-choice",
+          "instruction": "Selecciona la respuesta correcta:",
+          "question": "The sentence 'I saw the man with the telescope' is ambiguous because _____.",
+          "options": [
+            "the phrase can describe who had the telescope",
+            "the verb has no object",
+            "the tense is unclear"
+          ],
+          "correctAnswer": "the phrase can describe who had the telescope",
+          "explanation": "The prepositional phrase can attach to the observer or the man."
+        },
+        {
+          "type": "fill-blank",
+          "instruction": "Completa la oración:",
+          "sentence": "To remove ambiguity, write: 'Using a telescope, I saw the man ____.'",
+          "options": [
+            "across the street",
+            "with the telescope",
+            "who had one"
+          ],
+          "correctAnswer": "across the street",
+          "explanation": "The revised phrase makes clear that the observer used the telescope."
+        }
+      ]
+    },
+    {
+      "id": "lesson_extra_65",
+      "number": 65,
+      "cefr": "C2",
+      "title": "Stylistic Register & Subtlety",
+      "subtitle": "Stylistic Register & Subtlety (C2)",
+      "icon": "🖋️",
+      "description": "Ajustar el tono y la elección léxica a contextos exigentes.",
+      "category": "C2 Proficiency",
+      "time": "~9 min",
+      "exercises": [
+        {
+          "type": "multiple-choice",
+          "instruction": "Selecciona la respuesta correcta:",
+          "question": "Which expression is the most diplomatically critical?",
+          "options": [
+            "The approach may benefit from further refinement.",
+            "The approach is ridiculous.",
+            "The approach is completely useless."
+          ],
+          "correctAnswer": "The approach may benefit from further refinement.",
+          "explanation": "The first option communicates criticism tactfully."
+        },
+        {
+          "type": "fill-blank",
+          "instruction": "Completa la oración:",
+          "sentence": "Her response was deliberately ____ to avoid making a firm commitment.",
+          "options": [
+            "equivocal",
+            "unequivocal",
+            "explicit"
+          ],
+          "correctAnswer": "equivocal",
+          "explanation": "Equivocal means ambiguous or open to more than one interpretation."
+        }
+      ]
+    }
+  ];
+  LESSONS_DATA.push(...ADDITIONAL_CEFR_LESSONS);
+
+
   // Grammar Data
   // ========================================================================
 // COMPENDIO MAESTRO DE GRAMATICA INGLESA A1 A C1 (48 UNIDADES COMPLETAS)
