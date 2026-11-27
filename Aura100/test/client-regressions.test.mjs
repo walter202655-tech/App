@@ -45,3 +45,39 @@ test("all navigation destinations exist and HTML ids are unique", async () => {
   }
   assert.equal(ids.length, new Set(ids).size, "HTML contains duplicate ids");
 });
+
+
+test("premium products are separated into six sections with explicit feature workspaces", async () => {
+  const html = await readFile(new URL("../index.html", import.meta.url), "utf8");
+  for (const id of ["grammar","pronunciation","themes","avatars","writing","multiplier"]) {
+    assert.match(html, new RegExp('data-premium-feature="' + id + '"'));
+  }
+  assert.match(html, /id="premium-feature-workspace"/);
+  assert.match(script, /renderPremiumGrammar\(\)/);
+  assert.match(script, /renderPremiumPronunciation\(\)/);
+  assert.match(script, /renderPremiumWriting\(\)/);
+  assert.match(script, /renderPremiumThemes\(\)/);
+  assert.match(script, /renderPremiumAvatars\(\)/);
+  assert.match(script, /renderPremiumMultiplier\(\)/);
+});
+
+test("premium avatar collection is gated by ownership", () => {
+  assert.match(script, /this\.state\.premiumAvatars \? \['🐙'/);
+  assert.match(script, /Este avatar pertenece a la colección Premium/);
+});
+
+test("premium writing evaluation validates length and prevents duplicate AI requests", () => {
+  assert.match(script, /async evaluatePremiumWriting\(\)/);
+  assert.match(script, /words < 120 \|\| words > 220/);
+  assert.match(script, /if \(this\.premiumWritingBusy\) return/);
+  assert.match(script, /finally \{/);
+});
+
+test("premium theme palettes are applied only after unlocking and persist", async () => {
+  const styles = await readFile(new URL("../style.css", import.meta.url), "utf8");
+  assert.match(script, /if \(!this\.state\.premiumThemes\)/);
+  assert.match(script, /this\.state\.premiumThemeSkin = skin/);
+  assert.match(styles, /premium-skin-obsidian-gold/);
+  assert.match(styles, /premium-skin-arctic-mint/);
+  assert.match(styles, /premium-skin-sakura-pulse/);
+});
