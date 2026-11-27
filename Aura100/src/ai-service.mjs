@@ -60,7 +60,7 @@ export async function generateText({ instructions, input, maxOutputTokens = 700 
 export async function* streamText({ instructions, input, maxOutputTokens = 600, signal }) {
   const api = getClient();
   const stream = await api.responses.create({
-    model: process.env.OPENAI_TALK_MODEL || process.env.OPENAI_MODEL || DEFAULT_MODEL,
+    model: process.env.OPENAI_TALK_MODEL || process.env.OPENAI_MODEL || "gpt-6.1-sol",
     instructions, input, max_output_tokens: maxOutputTokens, store: false, stream: true
   }, { signal });
   for await (const event of stream) {
