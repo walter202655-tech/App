@@ -10,6 +10,7 @@ Never claim that an AI estimate is an official CEFR certificate or externally ac
 const SCENARIOS = {
   free: "An open everyday conversation. Let the learner choose the topic.",
   restaurant: "Ordering food politely at a restaurant.",
+  cambridge_speaking: "A Cambridge B2 First Speaking interlocutor conducting original practice for one selected exam part.",
   hotel: "Checking into a hotel and asking practical questions.",
   directions: "Asking for and giving directions in a city.",
   job: "A respectful, age-appropriate practice interview about skills, studies, and goals.",
@@ -21,7 +22,11 @@ const SCENARIOS = {
 };
 
 export function chatInstructions(level, scenario) {
-  const scenarioGuidance = scenario === "cambridge_exam"
+  const scenarioGuidance = scenario === "cambridge_speaking"
+    ? `
+Conduct an original Cambridge B2 First Speaking practice. Act as a calm interlocutor, not as a lecturer. Follow the requested part and ask one prompt at a time. For Part 1 ask short interview questions; for Part 2 provide a text-described comparison task; for Part 3 interact as a collaborative partner; for Part 4 ask broader discussion questions. Keep the learner speaking most of the time. Do not provide model answers unless asked. If the learner requests final feedback, respond in Spanish and evaluate only the written transcript for Grammar and Vocabulary, Discourse Management, and Interactive Communication. Explicitly state that pronunciation and actual spoken fluency cannot be assessed from typed answers. Never give an official Cambridge score or predict a pass.
+`
+    : scenario === "cambridge_exam"
     ? `
 You are answering questions about Cambridge B2 First (not an official Cambridge representative).
 Use Spanish explanations by default, while preserving English exam terms where useful.
@@ -56,6 +61,7 @@ Rules:
 }
 
 export function writingInstructions(level, taskType, language, taskPrompt) {
+  const cambridgeRubric = String(taskPrompt || "").includes("[CAMBRIDGE_B2_FIRST_RUBRIC]");
   return `${SAFETY_BASE}
 You are an experienced English-language writing teacher. Evaluate the learner's own writing; do not replace their ideas or invent evidence.
 Target CEFR level: ${level}.
@@ -63,7 +69,7 @@ Writing task type: ${taskType}.
 Task instructions: ${taskPrompt || "No additional task prompt supplied."}
 Feedback language: ${language === "es" ? "Spanish" : "English"}.
 
-Evaluate the response against the exact task, intended audience and register. Consider task fulfilment, coherence and cohesion, lexical resource, grammatical range and accuracy, and register where relevant.
+Evaluate the response against the exact task, intended audience and register. ${cambridgeRubric ? "For Cambridge B2 First, use exactly these four criteria: Content, Communicative Achievement, Organisation, and Language. Score each from 0 to 5, using the Cambridge B2 First descriptors as a guide, and justify each score with evidence. Do not use the generic five-criterion rubric for this task." : "Consider task fulfilment, coherence and cohesion, lexical resource, grammatical range and accuracy, and register where relevant."}
 Scoring rules: use the 0-10 scale for each applicable criterion and justify every score with evidence from the submitted text. Normally include all five criteria. Calculate overallScore as the arithmetic mean of the criterion scores multiplied by 10 (for five equally weighted criteria, the sum of the five scores multiplied by 2); round to the nearest whole number. If a criterion genuinely does not apply, explain this in the summary and calculate using the remaining criteria. Never inflate marks to be encouraging. This is an internal pedagogical estimate, not an official exam mark. The estimated CEFR level describes this writing sample only, not the learner's overall ability.
 Do not penalise a correct regional variety of English. Distinguish errors from acceptable alternatives and avoid overcorrecting.
 Every correction must quote a real phrase from the submission and preserve its intended meaning. Do not invent errors, content, facts or evidence. If there are few errors, focus on precision and naturalness rather than manufacturing corrections.
