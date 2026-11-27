@@ -49,7 +49,7 @@ app.use((req, res, next) => {
 
 const generalLimiter = rateLimit({
   windowMs: Number(process.env.AI_RATE_LIMIT_WINDOW_MS || 600000),
-  limit: Number(process.env.AI_RATE_LIMIT_MAX || 20),
+  limit: Number(process.env.AI_RATE_LIMIT_MAX || 120),
   standardHeaders: "draft-8",
   legacyHeaders: false,
   message: { error: "Has realizado demasiadas solicitudes. Espera un momento y vuelve a intentarlo." }
