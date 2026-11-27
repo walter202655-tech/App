@@ -5403,6 +5403,7 @@ Warm regards,
         completedLessons: [], knownWords: ["w_hello","w_good_morning","w_goodbye","w_please","w_thank_you"],
         ankiDeck: [...INITIAL_ANKI_DECK], ankiReviewsLifetime: 0,
         unlockedAchievements: [], inventory: { streakFreeze: 0, doubleXp: 0 },
+        purchases: 0, premiumUnlocked: 0, shopPurchaseHistory: [],
         doubleXpActiveCount: 0,
         lastWheelSpin: null, loginStreak: 0, lastLoginBonus: null,
         sentencesMined: 0, wheelSpins: 0,
@@ -5443,6 +5444,9 @@ Warm regards,
           }
         };
         state.inventory = { ...initial.inventory, ...savedInventory };
+        if (!Array.isArray(state.shopPurchaseHistory)) state.shopPurchaseHistory = [];
+        if (!Number.isFinite(Number(state.purchases))) state.purchases = 0;
+        if (!Number.isFinite(Number(state.premiumUnlocked))) state.premiumUnlocked = 0;
 
         ['completedLessons', 'knownWords', 'ankiDeck', 'unlockedAchievements'].forEach((key) => {
           if (!Array.isArray(state[key])) state[key] = initial[key];
@@ -5660,8 +5664,11 @@ Warm regards,
     }
 
     addCoins(amount) {
-      this.state.coinsEarnedTotal = (this.state.coinsEarnedTotal||0) + amount;
-      this.state.coins += amount;
+      const baseAmount = Number(amount) || 0;
+      const multiplier = Math.max(1, Math.min(3, Number(this.state.coinMultiplier) || 1));
+      const earned = Math.max(0, Math.round(baseAmount * multiplier));
+      this.state.coinsEarnedTotal = (this.state.coinsEarnedTotal || 0) + earned;
+      this.state.coins += earned;
       const coinEl = document.getElementById('header-coins');
       if (coinEl) {
         coinEl.textContent = this.state.coins;
@@ -8447,15 +8454,43 @@ Warm regards,
     // SHOP
     // ========================================================================
     renderShop() {
-      const set = (id, v) => { const el = document.getElementById(id); if (el) el.textContent = v; };
+      const set = (id, value) => { const el = document.getElementById(id); if (el) el.textContent = value; };
       set('shop-coins-val', this.state.coins);
-      set('inventory-streak-freeze', `Tienes: ${this.state.inventory.streakFreeze}`);
-      set('inventory-double-xp', `Tienes: ${this.state.inventory.doubleXp}`);
-      set('inventory-hearts-info', `Corazones: ${this.state.hearts}/${this.state.maxHearts}`);
-      this.renderLoginBonus();
-      this.renderWheelCooldown();
+      set('inventory-streak-freeze', 'Tienes: ' + (this.state.inventory.streakFreeze || 0));
+      set('inventory-double-xp', 'Actividades con XP doble: ' + (this.state.doubleXpActiveCount || 0));
+      set('inventory-hearts-info', 'Corazones: ' + this.state.hearts + '/' + this.state.maxHearts);
+      const inventory = document.getElementById('shop-inventory-summary');
+      if (inventory) { const rows = [['Streak Freeze', this.state.inventory.streakFreeze || 0], ['Actividades con XP doble', this.state.doubleXpActiveCount || 0], ['XP doble pendiente', this.state.doubleXpActiveCount || 0], ['Corazones', this.state.hearts + '/' + this.state.maxHearts], ['Multiplicador de monedas', 'x' + (this.state.coinMultiplier || 1).toFixed(1)]]; inventory.innerHTML = rows.map(row => '<div class="shop-inventory-stat"><span>' + escapeHTML(String(row[0])) + '</span><strong>' + escapeHTML(String(row[1])) + '</strong></div>').join(''); }
+      const cards = Array.from(document.querySelectorAll('#view-shop .shop-item-card'));
+      cards.forEach(card => { const grid = card.closest('.shop-grid'); const heading = grid && grid.previousElementSibling; const label = (heading && heading.textContent || '').toLowerCase(); card.dataset.shopCategory = label.includes('anki') ? 'anki' : label.includes('premium') ? 'premium' : 'consumables'; });
+      cards.forEach(card => {
+        const button = card.querySelector('button[onclick*="buyShopItem"]'); if (!button) return;
+        const match = (button.getAttribute('onclick') || '').match(/buyShopItem\('([^']+)'\)/); if (!match) return;
+        const id = match[1]; card.dataset.shopItem = id;
+        const flags = { grammarUnlock: 'premiumGrammar', pronunciationPro: 'premiumPronunciation', darkThemeUnlock: 'premiumThemes', customAvatar: 'premiumAvatars', writingPro: 'premiumWriting' };
+        const owned = Boolean(flags[id] && this.state[flags[id]]);
+        const capped = (id === 'extraHeart' && (this.state.maxHearts || 3) >= 10) || (id === 'heartRefill' && this.state.hearts >= this.state.maxHearts) || (id === 'coinMultiplier' && (this.state.coinMultiplier || 1) >= 3);
+        const price = Number((card.querySelector('.shop-price') && card.querySelector('.shop-price').textContent || '').replace(/[^0-9]/g, ''));
+        const insufficient = Number.isFinite(price) && this.state.coins < price;
+        if (!button.dataset.defaultLabel) button.dataset.defaultLabel = button.textContent;
+        button.disabled = owned || capped || insufficient;
+        button.textContent = owned ? 'Desbloqueado' : capped ? 'Límite alcanzado' : insufficient ? 'Coins insuficientes' : button.dataset.defaultLabel;
+        card.classList.toggle('is-owned', owned); card.classList.toggle('is-unavailable', capped || insufficient);
+        let badge = card.querySelector('.shop-owned-status');
+        if (owned && !badge) { badge = document.createElement('span'); badge.className = 'shop-owned-status'; badge.textContent = 'En tu cuenta'; card.appendChild(badge); }
+        if (!owned && badge) badge.remove();
+      });
+      const history = document.getElementById('shop-purchase-history');
+      if (history) { const entries = (this.state.shopPurchaseHistory || []).slice(0, 8); history.innerHTML = entries.length ? entries.map(entry => { const card = cards.find(node => node.dataset.shopItem === entry.itemId); const title = card && card.querySelector('h4') ? card.querySelector('h4').textContent : entry.itemId; const date = new Date(entry.date); const label = Number.isNaN(date.getTime()) ? '' : date.toLocaleDateString('es-PE', { day: '2-digit', month: 'short' }); return '<div class="shop-history-row"><span><strong>' + escapeHTML(String(title)) + '</strong><small>' + escapeHTML(String(label)) + '</small></span><b>-' + (Number(entry.cost) || 0) + ' Coins</b></div>'; }).join('') : '<p class="shop-empty-history">Tus compras aparecerán aquí.</p>'; }
+      this.renderLoginBonus(); this.renderWheelCooldown(); this.filterShopItems();
     }
 
+    filterShopItems() {
+      const query = (document.getElementById('shop-search') && document.getElementById('shop-search').value || '').trim().toLocaleLowerCase('es');
+      const category = document.getElementById('shop-category-filter') && document.getElementById('shop-category-filter').value || 'all';
+      document.querySelectorAll('#view-shop .shop-item-card').forEach(card => { const text = ((card.querySelector('h4') && card.querySelector('h4').textContent || '') + ' ' + (card.querySelector('p') && card.querySelector('p').textContent || '')).toLocaleLowerCase('es'); card.hidden = !(text.includes(query) && (category === 'all' || category === (card.dataset.shopCategory || 'other'))); });
+      document.querySelectorAll('#view-shop .shop-grid').forEach(grid => { const visible = Array.from(grid.querySelectorAll('.shop-item-card')).some(card => !card.hidden); if (grid.previousElementSibling && grid.previousElementSibling.classList.contains('section-title')) grid.previousElementSibling.hidden = !visible; grid.hidden = !visible; });
+    }
     renderLoginBonus() {
       const row = document.getElementById('login-days-row');
       const btn = document.getElementById('btn-claim-bonus');
@@ -8624,41 +8659,41 @@ Warm regards,
 
     buyShopItem(itemId) {
       this.sound.playClick();
-      const buy = (cost, fn, msg, type='cyan') => {
-        if (this.state.coins < cost) { this.showToast(`Necesitas ${cost}🪙 (tienes ${this.state.coins})`, 'info'); return; }
-        this.state.coins -= cost;
-        this.state.purchases = (this.state.purchases||0) + 1;
-        this.state.premiumUnlocked = (this.state.premiumUnlocked||0) + 1;
-        fn();
-        this.showToast(msg, type);
-        this.sound.playCoin();
-        this.checkAchievements();
+      const permanent = { grammarUnlock: 'premiumGrammar', pronunciationPro: 'premiumPronunciation', darkThemeUnlock: 'premiumThemes', customAvatar: 'premiumAvatars', writingPro: 'premiumWriting' };
+      if (permanent[itemId] && this.state[permanent[itemId]]) { this.showToast('Este artículo ya está desbloqueado.', 'info'); return; }
+      if (itemId === 'extraHeart' && (this.state.maxHearts || 3) >= 10) { this.showToast('Has alcanzado el máximo de 10 corazones.', 'info'); return; }
+      if (itemId === 'heartRefill' && this.state.hearts >= this.state.maxHearts) { this.showToast('Ya tienes todos los corazones.', 'info'); return; }
+      if (itemId === 'coinMultiplier' && (this.state.coinMultiplier || 1) >= 3) { this.showToast('El multiplicador máximo es x3.', 'info'); return; }
+      const buy = (cost, apply, message, type = 'cyan', premium = false) => {
+        if (this.state.coins < cost) { this.showToast('Necesitas ' + cost + ' Coins. Tu saldo es ' + this.state.coins + '.', 'info'); return false; }
+        this.state.coins -= cost; this.state.purchases = (this.state.purchases || 0) + 1; apply();
+        if (premium) this.state.premiumUnlocked = (this.state.premiumUnlocked || 0) + 1;
+        if (!Array.isArray(this.state.shopPurchaseHistory)) this.state.shopPurchaseHistory = [];
+        this.state.shopPurchaseHistory.unshift({ itemId: itemId, cost: cost, date: new Date().toISOString(), balanceAfter: this.state.coins });
+        this.state.shopPurchaseHistory = this.state.shopPurchaseHistory.slice(0, 20);
+        if (message) this.showToast(message, type); this.sound.playCoin(); this.checkAchievements(); return true;
       };
       const actions = {
-        // ── Consumibles ──────────────────────────────────────────────
-        streakFreeze:    () => buy(50,  () => { this.state.inventory.streakFreeze++; },                                              '🛡️ Streak Freeze comprado! Tu racha está protegida.', 'purple'),
-        doubleXp:        () => buy(40,  () => { this.state.inventory.doubleXp++; this.state.doubleXpActiveCount += 2; },             '⚡ Double XP activado por 2 actividades!', 'gold'),
-        heartRefill:     () => { if (this.state.hearts===this.state.maxHearts){ this.showToast('¡Corazones llenos!','info'); return; } buy(30, () => { this.state.hearts = this.state.maxHearts; }, '❤️ Corazones recargados al máximo!', 'purple'); },
-        extraHeart:      () => buy(80,  () => { this.state.maxHearts = Math.min(10, (this.state.maxHearts||5)+1); this.state.hearts = this.state.maxHearts; }, '💖 ¡Corazón extra permanente desbloqueado!', 'purple'),
-        mysteryBox:      () => buy(60,  () => { const r=Math.random(); if(r<0.4){this.addXp(150);this.addCoins(50);this.showToast('🎁 Mystery Box: +150 XP y +50 monedas!','gold');}else if(r<0.7){this.state.inventory.streakFreeze++;this.showToast('🎁 Mystery Box: Streak Freeze!','purple');}else{this.state.doubleXpActiveCount+=5;this.showToast('🎁 Mystery Box: Double XP x5!','gold');} this.sound.playFanfare(); }, '', 'gold'),
-        xpBoost:         () => buy(80,  () => { this.state.doubleXpActiveCount += 10; },                                             '🌟 XP Boost x2 activado por 10 actividades!', 'gold'),
-        // ── Anki Premium ─────────────────────────────────────────────
-        ankiPack:        () => buy(45,  () => this.addAnkiPowerPack('basic'),  '🎴 Anki Pack B1-B2 añadido: +10 tarjetas!', 'cyan'),
-        ankiPackAdvanced:() => buy(90,  () => this.addAnkiPowerPack('advanced'),'🎴 Anki Pack C1-C2 añadido: +10 tarjetas!', 'cyan'),
-        ankiPackIdioms:  () => buy(70,  () => this.addAnkiPowerPack('idioms'),  '🎴 Anki Idioms Pack añadido: +10 frases!', 'cyan'),
-        // ── Herramientas Premium ──────────────────────────────────────
-        grammarUnlock:   () => buy(100, () => { this.state.premiumGrammar = true; },                                                 '📚 Grammar Pro desbloqueado: acceso a unidades C1-C2 avanzadas!', 'gold'),
-        pronunciationPro:() => buy(75,  () => { this.state.premiumPronunciation = true; },                                           '🎤 Pronunciation Pro desbloqueado: modo entrenador avanzado!', 'purple'),
-        darkThemeUnlock: () => buy(50,  () => { this.state.premiumThemes = true; this.showToast('🌙 Temas premium desbloqueados en Configuración!','cyan'); }, '', 'cyan'),
-        coinMultiplier:  () => buy(150, () => { this.state.coinMultiplier = (this.state.coinMultiplier||1) + 0.5; },                 `🪙 Coin Multiplier x${((this.state.coinMultiplier||1)+0.5).toFixed(1)} desbloqueado!`, 'gold'),
-        customAvatar:    () => buy(60,  () => { this.state.premiumAvatars = true; },                                                 '🦊 Avatares premium desbloqueados en tu perfil!', 'purple'),
-        writingPro:      () => buy(85,  () => { this.state.premiumWriting = true; },                                                  '✍️ Writing Pro desbloqueado: feedback avanzado y más talleres!', 'cyan')
+        streakFreeze: () => buy(50, () => { this.state.inventory.streakFreeze = (this.state.inventory.streakFreeze || 0) + 1; }, 'Streak Freeze añadido al inventario.', 'purple'),
+        doubleXp: () => buy(40, () => { this.state.doubleXpActiveCount = (this.state.doubleXpActiveCount || 0) + 2; }, 'Double XP activado para 2 actividades.', 'gold'),
+        heartRefill: () => buy(30, () => { this.state.hearts = this.state.maxHearts; }, 'Corazones recargados.', 'purple'),
+        extraHeart: () => buy(80, () => { this.state.maxHearts = Math.min(10, (this.state.maxHearts || 3) + 1); this.state.hearts = this.state.maxHearts; }, 'Capacidad de corazones aumentada.', 'purple'),
+        mysteryBox: () => buy(60, () => { const r = Math.random(); if (r < 0.4) { this.addXp(150); this.addCoins(50); this.showToast('Caja sorpresa: +150 XP y +50 monedas.', 'gold'); } else if (r < 0.7) { this.state.inventory.streakFreeze = (this.state.inventory.streakFreeze || 0) + 1; this.showToast('Caja sorpresa: recibiste Streak Freeze.', 'purple'); } else { this.state.doubleXpActiveCount = (this.state.doubleXpActiveCount || 0) + 5; this.showToast('Caja sorpresa: Double XP para 5 actividades.', 'gold'); } this.sound.playFanfare(); }, '', false),
+        xpBoost: () => buy(80, () => { this.state.doubleXpActiveCount = (this.state.doubleXpActiveCount || 0) + 10; }, 'XP x2 activado para 10 actividades.', 'gold'),
+        ankiPack: () => buy(45, () => this.addAnkiPowerPack('basic'), 'Pack Anki B1-B2 añadido.'),
+        ankiPackAdvanced: () => buy(90, () => this.addAnkiPowerPack('advanced'), 'Pack Anki C1-C2 añadido.'),
+        ankiPackIdioms: () => buy(70, () => this.addAnkiPowerPack('idioms'), 'Pack de idioms añadido.'),
+        grammarUnlock: () => buy(100, () => { this.state.premiumGrammar = true; }, 'Grammar Pro desbloqueado.', 'gold', true),
+        pronunciationPro: () => buy(75, () => { this.state.premiumPronunciation = true; }, 'Pronunciation Pro desbloqueado.', 'purple', true),
+        darkThemeUnlock: () => buy(50, () => { this.state.premiumThemes = true; }, 'Temas premium desbloqueados.', 'cyan', true),
+        coinMultiplier: () => buy(150, () => { this.state.coinMultiplier = Math.min(3, (this.state.coinMultiplier || 1) + 0.5); }, 'Multiplicador de monedas actualizado.', 'gold', true),
+        customAvatar: () => buy(60, () => { this.state.premiumAvatars = true; }, 'Avatares premium desbloqueados.', 'purple', true),
+        writingPro: () => buy(85, () => { this.state.premiumWriting = true; }, 'Writing Pro desbloqueado.', 'cyan', true)
       };
-      if (actions[itemId]) actions[itemId]();
-      this.saveState();
-      this.renderShop();
+      if (!Object.prototype.hasOwnProperty.call(actions, itemId)) { this.showToast('Artículo no válido.', 'info'); return; }
+      const purchased = actions[itemId](); if (!purchased) return;
+      this.saveState(); this.renderShop();
     }
-
     addAnkiPowerPack(packType = 'basic') {
       const PACKS = {
         basic: [

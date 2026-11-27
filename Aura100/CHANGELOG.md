@@ -1,5 +1,16 @@
 # Changelog - Aura100
 
+## [4.2.0] - 2026-11-27
+
+### Added
+- Inventory dashboard, recent purchase history, product search and category filters.
+- Ownership and availability indicators for store items.
+
+### Improved
+- Purchase validation, duplicate-unlock prevention and limits for upgrades.
+- Transactions are recorded only after successful purchases.
+
+
 ## [4.1.0] - 2026-11-26
 
 ### Added

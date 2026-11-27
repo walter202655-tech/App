@@ -1202,7 +1202,15 @@
             <p class="wheel-cooldown" id="wheel-cooldown">✨ ¡Giro diario disponible!</p>
           </div>
 
-          <!-- Shop Items Grid — Consumibles -->
+                    <div class="shop-management-grid">
+            <section class="card shop-inventory-panel"><div class="shop-panel-heading"><div><h3>Tu inventario</h3><p>Artículos y mejoras disponibles en tu cuenta.</p></div><span class="shop-panel-kicker">CUENTA</span></div><div id="shop-inventory-summary" class="shop-inventory-summary"></div></section>
+            <section class="card shop-history-panel"><div class="shop-panel-heading"><div><h3>Actividad reciente</h3><p>Últimas compras realizadas.</p></div><span class="shop-panel-kicker">HISTORIAL</span></div><div id="shop-purchase-history" class="shop-purchase-history"><p class="shop-empty-history">Tus compras aparecerán aquí.</p></div></section>
+          </div>
+          <div class="shop-toolbar">
+            <label class="shop-search-wrap"><span aria-hidden="true">⌕</span><input id="shop-search" type="search" placeholder="Buscar artículos..." aria-label="Buscar artículos en la tienda" oninput="app.filterShopItems()"></label>
+            <label class="shop-filter-wrap"><span>Mostrar</span><select id="shop-category-filter" onchange="app.filterShopItems()"><option value="all">Todos los artículos</option><option value="consumables">Consumibles</option><option value="anki">Packs Anki</option><option value="premium">Herramientas premium</option></select></label>
+          </div>
+<!-- Shop Items Grid — Consumibles -->
           <h3 class="section-title" style="margin-top:1.5rem"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="svg-section-icon"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg> ⚡ Consumibles</h3>
           <div class="shop-grid">
             <div class="shop-item-card">
