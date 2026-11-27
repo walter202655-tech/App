@@ -1,6 +1,8 @@
 # Changelog - Aura100
 
 ## [Unreleased]
+- Integración progresiva de Anime.js 4 para transiciones de vistas, entrada escalonada de tarjetas y microinteracciones accesibles.
+- Respeto de `prefers-reduced-motion`, carga degradable si el CDN no está disponible y optimizaciones para dispositivos móviles.
 
 ### Added
 - Adaptive Cambridge B2 diagnostic dashboard and skill-prioritised practice sessions.
