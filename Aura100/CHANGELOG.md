@@ -2,6 +2,26 @@
 
 Todos los cambios notables realizados en el proyecto se documentan en este archivo.
 
+
+## [Unreleased] — 2026-11-26
+
+### Added - Academy Hub and Cambridge B2 preparation
+- Added an AI-assisted weekly study calendar that uses the existing adaptive learning plan, schedules activities by day, and stores completed tasks locally.
+- Added two date-based daily mini-games: an English Wordle-style challenge and a vocabulary matching game.
+- Added a dedicated Cambridge B2 First preparation area with guidance for Reading and Use of English, Writing, Listening and Speaking.
+- Added AI-generated personalised practice questions, short original Reading and Use of English practice sets, and a quick formative evaluation with transparent "Predictive Notes".
+- Added a Cambridge exam Q&A chat scenario and a study-coach AI scenario for progress summaries.
+- Expanded vocabulary into saved-word and vocabulary-assessment views, using the existing Anki deck as the learner's saved collection.
+- Expanded the progress view with a question log, personal notes, recent assessment history and an AI-generated study summary.
+- Added responsive styling and regression checks for the new Academy Hub views.
+- Added explicit limits to practice feedback: short local assessments are not official Cambridge results or validated score predictions.
+
+### Notes
+- AI-generated questions and study summaries require the configured server-side AI service. Practice screens include local fallback questions when AI is unavailable.
+- Calendar tasks, game results, questions, notes and chat history are stored in the browser's local storage for this beta. They are not synchronised between devices.
+- The Cambridge practice sets are original learning exercises and do not reproduce official Cambridge papers.
+
+
 ## [v4.0.0] — 2026-11-22
 
 ### 🚀 Transformación de Arquitectura & Rebranding

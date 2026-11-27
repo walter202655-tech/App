@@ -3,7 +3,7 @@ import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
 
 const source = await readFile(new URL("../script.js", import.meta.url), "utf8");
-const match = source.match(/const ADDITIONAL_CEFR_LESSONS = (\[[\s\S]*?\]);\s*LESSONS_DATA\.push/);
+const match = source.match(/const ADDITIONAL_CEFR_LESSONS =\s*(\[[\s\S]*?\]);\s*LESSONS_DATA\.push/);
 assert.ok(match, "The additional CEFR lesson dataset must be present.");
 const lessons = JSON.parse(match[1]);
 
