@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <!-- Content Security Policy: Authorizes YouTube, Google and fonts, preventing Error 153 -->
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline' 'unsafe-eval' data: blob: https://*.youtube.com https://*.youtube-nocookie.com https://*.ytimg.com https://*.google.com https://fonts.googleapis.com https://fonts.gstatic.com; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://*.youtube.com https://*.youtube-nocookie.com https://*.ytimg.com https://*.google.com; frame-src 'self' https://*.youtube.com https://*.youtube-nocookie.com https://player.vimeo.com; child-src 'self' https://*.youtube.com https://*.youtube-nocookie.com; connect-src 'self' https://*.youtube.com https://*.google.com https://*.googleapis.com; img-src 'self' data: blob: https://*.ytimg.com https://*.google.com https://*.ggpht.com https://*.youtube.com; media-src 'self' data: blob: https://*.youtube.com; font-src 'self' data: https://fonts.gstatic.com;">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline' 'unsafe-eval' data: blob: https://*.youtube.com https://*.youtube-nocookie.com https://*.ytimg.com https://*.google.com https://fonts.googleapis.com https://fonts.gstatic.com; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://*.youtube.com https://*.youtube-nocookie.com https://*.ytimg.com https://*.google.com https://cdn.jsdelivr.net; frame-src 'self' https://*.youtube.com https://*.youtube-nocookie.com https://player.vimeo.com; child-src 'self' https://*.youtube.com https://*.youtube-nocookie.com; connect-src 'self' https://*.youtube.com https://*.google.com https://*.googleapis.com; img-src 'self' data: blob: https://*.ytimg.com https://*.google.com https://*.ggpht.com https://*.youtube.com; media-src 'self' data: blob: https://*.youtube.com; font-src 'self' data: https://fonts.gstatic.com;">
   <title>Aura100 — English Academy</title>
     <!-- Google Fonts: Aura100 & Figma 4 Themes (Lora, DM Sans, Space Grotesk, IBM Plex Sans, Manrope, Inter, Rajdhani) -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -12,6 +12,7 @@
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=IBM+Plex+Sans:ital,wght@0,100..700;1,100..700&family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Lora:ital,wght@0,400..700;1,400..700&family=Manrope:wght@200..800&family=Rajdhani:wght@500;600;700&family=Space+Grotesk:wght@300..700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
   <link rel="stylesheet" href="academy-hub.css">\n  <link rel="stylesheet" href="ux-refresh.css">
+  <link rel="stylesheet" href="motion-effects.css">
   <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>⚡</text></svg>">
 </head>
 <body class="cyber-theme">
@@ -1722,5 +1723,7 @@
   <script src="js/academy-hub.js"></script>
   <script src="js/cambridge-coach.js"></script>
   <script src="js/ux-refresh.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/animejs/dist/bundles/anime.umd.min.js"></script>
+  <script src="js/motion-system.js"></script>
 </body>
 </html>

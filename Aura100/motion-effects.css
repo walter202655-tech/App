@@ -1,0 +1,23 @@
+/* Aura100 motion layer - subtle, functional animation only. */
+#main-content .motion-enter {
+  will-change: opacity, transform;
+}
+#main-content .motion-enter.motion-entered {
+  will-change: auto;
+}
+.btn, .btn-icon, .academy-option, .academy-tab, .mission-action-btn {
+  transform-origin: center;
+}
+@media (prefers-reduced-motion: reduce) {
+  #main-content .motion-enter,
+  #main-content .motion-enter.motion-entered {
+    opacity: 1 !important;
+    transform: none !important;
+    will-change: auto !important;
+  }
+}
+@media (max-width: 640px) {
+  #main-content .motion-enter {
+    will-change: opacity;
+  }
+}
