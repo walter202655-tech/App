@@ -269,6 +269,8 @@
         await this.app.learningPlanManager.generatePersonalizedPlan(minutes, goal);
         const plan = this.app.learningPlanManager.activePlan;
         if (!plan || !Array.isArray(plan.weeklyPlan)) throw new Error("No se pudo validar el plan generado.");
+        plan.minutesPerDay = minutes;
+        this.app.learningPlanManager.savePlan(plan);
         this.state.activeGoal = goal;
         this.state.planUpdatedAt = new Date().toISOString();
         this.saveState();
@@ -311,7 +313,6 @@
       this.saveState();
       if (!checked) {
         this.app.addXp(3);
-        this.recordQuestion({ source: "Calendario", skill: "study", question: "Tarea completada: " + id, answer: "Completada", correctAnswer: "Completada", isCorrect: true });
       }
       const plan = this.app.learningPlanManager && this.app.learningPlanManager.activePlan;
       if (plan) this.renderCalendarPlan(plan);
@@ -566,7 +567,7 @@
       if (!box || !run) return;
       if (run.index >= run.questions.length) { this.finishQuestionRun(); return; }
       const q = run.questions[run.index];
-      box.innerHTML = '<div class="academy-run-header"><div><span class="academy-eyebrow">' + escapeHTML(run.kind === "practice" ? "SIMULACRO BREVE" : run.kind === "quick" ? "EVALUACIÓN RÁPIDA" : "PRÁCTICA PERSONALIZADA") + '</span><h3>Pregunta ' + (run.index + 1) + ' de ' + run.questions.length + '</h3></div><strong id="academy-run-timer">' + this.formatTime(run.secondsLeft) + '</strong></div><div class="academy-progress-track"><span style="width:' + (run.index / run.questions.length * 100) + '%"></span></div><article class="academy-question-card"><p class="academy-eyebrow">' + escapeHTML(q.skill || run.skill) + '</p><h3>' + escapeHTML(q.question) + '</h3><div class="academy-options">' + (q.options || []).map((option, index) => '<button class="academy-option" onclick="app.academyHub.answerCurrentQuestion(' + index + ')">' + escapeHTML(option) + '</button>').join("") + '</div><p id="academy-question-feedback" class="academy-feedback" aria-live="polite"></p></article><button class="btn btn-ghost" onclick="app.academyHub.finishQuestionRun()">Finalizar ahora</button>';
+      box.innerHTML = '<div class="academy-run-header"><div><span class="academy-eyebrow">' + escapeHTML(run.kind === "practice" ? "SIMULACRO BREVE" : run.kind === "quick" ? "EVALUACIÓN RÁPIDA" : "PRÁCTICA PERSONALIZADA") + '</span><h3>Pregunta ' + (run.index + 1) + ' de ' + run.questions.length + '</h3></div><strong id="academy-run-timer">' + this.formatTime(run.secondsLeft) + '</strong></div><div class="academy-progress-track"><span style="width:' + (run.index / run.questions.length * 100) + '%"></span></div><article class="academy-question-card"><p class="academy-eyebrow">' + escapeHTML(q.skill || run.skill) + ' · ' + escapeHTML(run.source) + '</p><h3>' + escapeHTML(q.question) + '</h3><div class="academy-options">' + (q.options || []).map((option, index) => '<button class="academy-option" onclick="app.academyHub.answerCurrentQuestion(' + index + ')">' + escapeHTML(option) + '</button>').join("") + '</div><p id="academy-question-feedback" class="academy-feedback" aria-live="polite"></p></article><button class="btn btn-ghost" onclick="app.academyHub.finishQuestionRun()">Finalizar ahora</button>';
     }
 
     answerCurrentQuestion(choiceIndex) {
@@ -762,6 +763,7 @@
     if (viewId === "cambridge-b2") app.academyHub.renderCambridge();
     if (viewId === "exam-chat") app.academyHub.renderExamChat();
     if (viewId === "word-bank") app.academyHub.setVocabularyTab(app.academyHub.vocabularyTab);
+    if (viewId === "modules") app.setModuleTab("grammar");
     if (viewId === "progress") app.academyHub.renderProgressExtras();
   };
 })(window);
