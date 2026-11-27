@@ -21,6 +21,12 @@ test("chat schema rejects empty messages and unexpected properties", () => {
   assert.equal(chatRequestSchema.safeParse({ message: "Hello", isAdmin: true }).success, false);
 });
 
+test("chat schema accepts the dedicated Cambridge tutor and study coach scenarios", () => {
+  assert.equal(chatRequestSchema.safeParse({ message: "How is the B2 First structured?", scenario: "cambridge_exam" }).success, true);
+  assert.equal(chatRequestSchema.safeParse({ message: "Summarise this progress data.", scenario: "study_coach" }).success, true);
+  assert.equal(chatRequestSchema.safeParse({ message: "Hello", scenario: "unknown_scenario" }).success, false);
+});
+
 test("writing schema enforces minimum text length and CEFR levels", () => {
   assert.equal(writingRequestSchema.safeParse({ text: "Too short" }).success, false);
   assert.equal(writingRequestSchema.safeParse({ text: "This is a sufficiently long student writing sample." }).success, true);
