@@ -6892,13 +6892,19 @@ Warm regards,
       const level = document.getElementById('ai-chat-level-select');
       if (scenario && !scenario.dataset.bound) { scenario.dataset.bound = '1'; scenario.addEventListener('change', () => this.aiChat.setScenario(scenario.value)); }
       if (level && !level.dataset.bound) { level.dataset.bound = '1'; level.addEventListener('change', () => this.aiChat.setLevel(level.value)); }
-    }\n\n    selectChatScenario(scenarioKey) { if (this.aiChat) this.aiChat.setScenario(scenarioKey); }\n\n    sendChatMessage() {
+    }
+
+    selectChatScenario(scenarioKey) { if (this.aiChat) this.aiChat.setScenario(scenarioKey); }
+
+    sendChatMessage() {
       const input = document.getElementById('ai-chat-input');
       const message = input?.value || '';
       if (!message.trim() || !this.aiChat) return;
       input.value = '';
       this.aiChat.sendMessage(message);
-    }\n\n    getChatHint() {
+    }
+
+    getChatHint() {
       const scenario = CHAT_SCENARIOS[this.currentScenario];
       const hint = scenario?.hints?.[this.chatStep] || '¡Sigue adelante!';
       this.showToast(`💡 ${hint}`, "cyan");
