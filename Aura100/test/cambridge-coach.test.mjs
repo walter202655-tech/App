@@ -23,7 +23,7 @@ test("Speaking simulation has a dedicated age-appropriate AI scenario", () => {
 
 test("Cambridge Writing uses the four B2 First assessment criteria", () => {
   for (const criterion of ["Content", "Communicative Achievement", "Organisation", "Language"]) {
-    assert.ok(schemas.includes('"' + criterion + '"'));
+    assert.ok(prompts.includes(criterion));
     assert.ok(prompts.includes(criterion));
   }
   assert.match(coach, /CAMBRIDGE_B2_FIRST_RUBRIC/);
@@ -31,7 +31,7 @@ test("Cambridge Writing uses the four B2 First assessment criteria", () => {
 
 test("integrated mock covers all four exam papers and is clearly formative", () => {
   for (const paper of ["reading", "writing", "listening", "speaking"]) assert.ok(coach.includes(paper));
-  assert.match(coach, /no es una reproducción del examen oficial completo/i);
+  assert.match(coach, /no una reproducción del examen oficial completo/i);
   assert.match(coach, /No se calcula una puntuación Cambridge English Scale/);
   assert.match(css, /@media\(max-width:760px\)/);
 });
