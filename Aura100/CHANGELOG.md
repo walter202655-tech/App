@@ -1,6 +1,9 @@
 # Changelog - Aura100
 
 ## [Unreleased]
+- Renovación visual de la interfaz: jerarquía tipográfica, tarjetas, navegación, dashboard y espaciado adaptable.
+- Nuevo tema seleccionable Aurora Flow con paleta midnight, violeta y menta.
+- Transiciones de sección más visibles, entrada escalonada de componentes y animación del elemento principal con Anime.js 4.
 - Integración progresiva de Anime.js 4 para transiciones de vistas, entrada escalonada de tarjetas y microinteracciones accesibles.
 - Respeto de `prefers-reduced-motion`, carga degradable si el CDN no está disponible y optimizaciones para dispositivos móviles.
 
