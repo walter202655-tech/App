@@ -134,9 +134,9 @@ export const SCHEMAS = {
           type: "object", additionalProperties: false,
           required: ["name", "score", "maxScore", "feedback"],
           properties: {
-            name: { type: "string", enum: ["Task fulfilment", "Coherence and cohesion", "Lexical resource", "Grammar range and accuracy", "Register"] },
+            name: { type: "string", enum: ["Task fulfilment", "Coherence and cohesion", "Lexical resource", "Grammar range and accuracy", "Register", "Content", "Communicative Achievement", "Organisation", "Language"] },
             score: { type: "integer", minimum: 0, maximum: 10 },
-            maxScore: { type: "integer", enum: [10] },
+            maxScore: { type: "integer", enum: [5, 10] },
             feedback: { type: "string" }
           }
         }
