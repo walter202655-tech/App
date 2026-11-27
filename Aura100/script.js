@@ -6886,109 +6886,19 @@ Warm regards,
     // CHAT BOT
     // ========================================================================
     renderChatBot() {
-      this.chatXpEarned = 0;
-      const xpEl = document.getElementById('chat-xp-total');
-      if (xpEl) xpEl.textContent = '+0 XP earned';
-      this.selectChatScenario(this.currentScenario);
-    }
-
-    selectChatScenario(scenarioKey) {
-      this.currentScenario = scenarioKey;
-      this.chatStep = 0;
-      document.querySelectorAll('.scenario-btn').forEach(b => b.classList.toggle('active', b.dataset.scenario === scenarioKey));
-      const scenario = CHAT_SCENARIOS[scenarioKey];
-      if (!scenario) return;
-      const messages = document.getElementById('chat-messages');
-      if (messages) {
-        messages.innerHTML = `<div class="chat-msg chat-msg-bot">🤖 <strong>${scenario.name}</strong><br>${scenario.intro}</div>`;
-      }
-      const input = document.getElementById('chat-input');
-      if (input) { input.value = ''; input.focus(); }
-      const hintEl = document.getElementById('chat-grammar-hint');
-      if (hintEl) hintEl.textContent = `💡 Hint: ${scenario.hints?.[0] || 'Escribe algo en inglés...'}`;
-    }
-
-    sendChatMessage() {
-      const input = document.getElementById('chat-input');
-      const msg = input?.value.trim();
-      if (!msg) return;
-      if (input) input.value = '';
-      const scenario = CHAT_SCENARIOS[this.currentScenario];
-      if (!scenario) return;
-      const messages = document.getElementById('chat-messages');
-      if (!messages) return;
-
-      // Check grammar corrections
-      let correction = '';
-      Object.entries(scenario.corrections || {}).forEach(([pattern, fix]) => {
-        if (msg.toLowerCase().includes(pattern)) correction = fix;
-      });
-
-      // Add user message
-      const userDiv = document.createElement('div');
-      userDiv.className = 'chat-msg chat-msg-user';
-      userDiv.textContent = msg;
-      messages.appendChild(userDiv);
-
-      if (correction) {
-        const corr = document.createElement('div');
-        corr.className = 'chat-msg-correction';
-        corr.textContent = correction;
-        messages.appendChild(corr);
-      }
-
-      // Bot response
-      const step = scenario.steps[this.chatStep];
-      if (step) {
-        const msgLow = msg.toLowerCase();
-        const matches = step.keywords.some(kw => msgLow.includes(kw));
-        const botText = matches ? step.response : (scenario.steps[Math.max(0, this.chatStep - 1)]?.response || "I'm not sure I understood. Could you rephrase that?");
-        const xpEarned = matches ? (step.xp || 10) : 3;
-
-        setTimeout(() => {
-          const botDiv = document.createElement('div');
-          botDiv.className = 'chat-msg chat-msg-bot';
-          botDiv.textContent = `🤖 ${botText}`;
-          messages.appendChild(botDiv);
-          messages.scrollTop = messages.scrollHeight;
-          this.speakText(botText, 0.95);
-
-          if (matches) {
-            this.chatStep++;
-            this.chatXpEarned += xpEarned;
-            this.addXp(xpEarned);
-            const xpEl = document.getElementById('chat-xp-total');
-            if (xpEl) xpEl.textContent = `+${this.chatXpEarned} XP earned`;
-          }
-
-          // Update hint
-          const nextHint = scenario.hints?.[this.chatStep] || '¡Buen trabajo! Sigue conversando.';
-          const hintEl = document.getElementById('chat-grammar-hint');
-          if (hintEl) hintEl.textContent = `💡 ${nextHint}`;
-
-          if (this.chatStep >= scenario.steps.length) {
-            this.addCoins(20);
-            this.chatsCompletedCount++;
-            this.state.stats.chatsCompleted = (this.state.stats.chatsCompleted || 0) + 1;
-            this.checkAchievements();
-            this.saveState();
-            setTimeout(() => {
-              const fin = document.createElement('div');
-              fin.className = 'chat-msg chat-msg-bot';
-              fin.innerHTML = `🎉 <strong>¡Conversación completada!</strong> +20 🪙 ¡Excelente inglés!`;
-              messages.appendChild(fin);
-              messages.scrollTop = messages.scrollHeight;
-              this.sound.playFanfare();
-            }, 1000);
-          }
-        }, 700);
-      }
-
-      messages.scrollTop = messages.scrollHeight;
-      this.saveState();
-    }
-
-    getChatHint() {
+      if (!this.aiChat) return;
+      this.aiChat.init();
+      const scenario = document.getElementById('ai-chat-scenario-select');
+      const level = document.getElementById('ai-chat-level-select');
+      if (scenario && !scenario.dataset.bound) { scenario.dataset.bound = '1'; scenario.addEventListener('change', () => this.aiChat.setScenario(scenario.value)); }
+      if (level && !level.dataset.bound) { level.dataset.bound = '1'; level.addEventListener('change', () => this.aiChat.setLevel(level.value)); }
+    }\n\n    selectChatScenario(scenarioKey) { if (this.aiChat) this.aiChat.setScenario(scenarioKey); }\n\n    sendChatMessage() {
+      const input = document.getElementById('ai-chat-input');
+      const message = input?.value || '';
+      if (!message.trim() || !this.aiChat) return;
+      input.value = '';
+      this.aiChat.sendMessage(message);
+    }\n\n    getChatHint() {
       const scenario = CHAT_SCENARIOS[this.currentScenario];
       const hint = scenario?.hints?.[this.chatStep] || '¡Sigue adelante!';
       this.showToast(`💡 ${hint}`, "cyan");
