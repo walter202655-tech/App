@@ -23,6 +23,7 @@ import {
   SCHEMAS
 } from "./src/prompts.mjs";
 import { generateText, generateStructured, moderateText, isAIConfigured } from "./src/ai-service.mjs";
+import { registerTalkRoutes } from "./src/talk-routes.mjs";
 
 const app = express();
 const PORT = Number(process.env.PORT || 3000);
@@ -48,7 +49,7 @@ app.use((req, res, next) => {
 
 const generalLimiter = rateLimit({
   windowMs: Number(process.env.AI_RATE_LIMIT_WINDOW_MS || 600000),
-  limit: Number(process.env.AI_RATE_LIMIT_MAX || 20),
+  limit: Number(process.env.AI_RATE_LIMIT_MAX || 120),
   standardHeaders: "draft-8",
   legacyHeaders: false,
   message: { error: "Has realizado demasiadas solicitudes. Espera un momento y vuelve a intentarlo." }
@@ -161,6 +162,8 @@ app.post("/api/ai/chat", async (req, res, next) => {
     res.json({ reply });
   } catch (error) { next(error); }
 });
+
+registerTalkRoutes(app);
 
 app.post("/api/ai/writing", async (req, res, next) => {
   try {

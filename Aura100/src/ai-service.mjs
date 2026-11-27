@@ -57,10 +57,24 @@ export async function generateText({ instructions, input, maxOutputTokens = 700 
   return output;
 }
 
-export async function generateStructured({ instructions, input, schemaName, schema, maxOutputTokens = 1400 }) {
+export async function* streamText({ instructions, input, maxOutputTokens = 600, signal }) {
+  const api = getClient();
+  const stream = await api.responses.create({
+    model: process.env.OPENAI_TALK_MODEL || process.env.OPENAI_MODEL || DEFAULT_MODEL,
+    instructions, input, max_output_tokens: maxOutputTokens, store: false, stream: true
+  }, { signal });
+  for await (const event of stream) {
+    if (event.type === "response.output_text.delta" && typeof event.delta === "string") yield event.delta;
+    else if (event.type === "response.refusal.done" || event.type === "response.failed" || event.type === "error") {
+      const error = new Error("The AI stream failed or was declined."); error.code = "AI_STREAM_FAILED"; throw error;
+    }
+  }
+}
+
+export async function generateStructured({ instructions, input, schemaName, schema, maxOutputTokens = 1400, model }) {
   const api = getClient();
   const response = await api.responses.create({
-    model: process.env.OPENAI_MODEL || "gpt-6.1-sol",
+    model: model || process.env.OPENAI_MODEL || "gpt-6.1-sol",
     instructions,
     input,
     max_output_tokens: maxOutputTokens,
