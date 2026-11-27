@@ -6392,3 +6392,18 @@ body.premium-skin-obsidian-gold{--purple-neon:#e7b85c;--purple-light:#f0d28b;--c
 body.premium-skin-arctic-mint{--purple-neon:#56d6c2;--purple-light:#d0f5ed;--cyan-neon:#8bc8ff;--purple-glow:rgba(86,214,194,.24)}
 body.premium-skin-sakura-pulse{--purple-neon:#f28ab2;--purple-light:#ffd1e2;--cyan-neon:#b89aff;--purple-glow:rgba(242,138,178,.24)}
 @media(max-width:600px){.premium-product-section{padding:.85rem}.premium-workspace-heading{flex-direction:column}.premium-pronunciation-controls{flex-direction:column}.premium-pronunciation-controls button{width:100%}}
+
+/* AI Conversation Studio */
+.ai-chat-toolbar{display:flex;align-items:center;gap:.8rem;flex-wrap:wrap;margin:1rem 0;padding:1rem;border:1px solid var(--border-color);border-radius:14px;background:var(--bg-card)}
+.ai-chat-toolbar label{display:flex;align-items:center;gap:.5rem;color:var(--text-main);font-size:.88rem;font-weight:700}
+.ai-chat-toolbar select{min-height:40px;padding:.45rem .7rem;border:1px solid var(--border-color);border-radius:9px;background:var(--bg-main);color:var(--text-main)}
+.ai-chat-window{overflow:hidden}
+.ai-chat-window .chat-messages{min-height:320px;max-height:58vh;overflow-y:auto;padding:1rem}
+.ai-chat-starters{display:flex;gap:.5rem;flex-wrap:wrap;padding:.5rem 1rem}
+.ai-chat-starters .chat-starter-chip{border:1px solid var(--border-color);border-radius:999px;padding:.45rem .75rem;background:var(--bg-card);color:var(--text-main);cursor:pointer}
+.ai-chat-controls{display:flex;align-items:center;gap:.65rem;flex-wrap:wrap;padding:.65rem 1rem}
+.btn-chat-mic,.btn-chat-summary{padding:.45rem .8rem;border:1px solid var(--border-color);border-radius:999px;background:transparent;color:var(--text-main);cursor:pointer}
+.chat-toggle{display:inline-flex;align-items:center;gap:.4rem;color:var(--text-muted);font-size:.85rem}
+.chat-feedback-note{margin:.3rem 0 .7rem auto;max-width:85%;padding:.5rem .75rem;border-left:3px solid var(--purple-neon);border-radius:0 8px 8px 0;background:var(--bg-card);font-size:.85rem;color:var(--text-main)}
+.chat-feedback-line+.chat-feedback-line{margin-top:.25rem}
+@media(max-width:600px){.ai-chat-toolbar{align-items:stretch}.ai-chat-toolbar label{justify-content:space-between;width:100%}.ai-chat-toolbar select{flex:1;max-width:65%}.ai-chat-window .chat-messages{min-height:260px;max-height:55vh}.ai-chat-window .chat-input-row{display:flex;flex-wrap:wrap}.ai-chat-window .chat-input-row input{min-width:0;flex:1}.ai-chat-window .chat-input-row button{flex-shrink:0}}
