@@ -38,7 +38,7 @@ test("profile controls include visible keyboard focus styling", () => {
 test("all navigation destinations exist and HTML ids are unique", async () => {
   const html = await readFile(new URL("../index.html", import.meta.url), "utf8");
   const destinations = [...html.matchAll(/data-view="([^"]+)"/g)].map(match => match[1]);
-  const ids = [...html.matchAll(/\\bid="([^"]+)"/g)].map(match => match[1]);
+  const ids = [...html.matchAll(/\bid="([^"]+)"/g)].map(match => match[1]);
   assert.ok(destinations.length > 0, "Expected navigation destinations");
   for (const view of new Set(destinations)) {
     assert.ok(ids.includes("view-" + view), "Missing view container: " + view);
