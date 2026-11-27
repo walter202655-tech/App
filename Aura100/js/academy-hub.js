@@ -266,9 +266,11 @@
       if (status) status.textContent = "Preparando tu plan semanal...";
       try {
         if (!this.app.learningPlanManager) throw new Error("El planificador de estudio no está disponible.");
-        await this.app.learningPlanManager.generatePersonalizedPlan(minutes, goal);
-        const plan = this.app.learningPlanManager.activePlan;
-        if (!plan || !Array.isArray(plan.weeklyPlan)) throw new Error("No se pudo validar el plan generado.");
+        const manager = this.app.learningPlanManager;
+        const previousPlan = manager.activePlan;
+        await manager.generatePersonalizedPlan(minutes, goal);
+        const plan = manager.activePlan;
+        if (!plan || plan === previousPlan || !Array.isArray(plan.weeklyPlan)) throw new Error("No se pudo actualizar el plan. Revisa la conexión con el servicio de IA e inténtalo de nuevo.");
         plan.minutesPerDay = minutes;
         this.app.learningPlanManager.savePlan(plan);
         this.state.activeGoal = goal;
@@ -658,6 +660,29 @@
       if (messages) messages.scrollTop = messages.scrollHeight;
     }
 
+    localExamReply(message) {
+      const query = String(message || "").toLowerCase();
+      if (/(cu[aá]ntas|partes|formato|estructura|duraci[oó]n|tiempo total)/.test(query)) {
+        return "El B2 First tiene cuatro pruebas: Reading and Use of English (1 h 15 min, 7 partes y 52 preguntas), Writing (1 h 20 min y 2 tareas), Listening (unos 40 min, 4 partes y 30 preguntas) y Speaking (4 partes, unos 14 minutos por pareja). Son los tiempos generales publicados por Cambridge; confirma los detalles de tu convocatoria con tu centro examinador.";
+      }
+      if (/(cu[aá]ntas|partes|reading|use of english|lectura|parte 1|parte 2|parte 3|parte 4|parte 5|parte 6|parte 7)/.test(query)) {
+        return "Reading and Use of English dura 1 h 15 min y contiene 7 partes. Practica colocaciones y phrasal verbs en la Parte 1, palabras gramaticales en la Parte 2, formación de palabras en la Parte 3 y transformaciones con palabra clave en la Parte 4. Las Partes 5-7 evalúan comprensión, inferencia, estructura textual y búsqueda de información. Comprueba cada respuesta con evidencia del texto.";
+      }
+      if (/(writing|redacci[oó]n|essay|ensayo|review|report|article)/.test(query)) {
+        return "Writing dura 1 h 20 min y contiene dos tareas de 140-190 palabras. La Parte 1 es un ensayo obligatorio: desarrolla las dos ideas propuestas e incorpora una tercera propia. En la Parte 2 eliges una tarea entre tres y adaptas el registro al destinatario y propósito. Reserva tiempo para planificar y revisar. Algunos tipos de tarea cambian entre B2 First y B2 First for Schools.";
+      }
+      if (/(listening|escucha|audio|grabaci[oó]n)/.test(query)) {
+        return "Listening dura unos 40 minutos y tiene 4 partes con 30 preguntas. Escucharás las grabaciones dos veces. Antes de cada audio, revisa las preguntas y predice qué información necesitas; durante la primera escucha capta la idea general y en la segunda confirma detalles, actitudes y opiniones.";
+      }
+      if (/(speaking|oral|fotograf[ií]as|compa[nñ]ero)/.test(query)) {
+        return "Speaking tiene 4 partes y dura aproximadamente 14 minutos por pareja de candidatos. Practica respuestas ampliadas en la entrevista, comparación y especulación al hablar de fotografías, colaboración con tu compañero y discusión de ideas. Interactúa: pregunta, responde, justifica y permite que la otra persona participe.";
+      }
+      if (/(puntaje|nota|score|aprobar|resultado|cambridge english scale)/.test(query)) {
+        return "La puntuación oficial se calcula con el sistema Cambridge English Scale y la evaluación real incluye distintas competencias. Los resultados de las prácticas breves de Aura100 son orientativos: no se convierten directamente en una nota oficial ni permiten asegurar si aprobarás. Úsalos para identificar qué necesitas estudiar.";
+      }
+      return "Puedo orientarte sobre las cuatro pruebas, sus tiempos, tipos de tareas y estrategias. Para darte una respuesta precisa, menciona la parte del B2 First a la que se refiere tu duda (Reading and Use of English, Writing, Listening o Speaking).";
+    }
+
     async sendExamChatMessage() {
       const input = document.getElementById("academy-exam-chat-input");
       const status = document.getElementById("academy-exam-chat-status");
@@ -678,7 +703,7 @@
           history: this.examChatHistory.slice(0, -1).slice(-8).map((item) => ({ role: item.role, content: item.content }))
         });
       } catch (error) {
-        reply = "No pude conectar con el servicio de IA. Como orientación general, identifica primero la parte del examen a la que se refiere tu duda y consulta las instrucciones oficiales de Cambridge o de tu centro examinador. Puedes volver a enviar la pregunta cuando el servicio esté disponible.";
+        reply = this.localExamReply(message) + "\n\n(Respuesta local de orientación; el tutor IA no está disponible en este momento.)";
       }
       this.examChatHistory.push({ role: "assistant", content: reply });
       this.examChatHistory = this.examChatHistory.slice(-20);
