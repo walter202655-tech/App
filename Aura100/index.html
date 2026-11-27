@@ -722,40 +722,14 @@
         <!-- VIEW: CHAT BOT (AI Conversation Simulator)   -->
         <!-- ============================================== -->
         <section id="view-chatbot" class="content-view">
-          <div class="view-header">
-            <div>
-              <h2 class="view-title"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="svg-view-title-icon"><rect x="3" y="11" width="18" height="10" rx="2"/><circle cx="12" cy="5" r="2"/><path d="M12 7v4M8 15h.01M16 15h.01"/></svg> AI Conversation Bot</h2>
-              <p class="view-subtitle">Practica inglés real con un compañero de conversación simulado. Elige un escenario y escribe en inglés.</p>
-            </div>
+          <div class="view-header"><div><h2 class="view-title">AI Conversation Studio</h2><p class="view-subtitle">Practica conversaciones reales en inglés. Recibe respuestas naturales y correcciones sin interrumpir el diálogo.</p></div></div>
+          <div class="ai-chat-toolbar">
+            <label>Scenario <select id="ai-chat-scenario-select"><option value="free">Free conversation</option><option value="restaurant" selected>Restaurant</option><option value="hotel">Hotel</option><option value="directions">Directions</option><option value="job">Interview</option><option value="friends">Friends</option><option value="academic_debate">Academic debate</option><option value="presentation">Presentation</option></select></label>
+            <label>English level <select id="ai-chat-level-select"><option>A1</option><option>A2</option><option selected>B1</option><option>B2</option><option>C1</option><option>C2</option></select></label>
+            <span id="ai-chat-status-indicator" class="ai-status-pill">Checking AI...</span>
           </div>
-
-          <!-- Scenario Selector -->
-          <div class="chatbot-scenarios-bar" id="chatbot-scenarios-bar">
-            <button class="scenario-btn active" data-scenario="restaurant" onclick="app.selectChatScenario('restaurant')">🍽️ Restaurante</button>
-            <button class="scenario-btn" data-scenario="hotel" onclick="app.selectChatScenario('hotel')">🏨 Hotel</button>
-            <button class="scenario-btn" data-scenario="directions" onclick="app.selectChatScenario('directions')">🗺️ Directions</button>
-            <button class="scenario-btn" data-scenario="job" onclick="app.selectChatScenario('job')">💼 Job Interview</button>
-            <button class="scenario-btn" data-scenario="friends" onclick="app.selectChatScenario('friends')">👥 Making Friends</button>
-          </div>
-
-          <!-- Chat Window -->
-          <div class="chatbot-window">
-            <div class="chat-messages" id="chat-messages">
-              <!-- Populated by JS -->
-            </div>
-            <div class="chat-input-area">
-              <div class="chat-grammar-hint" id="chat-grammar-hint"></div>
-              <div class="chat-input-row">
-                <input type="text" id="chat-input" class="text-input chat-text-input" placeholder="Type your response in English..." onkeydown="if(event.key==='Enter') app.sendChatMessage()">
-                <button class="btn btn-primary btn-large" onclick="app.sendChatMessage()">Send ▶</button>
-                <button class="btn btn-secondary btn-sm" onclick="app.speakText(document.getElementById('chat-input').value)">🔊</button>
-              </div>
-              <div class="chat-hints-row">
-                <button class="btn-hint" onclick="app.getChatHint()">💡 Hint</button>
-                <button class="btn-hint" onclick="app.resetChat()">🔄 Reset</button>
-                <span class="chat-xp-earned" id="chat-xp-total">+0 XP earned</span>
-              </div>
-            </div>
+          <div class="chatbot-window ai-chat-window"><div class="chat-messages" id="ai-chat-thread" aria-live="polite"></div><div class="ai-chat-starters" id="ai-chat-starters"></div>
+            <div class="chat-input-area"><div class="chat-input-row"><input type="text" id="ai-chat-input" class="text-input chat-text-input" maxlength="2000" placeholder="Write your message in English..." onkeydown="if(event.key==='Enter'){event.preventDefault();app.sendChatMessage();}"><button class="btn btn-primary btn-large" onclick="app.sendChatMessage()">Send</button></div></div>
           </div>
         </section>
 
@@ -1687,7 +1661,7 @@
   </div>
 
   <!-- Aura100 v4.0 Modular Architecture Services -->
-  <script src="ai-client.js"></script>
+  <script src="ai-client.js"></script>\n  <script src="js/ai-conversation.js"></script>
   <script src="js/adaptive-engine.js"></script>
   <script src="js/placement-test.js"></script>
   <script src="js/writing-evaluator.js"></script>
