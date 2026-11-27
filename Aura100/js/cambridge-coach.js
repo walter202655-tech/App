@@ -198,7 +198,7 @@
         const reply = await global.Aura100AI.chat({
           level: "B2", scenario: "cambridge_speaking",
           message: message,
-          history: this.speakingHistory.slice(-9, -1).map(item => ({ role: item.role, content: item.content }))
+          history: this.speakingHistory.slice(-9, -1).map(item => ({ role: item.role, content: String(item.content || "").slice(0, 1500) }))
         });
         this.speakingHistory.push({ role: "assistant", content: reply });
         this.speakingHistory = this.speakingHistory.slice(-12);
@@ -218,7 +218,7 @@
         const feedback = await global.Aura100AI.chat({
           level: "B2", scenario: "cambridge_speaking",
           message: "End the simulation and provide feedback in Spanish. Evaluate only the written evidence in this transcript using B2 Speaking dimensions: Grammar and Vocabulary, Discourse Management, and Interactive Communication. Give two strengths, up to three priorities and one short practice goal. State clearly that pronunciation and actual spoken fluency cannot be assessed from typed answers. Do not give an official Cambridge score.",
-          history: this.speakingHistory.slice(-10).map(item => ({ role: item.role, content: item.content }))
+          history: this.speakingHistory.slice(-10).map(item => ({ role: item.role, content: String(item.content || "").slice(0, 1500) }))
         });
         this.speakingHistory.push({ role: "assistant", content: "FEEDBACK FINAL\n" + feedback });
         this.renderSpeakingMessages();
@@ -322,8 +322,8 @@
       const status = document.getElementById("cc-writing-status");
       const text = String(input?.value || "").trim();
       const words = text ? text.split(/\s+/).length : 0;
-      if (words < 100) {
-        if (status) status.textContent = "Escribe un ensayo más desarrollado antes de solicitar la evaluación. El objetivo de esta tarea es 140-190 palabras.";
+      if (words < 140 || words > 190) {
+        if (status) status.textContent = "La tarea Cambridge B2 First requiere entre 140 y 190 palabras. Tu texto tiene " + words + " palabras."
         return;
       }
       if (!global.Aura100AI || typeof global.Aura100AI.evaluateWriting !== "function") {
