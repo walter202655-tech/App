@@ -181,10 +181,10 @@
       if (!panel) return;
       const deck = Array.isArray(this.app.state.ankiDeck) ? this.app.state.ankiDeck : [];
       if (!deck.length) {
-        panel.innerHTML = '<div class="academy-empty"><h3>Aún no hay palabras guardadas</h3><p>Añade vocabulario desde los cursos o desde el diccionario para crear tu colección personal.</p><button class="btn btn-primary" onclick="app.navigate(\\'modules\\')">Explorar vocabulario</button></div>';
+        panel.innerHTML = '<div class="academy-empty"><h3>Aún no hay palabras guardadas</h3><p>Añade vocabulario desde los cursos o desde el diccionario para crear tu colección personal.</p><button class="btn btn-primary" onclick="app.navigate(\'modules\')">Explorar vocabulario</button></div>';
         return;
       }
-      panel.innerHTML = '<div class="academy-section-heading"><div><h3>Tu colección</h3><p>' + deck.length + ' tarjetas guardadas y disponibles para repaso.</p></div><button class="btn btn-secondary btn-sm" onclick="app.navigate(\\'anki-srs\\')">Abrir repaso SRS</button></div><div class="academy-saved-grid">' +
+      panel.innerHTML = '<div class="academy-section-heading"><div><h3>Tu colección</h3><p>' + deck.length + ' tarjetas guardadas y disponibles para repaso.</p></div><button class="btn btn-secondary btn-sm" onclick="app.navigate(\'anki-srs\')">Abrir repaso SRS</button></div><div class="academy-saved-grid">' +
         deck.slice(0, 60).map(function (card) {
           return '<article class="academy-saved-card"><div class="academy-saved-word">' + escapeHTML(card.front) + '</div><div class="academy-saved-meaning">' + escapeHTML(card.back) + '</div><div class="academy-saved-meta">' + escapeHTML(card.level || "B1") + ' · ' + escapeHTML(card.state || "saved") + '</div></article>';
         }).join("") + '</div>';
@@ -195,7 +195,7 @@
       if (!box) return;
       const deck = Array.isArray(this.app.state.ankiDeck) ? this.app.state.ankiDeck.filter(function (card) { return card.front && card.back; }) : [];
       if (deck.length < 4) {
-        box.innerHTML = '<div class="academy-empty"><h3>Necesitas al menos cuatro tarjetas</h3><p>Guarda algunas palabras para poder crear una evaluación con opciones plausibles.</p><button class="btn btn-primary" onclick="app.navigate(\\'modules\\')">Ir a vocabulario</button></div>';
+        box.innerHTML = '<div class="academy-empty"><h3>Necesitas al menos cuatro tarjetas</h3><p>Guarda algunas palabras para poder crear una evaluación con opciones plausibles.</p><button class="btn btn-primary" onclick="app.navigate(\'modules\')">Ir a vocabulario</button></div>';
         return;
       }
       const items = shuffle(deck).slice(0, Math.min(10, deck.length));
@@ -300,7 +300,7 @@
             tasks.map((task, taskIndex) => {
               const id = key + ":" + taskIndex;
               const checked = Boolean(this.state.calendarChecks[id]);
-              return '<label class="academy-task ' + (checked ? "is-done" : "") + '"><input type="checkbox" ' + (checked ? "checked" : "") + ' onchange="app.academyHub.toggleCalendarTask(\\'' + id + '\\')"><span><strong>' + escapeHTML(task.activity) + '</strong><small>' + escapeHTML(task.objective) + '</small><em>' + escapeHTML(task.skill) + ' · ' + Number(task.minutes || 0) + ' min</em></span></label>';
+              return '<label class="academy-task ' + (checked ? "is-done" : "") + '"><input type="checkbox" ' + (checked ? "checked" : "") + ' onchange="app.academyHub.toggleCalendarTask(\'' + id + '\')"><span><strong>' + escapeHTML(task.activity) + '</strong><small>' + escapeHTML(task.objective) + '</small><em>' + escapeHTML(task.skill) + ' · ' + Number(task.minutes || 0) + ' min</em></span></label>';
             }).join("") + '</div></article>';
         }).join("") + '</div><p class="academy-disclaimer">' + escapeHTML(plan.disclaimer || "Plan orientativo. Puedes adaptar las sesiones según tu disponibilidad.") + '</p>';
     }
@@ -418,8 +418,8 @@
       }
       const order = this.currentConnectOrder;
       box.innerHTML = data.done ? '<div class="academy-result"><h3>Reto completado</h3><p>Has conectado las cuatro parejas.</p></div>' :
-        '<div class="academy-connect-columns"><div>' + set.pairs.map((pair) => '<button class="academy-connect-option ' + (matched.has(pair.word) ? "is-matched " : "") + (this.connectPick.left === pair.word ? "is-selected" : "") + '" onclick="app.academyHub.selectConnect(\\'left\\',\\'' + pair.word + '\\')" ' + (matched.has(pair.word) ? "disabled" : "") + '>' + escapeHTML(pair.word) + '</button>').join("") +
-        '</div><div>' + order.map((pair) => '<button class="academy-connect-option ' + (matched.has(pair.word) ? "is-matched " : "") + (this.connectPick.right === pair.word ? "is-selected" : "") + '" onclick="app.academyHub.selectConnect(\\'right\\',\\'' + pair.word + '\\')" ' + (matched.has(pair.word) ? "disabled" : "") + '>' + escapeHTML(pair.meaning) + '</button>').join("") +
+        '<div class="academy-connect-columns"><div>' + set.pairs.map((pair) => '<button class="academy-connect-option ' + (matched.has(pair.word) ? "is-matched " : "") + (this.connectPick.left === pair.word ? "is-selected" : "") + '" onclick="app.academyHub.selectConnect(\'left\',\'' + pair.word + '\')" ' + (matched.has(pair.word) ? "disabled" : "") + '>' + escapeHTML(pair.word) + '</button>').join("") +
+        '</div><div>' + order.map((pair) => '<button class="academy-connect-option ' + (matched.has(pair.word) ? "is-matched " : "") + (this.connectPick.right === pair.word ? "is-selected" : "") + '" onclick="app.academyHub.selectConnect(\'right\',\'' + pair.word + '\')" ' + (matched.has(pair.word) ? "disabled" : "") + '>' + escapeHTML(pair.meaning) + '</button>').join("") +
         '</div></div><p id="academy-connect-feedback" class="academy-feedback" aria-live="polite">Selecciona una palabra y luego su significado.</p><p class="academy-muted">' + matched.size + ' de 4 parejas conectadas.</p>';
     }
 
@@ -462,7 +462,7 @@
         ["quick", "Evaluación rápida"]
       ];
       box.innerHTML = '<div class="academy-subtabs">' + tabs.map((tab) =>
-        '<button class="academy-tab ' + (this.cambridgeTab === tab[0] ? "active" : "") + '" onclick="app.academyHub.setCambridgeTab(\\'' + tab[0] + '\\')">' + tab[1] + '</button>'
+        '<button class="academy-tab ' + (this.cambridgeTab === tab[0] ? "active" : "") + '" onclick="app.academyHub.setCambridgeTab(\'' + tab[0] + '\')">' + tab[1] + '</button>'
       ).join("") + '</div><div id="cambridge-b2-panel"></div>';
       this.renderCambridgeTab();
     }
@@ -480,7 +480,7 @@
           Object.keys(CAMBRIDGE_GUIDES).map((key) => {
             const guide = CAMBRIDGE_GUIDES[key];
             return '<article class="academy-guide-card"><span class="academy-eyebrow">CAMBRIDGE B2 FIRST</span><h3>' + guide.title + '</h3><strong>' + guide.meta + '</strong><p>' + guide.intro + '</p><div class="academy-guide-parts">' + guide.parts.map((part) => '<details><summary>' + escapeHTML(part[0]) + '</summary><p>' + escapeHTML(part[1]) + '</p></details>').join("") + '</div></article>';
-          }).join("") + '</div><div class="academy-shortcuts"><button class="btn btn-secondary" onclick="app.navigate(\\'writing-lab\\')">Practicar Writing</button><button class="btn btn-secondary" onclick="app.navigate(\\'chatbot\\')">Practicar Speaking</button><button class="btn btn-secondary" onclick="app.navigate(\\'video-lab\\')">Entrenar Listening</button></div>';
+          }).join("") + '</div><div class="academy-shortcuts"><button class="btn btn-secondary" onclick="app.navigate(\'writing-lab\')">Practicar Writing</button><button class="btn btn-secondary" onclick="app.navigate(\'chatbot\')">Practicar Speaking</button><button class="btn btn-secondary" onclick="app.navigate(\'video-lab\')">Entrenar Listening</button></div>';
         return;
       }
       if (this.cambridgeTab === "custom") {
@@ -488,10 +488,10 @@
         return;
       }
       if (this.cambridgeTab === "practice") {
-        box.innerHTML = '<div class="academy-generator-card"><span class="academy-eyebrow">PRACTICE PAPERS</span><h3>Simulacro breve de Reading and Use of English</h3><p>Genera un conjunto original de diez preguntas con formato de práctica B2. No reproduce preguntas oficiales ni sustituye un examen de muestra completo.</p><div class="academy-exam-overview academy-exam-overview-compact"><article><strong>10</strong><span>Preguntas</span><small>Opción múltiple</small></article><article><strong>15 min</strong><span>Tiempo sugerido</span><small>Ritmo de práctica</small></article></div><button class="btn btn-primary" onclick="app.academyHub.startQuestionRun(\\'practice\\', 10, \\'Mixed Cambridge B2 First Reading and Use of English practice\\', \\'use_of_english\\')">Iniciar simulacro</button><div class="academy-shortcuts"><button class="btn btn-secondary" onclick="app.navigate(\\'writing-lab\\')">Práctica de Writing</button><button class="btn btn-secondary" onclick="app.navigate(\\'chatbot\\')">Práctica de Speaking</button><button class="btn btn-secondary" onclick="app.navigate(\\'video-lab\\')">Práctica de Listening</button></div></div>';
+        box.innerHTML = '<div class="academy-generator-card"><span class="academy-eyebrow">PRACTICE PAPERS</span><h3>Simulacro breve de Reading and Use of English</h3><p>Genera un conjunto original de diez preguntas con formato de práctica B2. No reproduce preguntas oficiales ni sustituye un examen de muestra completo.</p><div class="academy-exam-overview academy-exam-overview-compact"><article><strong>10</strong><span>Preguntas</span><small>Opción múltiple</small></article><article><strong>15 min</strong><span>Tiempo sugerido</span><small>Ritmo de práctica</small></article></div><button class="btn btn-primary" onclick="app.academyHub.startQuestionRun(\'practice\', 10, \'Mixed Cambridge B2 First Reading and Use of English practice\', \'use_of_english\')">Iniciar simulacro</button><div class="academy-shortcuts"><button class="btn btn-secondary" onclick="app.navigate(\'writing-lab\')">Práctica de Writing</button><button class="btn btn-secondary" onclick="app.navigate(\'chatbot\')">Práctica de Speaking</button><button class="btn btn-secondary" onclick="app.navigate(\'video-lab\')">Práctica de Listening</button></div></div>';
         return;
       }
-      box.innerHTML = '<div class="academy-generator-card"><span class="academy-eyebrow">DIAGNÓSTICO FORMATIVO</span><h3>Evaluación rápida B2</h3><p>Responde ocho preguntas originales. Recibirás observaciones orientativas sobre tus áreas fuertes y las que conviene repasar.</p><button class="btn btn-primary" onclick="app.academyHub.startQuestionRun(\\'quick\\', 8, \\'B2 First diagnostic: grammar, vocabulary, collocations and reading inference\\', \\'use_of_english\\')">Comenzar evaluación</button><p class="academy-disclaimer">Las Predictive Notes son observaciones de estudio basadas en esta muestra breve. No predicen una nota oficial, una puntuación Cambridge English Scale ni el resultado real del examen.</p></div>';
+      box.innerHTML = '<div class="academy-generator-card"><span class="academy-eyebrow">DIAGNÓSTICO FORMATIVO</span><h3>Evaluación rápida B2</h3><p>Responde ocho preguntas originales. Recibirás observaciones orientativas sobre tus áreas fuertes y las que conviene repasar.</p><button class="btn btn-primary" onclick="app.academyHub.startQuestionRun(\'quick\', 8, \'B2 First diagnostic: grammar, vocabulary, collocations and reading inference\', \'use_of_english\')">Comenzar evaluación</button><p class="academy-disclaimer">Las Predictive Notes son observaciones de estudio basadas en esta muestra breve. No predicen una nota oficial, una puntuación Cambridge English Scale ni el resultado real del examen.</p></div>';
     }
 
     weakestTopics() {
@@ -623,7 +623,7 @@
       if (run.score > 0) this.app.addXp(Math.min(35, run.score * 3));
       const box = document.getElementById("cambridge-b2-panel");
       if (!box) return;
-      box.innerHTML = '<div class="academy-result"><span class="academy-eyebrow">RESULTADO FORMATIVO</span><h3>' + escapeHTML(record.title) + '</h3><div class="academy-result-score">' + pct + '%</div><p>' + run.score + ' de ' + total + ' respuestas correctas</p><div class="academy-predictive-notes"><h4>Predictive Notes</h4><ul>' + predictive.map((note) => '<li>' + escapeHTML(note) + '</li>').join("") + '</ul></div><p class="academy-disclaimer">Este resultado describe únicamente el conjunto de práctica realizado. No equivale a una puntuación Cambridge English Scale, una predicción validada ni una decisión sobre la aprobación del examen.</p><div class="academy-shortcuts"><button class="btn btn-primary" onclick="app.academyHub.setCambridgeTab(\\'' + (run.kind === "practice" ? "practice" : run.kind === "custom" ? "custom" : "quick") + '\\')">Repetir práctica</button><button class="btn btn-secondary" onclick="app.navigate(\\'progress\\')">Ver progreso</button></div></div>';
+      box.innerHTML = '<div class="academy-result"><span class="academy-eyebrow">RESULTADO FORMATIVO</span><h3>' + escapeHTML(record.title) + '</h3><div class="academy-result-score">' + pct + '%</div><p>' + run.score + ' de ' + total + ' respuestas correctas</p><div class="academy-predictive-notes"><h4>Predictive Notes</h4><ul>' + predictive.map((note) => '<li>' + escapeHTML(note) + '</li>').join("") + '</ul></div><p class="academy-disclaimer">Este resultado describe únicamente el conjunto de práctica realizado. No equivale a una puntuación Cambridge English Scale, una predicción validada ni una decisión sobre la aprobación del examen.</p><div class="academy-shortcuts"><button class="btn btn-primary" onclick="app.academyHub.setCambridgeTab(\'' + (run.kind === "practice" ? "practice" : run.kind === "custom" ? "custom" : "quick") + '\')">Repetir práctica</button><button class="btn btn-secondary" onclick="app.navigate(\'progress\')">Ver progreso</button></div></div>';
     }
 
     recordExamLikeResult(title, score, total) {
