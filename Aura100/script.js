@@ -753,7 +753,7 @@
         {
           "type": "fill-blank",
           "instruction": "Completa la oración:",
-          "sentence": "My surname is _____.",
+          "sentence": "My surname is ____.",
           "options": [
             "Smith",
             "Smits",
@@ -815,7 +815,7 @@
         {
           "type": "multiple-choice",
           "instruction": "Selecciona la respuesta correcta:",
-          "question": "Your mother's brother is your _____.",
+          "question": "Your mother's brother is your ____.",
           "options": [
             "uncle",
             "cousin",
@@ -827,7 +827,7 @@
         {
           "type": "fill-blank",
           "instruction": "Completa la oración:",
-          "sentence": "My sister's son is my _____.",
+          "sentence": "My sister's son is my ____.",
           "options": [
             "nephew",
             "niece",
@@ -852,7 +852,7 @@
         {
           "type": "multiple-choice",
           "instruction": "Selecciona la respuesta correcta:",
-          "question": "A person from Japan is _____.",
+          "question": "A person from Japan is ____.",
           "options": [
             "Japanese",
             "Japanish",
@@ -864,7 +864,7 @@
         {
           "type": "fill-blank",
           "instruction": "Completa la oración:",
-          "sentence": "They are from Peru. They are _____.",
+          "sentence": "They are from Peru. They are ____.",
           "options": [
             "Peruvian",
             "Peruish",
@@ -1382,7 +1382,7 @@
         {
           "type": "fill-blank",
           "instruction": "Completa la oración:",
-          "sentence": "That sounds great! I'd love to _____.",
+          "sentence": "That sounds great! I'd love to ____.",
           "options": [
             "come",
             "coming",
@@ -1666,7 +1666,7 @@
         {
           "type": "multiple-choice",
           "instruction": "Selecciona la respuesta correcta:",
-          "question": "Your flight leaves later than planned. It is _____.",
+          "question": "Your flight leaves later than planned. It is ____.",
           "options": [
             "delayed",
             "cancelled forever",
@@ -1678,7 +1678,7 @@
         {
           "type": "fill-blank",
           "instruction": "Completa la oración:",
-          "sentence": "We missed the train because we arrived _____.",
+          "sentence": "We missed the train because we arrived ____.",
           "options": [
             "late",
             "lately",
@@ -2295,7 +2295,7 @@
         {
           "type": "multiple-choice",
           "instruction": "Selecciona la respuesta correcta:",
-          "question": "If a plan is 'up in the air', it is _____.",
+          "question": "If a plan is 'up in the air', it is ____.",
           "options": [
             "undecided",
             "very successful",
@@ -2443,7 +2443,7 @@
         {
           "type": "multiple-choice",
           "instruction": "Selecciona la respuesta correcta:",
-          "question": "A question asked to make a point rather than obtain an answer is _____.",
+          "question": "A question asked to make a point rather than obtain an answer is ____.",
           "options": [
             "rhetorical",
             "hypothetical",
@@ -2455,7 +2455,7 @@
         {
           "type": "fill-blank",
           "instruction": "Completa la oración:",
-          "sentence": "The repeated opening phrase is an example of _____.",
+          "sentence": "The repeated opening phrase is an example of ____.",
           "options": [
             "anaphora",
             "irony",
@@ -2517,7 +2517,7 @@
         {
           "type": "multiple-choice",
           "instruction": "Selecciona la respuesta correcta:",
-          "question": "The sentence 'I saw the man with the telescope' is ambiguous because _____.",
+          "question": "The sentence 'I saw the man with the telescope' is ambiguous because ____.",
           "options": [
             "the phrase can describe who had the telescope",
             "the verb has no object",
