@@ -1,6 +1,16 @@
 # Changelog - Aura100
 
 ## [Unreleased]
+
+### Premium Store
+- Separa las seis mejoras premium en apartados independientes con estado de desbloqueo y acceso directo.
+- Grammar Pro incorpora un laboratorio C2 de seis preguntas con explicaciones y registro de mejor resultado.
+- Pronunciation Pro incorpora ocho frases C1, reproducción modelo y comparación de transcripción con reconocimiento de voz del navegador.
+- Temas Premium incorpora tres paletas de acento persistentes.
+- Avatares Premium añade ocho opciones exclusivas al selector de perfil.
+- Writing Pro incorpora seis talleres y evaluación formativa mediante el servicio de IA.
+- Coin Multiplier muestra el nivel actual y permite progresar hasta x3.
+
 - Corrige la concesión repetida de XP al desmarcar y volver a completar tareas del calendario.
 - Actualiza la etiqueta accesible del selector para reflejar los cinco temas visuales disponibles.
 - Añade una prueba de regresión para impedir la explotación de recompensas del calendario.
