@@ -5,6 +5,7 @@
   "use strict";
   const app = window.app;
   if (!app) return;
+  const escapeHTML = value => String(value ?? '').replace(/[&<>"']/g, char => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[char]);
 
   app.filterShopItems = function () {
     const query = (document.getElementById("shop-search")?.value || "").trim().toLocaleLowerCase("es");
