@@ -44,6 +44,7 @@
       this.speakingPart = "1";
       this.speakingHistory = [];
       this.speakingBusy = false;
+      this.writingBusy = false;
       this.listeningPlays = this.state.listeningPlays;
     }
 
@@ -313,7 +314,7 @@
     renderWriting() {
       const box = document.getElementById("cambridge-b2-panel");
       if (!box) return;
-      box.innerHTML = '<section class="cc-panel"><span class="academy-eyebrow">ETAPA 2 · WRITING CAMBRIDGE</span><h3>Part 1 - Essay</h3><p>Some people believe that schools should spend more time teaching practical skills, while others think traditional academic subjects should remain the main priority. Discuss both views and give your opinion.</p><div class="cc-writing-meta"><span>140-190 palabras</span><span>Tiempo recomendado: 40 minutos</span></div><label for="cc-writing-response">Tu ensayo en inglés</label><textarea id="cc-writing-response" class="text-input" rows="12" maxlength="4000" placeholder="Write your essay here..."></textarea><div class="cc-writing-actions"><span id="cc-writing-count" class="academy-muted">0 palabras</span><button class="btn btn-primary" onclick="app.academyHub.cambridgeCoach.submitWriting()">Evaluar con rúbrica Cambridge</button></div><div id="cc-writing-status" class="academy-muted" aria-live="polite"></div><p class="academy-disclaimer">La evaluación de Aura100 es orientativa. La rúbrica organiza el feedback según Content, Communicative Achievement, Organisation y Language; no sustituye a un examinador oficial.</p></section>';
+      box.innerHTML = '<section class="cc-panel"><span class="academy-eyebrow">ETAPA 2 · WRITING CAMBRIDGE</span><h3>Part 1 - Essay</h3><p>Some people believe that schools should spend more time teaching practical skills, while others think traditional academic subjects should remain the main priority. Discuss both views and give your opinion.</p><div class="cc-writing-meta"><span>140-190 palabras</span><span>Tiempo recomendado: 40 minutos</span></div><label for="cc-writing-response">Tu ensayo en inglés</label><textarea id="cc-writing-response" class="text-input" rows="12" maxlength="4000" placeholder="Write your essay here..."></textarea><div class="cc-writing-actions"><span id="cc-writing-count" class="academy-muted">0 palabras</span><button id="cc-writing-submit" class="btn btn-primary" onclick="app.academyHub.cambridgeCoach.submitWriting()">Evaluar con rúbrica Cambridge</button></div><div id="cc-writing-status" class="academy-muted" aria-live="polite"></div><p class="academy-disclaimer">La evaluación de Aura100 es orientativa. La rúbrica organiza el feedback según Content, Communicative Achievement, Organisation y Language; no sustituye a un examinador oficial.</p></section>';
       const input = document.getElementById("cc-writing-response");
       if (input) input.addEventListener("input", () => {
         const count = input.value.trim() ? input.value.trim().split(/\s+/).length : 0;
@@ -323,6 +324,7 @@
     }
 
     async submitWriting() {
+      if (this.writingBusy) return;
       const input = document.getElementById("cc-writing-response");
       const status = document.getElementById("cc-writing-status");
       const text = String(input?.value || "").trim();
@@ -335,6 +337,9 @@
         if (status) status.textContent = "El evaluador de IA no está disponible. Comprueba la conexión con el servidor.";
         return;
       }
+      this.writingBusy = true;
+      const submitButton = document.getElementById("cc-writing-submit");
+      if (submitButton) submitButton.disabled = true;
       if (status) status.textContent = "Evaluando con los cuatro criterios de Cambridge B2 First...";
       const taskPrompt = "[CAMBRIDGE_B2_FIRST_RUBRIC] Some people believe that schools should spend more time teaching practical skills, while others think traditional academic subjects should remain the main priority. Discuss both views and give your opinion. Target length: 140-190 words.";
       try {
@@ -357,6 +362,10 @@
         if (status) status.textContent = "Evaluación completada y registrada.";
       } catch (error) {
         if (status) status.textContent = "No se pudo evaluar el ensayo. Inténtalo de nuevo cuando la IA esté disponible.";
+      } finally {
+        this.writingBusy = false;
+        const button = document.getElementById("cc-writing-submit");
+        if (button) button.disabled = false;
       }
     }
   }
