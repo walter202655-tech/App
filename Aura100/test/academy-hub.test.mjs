@@ -42,3 +42,11 @@ test("hub markup escapes user and model-provided text and responsive styles exis
   assert.doesNotMatch(hub, /\beval\s*\(/);
   assert.doesNotMatch(hub, /new Function\s*\(/);
 });
+
+
+test("calendar task rewards can only be claimed once, even after unchecking", () => {
+  assert.match(hub, /calendarRewards: parsed\.calendarRewards/);
+  assert.match(hub, /const shouldReward = !checked && !this\.state\.calendarRewards\[id\]/);
+  assert.match(hub, /if \(shouldReward\) this\.state\.calendarRewards\[id\] = true/);
+  assert.match(hub, /if \(shouldReward\) this\.app\.addXp\(3\)/);
+});
