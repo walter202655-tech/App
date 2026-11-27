@@ -73,10 +73,11 @@ test("premium writing evaluation validates length and prevents duplicate AI requ
   assert.match(script, /finally \{/);
 });
 
-test("premium theme palettes are applied only after unlocking and persist", () => {
+test("premium theme palettes are applied only after unlocking and persist", async () => {
+  const styles = await readFile(new URL("../style.css", import.meta.url), "utf8");
   assert.match(script, /if \(!this\.state\.premiumThemes\)/);
   assert.match(script, /this\.state\.premiumThemeSkin = skin/);
-  assert.match(css, /premium-skin-obsidian-gold/);
-  assert.match(css, /premium-skin-arctic-mint/);
-  assert.match(css, /premium-skin-sakura-pulse/);
+  assert.match(styles, /premium-skin-obsidian-gold/);
+  assert.match(styles, /premium-skin-arctic-mint/);
+  assert.match(styles, /premium-skin-sakura-pulse/);
 });
