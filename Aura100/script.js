@@ -8457,10 +8457,10 @@ Warm regards,
       const set = (id, value) => { const el = document.getElementById(id); if (el) el.textContent = value; };
       set('shop-coins-val', this.state.coins);
       set('inventory-streak-freeze', 'Tienes: ' + (this.state.inventory.streakFreeze || 0));
-      set('inventory-double-xp', 'Tienes: ' + (this.state.inventory.doubleXp || 0));
+      set('inventory-double-xp', 'Actividades con XP doble: ' + (this.state.doubleXpActiveCount || 0));
       set('inventory-hearts-info', 'Corazones: ' + this.state.hearts + '/' + this.state.maxHearts);
       const inventory = document.getElementById('shop-inventory-summary');
-      if (inventory) { const rows = [['Streak Freeze', this.state.inventory.streakFreeze || 0], ['Double XP', this.state.inventory.doubleXp || 0], ['XP doble pendiente', this.state.doubleXpActiveCount || 0], ['Corazones', this.state.hearts + '/' + this.state.maxHearts], ['Multiplicador de monedas', 'x' + (this.state.coinMultiplier || 1).toFixed(1)]]; inventory.innerHTML = rows.map(row => '<div class="shop-inventory-stat"><span>' + escapeHTML(String(row[0])) + '</span><strong>' + escapeHTML(String(row[1])) + '</strong></div>').join(''); }
+      if (inventory) { const rows = [['Streak Freeze', this.state.inventory.streakFreeze || 0], ['Actividades con XP doble', this.state.doubleXpActiveCount || 0], ['XP doble pendiente', this.state.doubleXpActiveCount || 0], ['Corazones', this.state.hearts + '/' + this.state.maxHearts], ['Multiplicador de monedas', 'x' + (this.state.coinMultiplier || 1).toFixed(1)]]; inventory.innerHTML = rows.map(row => '<div class="shop-inventory-stat"><span>' + escapeHTML(String(row[0])) + '</span><strong>' + escapeHTML(String(row[1])) + '</strong></div>').join(''); }
       const cards = Array.from(document.querySelectorAll('#view-shop .shop-item-card'));
       cards.forEach(card => { const grid = card.closest('.shop-grid'); const heading = grid && grid.previousElementSibling; const label = (heading && heading.textContent || '').toLowerCase(); card.dataset.shopCategory = label.includes('anki') ? 'anki' : label.includes('premium') ? 'premium' : 'consumables'; });
       cards.forEach(card => {
@@ -8675,7 +8675,7 @@ Warm regards,
       };
       const actions = {
         streakFreeze: () => buy(50, () => { this.state.inventory.streakFreeze = (this.state.inventory.streakFreeze || 0) + 1; }, 'Streak Freeze añadido al inventario.', 'purple'),
-        doubleXp: () => buy(40, () => { this.state.inventory.doubleXp = (this.state.inventory.doubleXp || 0) + 1; this.state.doubleXpActiveCount = (this.state.doubleXpActiveCount || 0) + 2; }, 'Double XP activado para 2 actividades.', 'gold'),
+        doubleXp: () => buy(40, () => { this.state.doubleXpActiveCount = (this.state.doubleXpActiveCount || 0) + 2; }, 'Double XP activado para 2 actividades.', 'gold'),
         heartRefill: () => buy(30, () => { this.state.hearts = this.state.maxHearts; }, 'Corazones recargados.', 'purple'),
         extraHeart: () => buy(80, () => { this.state.maxHearts = Math.min(10, (this.state.maxHearts || 3) + 1); this.state.hearts = this.state.maxHearts; }, 'Capacidad de corazones aumentada.', 'purple'),
         mysteryBox: () => buy(60, () => { const r = Math.random(); if (r < 0.4) { this.addXp(150); this.addCoins(50); this.showToast('Caja sorpresa: +150 XP y +50 monedas.', 'gold'); } else if (r < 0.7) { this.state.inventory.streakFreeze = (this.state.inventory.streakFreeze || 0) + 1; this.showToast('Caja sorpresa: recibiste Streak Freeze.', 'purple'); } else { this.state.doubleXpActiveCount = (this.state.doubleXpActiveCount || 0) + 5; this.showToast('Caja sorpresa: Double XP para 5 actividades.', 'gold'); } this.sound.playFanfare(); }, '', false),
