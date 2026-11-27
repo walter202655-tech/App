@@ -44,17 +44,18 @@
       this.speakingPart = "1";
       this.speakingHistory = [];
       this.speakingBusy = false;
-      this.listeningPlays = 0;
+      this.listeningPlays = this.state.listeningPlays;
     }
 
     loadState() {
-      const fallback = { mock: { reading: null, writing: null, listening: null, speaking: null }, lastListening: null };
+      const fallback = { mock: { reading: null, writing: null, listening: null, speaking: null }, lastListening: null, listeningPlays: 0 };
       try {
         const parsed = JSON.parse(localStorage.getItem(this.storageKey) || "null");
         if (!parsed || typeof parsed !== "object") return fallback;
         return {
           ...fallback,
           ...parsed,
+          listeningPlays: Number.isInteger(parsed.listeningPlays) ? Math.max(0, Math.min(2, parsed.listeningPlays)) : 0,
           mock: { ...fallback.mock, ...(parsed.mock || {}) }
         };
       } catch (_) { return fallback; }
@@ -73,6 +74,8 @@
 
     resetMock() {
       this.state.mock = { reading: null, writing: null, listening: null, speaking: null };
+      this.state.listeningPlays = 0;
+      this.listeningPlays = 0;
       this.saveState();
       this.renderMock();
     }
@@ -232,8 +235,8 @@
     renderListening() {
       const box = document.getElementById("cambridge-b2-panel");
       if (!box) return;
-      this.listeningPlays = 0;
-      box.innerHTML = '<section class="cc-panel"><span class="academy-eyebrow">ETAPA 3 · LISTENING</span><h3>' + escapeHTML(LISTENING_SAMPLE.title) + '</h3><p>Escucha el texto y completa las cinco palabras. Puedes reproducirlo un máximo de dos veces, como en una práctica guiada. El audio utiliza la voz disponible en tu navegador.</p><div class="cc-listening-controls"><button class="btn btn-primary" id="cc-play-listening" onclick="app.academyHub.cambridgeCoach.playListening()">Reproducir audio (0/2)</button><span id="cc-listening-status" class="academy-muted">No se ha reproducido.</span></div><div class="cc-gap-list">' +
+      this.listeningPlays = this.state.listeningPlays;
+      box.innerHTML = '<section class="cc-panel"><span class="academy-eyebrow">ETAPA 3 · LISTENING</span><h3>' + escapeHTML(LISTENING_SAMPLE.title) + '</h3><p>Escucha el texto y completa las cinco palabras. Puedes reproducirlo un máximo de dos veces, como en una práctica guiada. El audio utiliza la voz disponible en tu navegador.</p><div class="cc-listening-controls"><button class="btn btn-primary" id="cc-play-listening" onclick="app.academyHub.cambridgeCoach.playListening()">Reproducir audio (' + this.listeningPlays + '/2)</button><span id="cc-listening-status" class="academy-muted">No se ha reproducido.</span></div><div class="cc-gap-list">' +
         LISTENING_SAMPLE.gaps.map((gap,index) => '<label>' + (index+1) + '. ' + escapeHTML(gap.prompt) + '<input class="text-input" id="cc-listening-' + index + '" maxlength="40" autocomplete="off"></label>').join("") +
         '</div><button class="btn btn-primary" onclick="app.academyHub.cambridgeCoach.submitListening()">Comprobar respuestas</button><div id="cc-listening-result" aria-live="polite"></div><p class="academy-disclaimer">Actividad original de Aura100 para práctica. No es un audio oficial de Cambridge ni reproduce un examen publicado.</p></section>';
     }
@@ -250,6 +253,8 @@
         return;
       }
       this.listeningPlays++;
+      this.state.listeningPlays = this.listeningPlays;
+      this.saveState();
       const utterance = new SpeechSynthesisUtterance(LISTENING_SAMPLE.script);
       utterance.lang = "en-GB";
       utterance.rate = 0.92;
