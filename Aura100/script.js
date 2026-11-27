@@ -8457,7 +8457,7 @@ Warm regards,
       set('inventory-double-xp', 'Tienes: ' + (this.state.inventory.doubleXp || 0));
       set('inventory-hearts-info', 'Corazones: ' + this.state.hearts + '/' + this.state.maxHearts);
       const inventory = document.getElementById('shop-inventory-summary');
-      if (inventory) { const rows = [['Streak Freeze', this.state.inventory.streakFreeze || 0], ['Double XP', this.state.inventory.doubleXp || 0], ['XP doble pendiente', this.state.doubleXpActiveCount || 0], ['Corazones', this.state.hearts + '/' + this.state.maxHearts], ['Multiplicador de monedas', 'x' + (this.state.coinMultiplier || 1).toFixed(1)]]; inventory.innerHTML = rows.map(row => '<div class="shop-inventory-stat"><span>' + row[0] + '</span><strong>' + row[1] + '</strong></div>').join(''); }
+      if (inventory) { const rows = [['Streak Freeze', this.state.inventory.streakFreeze || 0], ['Double XP', this.state.inventory.doubleXp || 0], ['XP doble pendiente', this.state.doubleXpActiveCount || 0], ['Corazones', this.state.hearts + '/' + this.state.maxHearts], ['Multiplicador de monedas', 'x' + (this.state.coinMultiplier || 1).toFixed(1)]]; inventory.innerHTML = rows.map(row => '<div class="shop-inventory-stat"><span>' + escapeHTML(String(row[0])) + '</span><strong>' + escapeHTML(String(row[1])) + '</strong></div>').join(''); }
       const cards = Array.from(document.querySelectorAll('#view-shop .shop-item-card'));
       cards.forEach(card => { const grid = card.closest('.shop-grid'); const heading = grid && grid.previousElementSibling; const label = (heading && heading.textContent || '').toLowerCase(); card.dataset.shopCategory = label.includes('anki') ? 'anki' : label.includes('premium') ? 'premium' : 'consumables'; });
       cards.forEach(card => {
@@ -8478,7 +8478,7 @@ Warm regards,
         if (!owned && badge) badge.remove();
       });
       const history = document.getElementById('shop-purchase-history');
-      if (history) { const entries = (this.state.shopPurchaseHistory || []).slice(0, 8); history.innerHTML = entries.length ? entries.map(entry => { const card = cards.find(node => node.dataset.shopItem === entry.itemId); const title = card && card.querySelector('h4') ? card.querySelector('h4').textContent : entry.itemId; const date = new Date(entry.date); const label = Number.isNaN(date.getTime()) ? '' : date.toLocaleDateString('es-PE', { day: '2-digit', month: 'short' }); return '<div class="shop-history-row"><span><strong>' + title + '</strong><small>' + label + '</small></span><b>-' + entry.cost + ' Coins</b></div>'; }).join('') : '<p class="shop-empty-history">Tus compras aparecerán aquí.</p>'; }
+      if (history) { const entries = (this.state.shopPurchaseHistory || []).slice(0, 8); history.innerHTML = entries.length ? entries.map(entry => { const card = cards.find(node => node.dataset.shopItem === entry.itemId); const title = card && card.querySelector('h4') ? card.querySelector('h4').textContent : entry.itemId; const date = new Date(entry.date); const label = Number.isNaN(date.getTime()) ? '' : date.toLocaleDateString('es-PE', { day: '2-digit', month: 'short' }); return '<div class="shop-history-row"><span><strong>' + escapeHTML(String(title)) + '</strong><small>' + escapeHTML(String(label)) + '</small></span><b>-' + (Number(entry.cost) || 0) + ' Coins</b></div>'; }).join('') : '<p class="shop-empty-history">Tus compras aparecerán aquí.</p>'; }
       this.renderLoginBonus(); this.renderWheelCooldown(); this.filterShopItems();
     }
 
