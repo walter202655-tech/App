@@ -22,7 +22,8 @@ import {
   learningPlanInstructions,
   SCHEMAS
 } from "./src/prompts.mjs";
-import { generateText, generateStructured, moderateText, isAIConfigured } from "./src/ai-service.mjs";\nimport { registerTalkRoutes } from "./src/talk-routes.mjs";
+import { generateText, generateStructured, moderateText, isAIConfigured } from "./src/ai-service.mjs";
+import { registerTalkRoutes } from "./src/talk-routes.mjs";
 
 const app = express();
 const PORT = Number(process.env.PORT || 3000);
@@ -162,7 +163,9 @@ app.post("/api/ai/chat", async (req, res, next) => {
   } catch (error) { next(error); }
 });
 
-registerTalkRoutes(app);\n\napp.post("/api/ai/writing", async (req, res, next) => {
+registerTalkRoutes(app);
+
+app.post("/api/ai/writing", async (req, res, next) => {
   try {
     const data = parseBody(writingRequestSchema, req, res);
     if (!data) return;
