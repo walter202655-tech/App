@@ -67,6 +67,17 @@ Combina una arquitectura robusta orientada a la privacidad, un frontend modular 
 
 ---
 
+## 8. Academy Hub: planificación, juegos y Cambridge B2
+
+- **Calendario de estudio con IA:** genera una semana de sesiones a partir del nivel CEFR, el objetivo declarado, las competencias registradas y los errores frecuentes. Las tareas se pueden marcar como completadas.
+- **Minijuegos diarios:** reto de palabras de cinco letras y actividad de conexión entre vocabulario y significados.
+- **Cambridge B2 First Preparation:** guías y consejos para Reading and Use of English, Writing, Listening y Speaking; generador de preguntas personalizadas; simulacros breves originales; evaluación rápida con "Predictive Notes".
+- **Tutor de dudas Cambridge:** chat orientado a resolver preguntas sobre las partes, instrucciones, tiempos y estrategias del examen.
+- **Vocabulary Builder:** colección de palabras guardadas basada en el mazo Anki y evaluación de vocabulario.
+- **Progreso ampliado:** registro de preguntas, notas personales, historial de evaluaciones y resumen de estudio asistido por IA.
+
+Las prácticas Cambridge generadas por Aura100 son materiales originales para el aprendizaje y no reproducen exámenes oficiales. Las "Predictive Notes" son observaciones formativas basadas en una muestra breve; no calculan una puntuación Cambridge English Scale ni predicen de forma validada el resultado oficial. El calendario, los resultados de juegos, el registro de preguntas, las notas y el historial de chat se guardan localmente en el navegador de esta beta y no se sincronizan entre dispositivos.
+
 ## 🛠️ Requisitos e Instalación
 
 ### Requisitos Previos
