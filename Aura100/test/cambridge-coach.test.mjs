@@ -34,3 +34,20 @@ test("integrated mock covers all four exam papers and is clearly formative", () 
   assert.match(coach, /No se calcula una puntuación Cambridge English Scale/);
   assert.match(css, /@media\(max-width:760px\)/);
 });
+
+
+test("Listening playback limit persists when navigating away and back", () => {
+  assert.match(coach, /listeningPlays: Number\.isInteger\(parsed\.listeningPlays\)/);
+  assert.match(coach, /this\.state\.listeningPlays = this\.listeningPlays/);
+  assert.match(coach, /this\.listeningPlays = this\.state\.listeningPlays/);
+  assert.match(coach, /Reproducir audio \(' \+ this\.listeningPlays \+ '\/2\)/);
+  assert.match(coach, /this\.state\.listeningPlays = 0/);
+});
+
+
+test("Writing evaluation prevents duplicate submissions while a request is pending", () => {
+  assert.match(coach, /if \(this\.writingBusy\) return/);
+  assert.match(coach, /id="cc-writing-submit"/);
+  assert.match(coach, /if \(submitButton\) submitButton\.disabled = true/);
+  assert.match(coach, /finally \{\s*this\.writingBusy = false/);
+});

@@ -44,17 +44,19 @@
       this.speakingPart = "1";
       this.speakingHistory = [];
       this.speakingBusy = false;
-      this.listeningPlays = 0;
+      this.writingBusy = false;
+      this.listeningPlays = this.state.listeningPlays;
     }
 
     loadState() {
-      const fallback = { mock: { reading: null, writing: null, listening: null, speaking: null }, lastListening: null };
+      const fallback = { mock: { reading: null, writing: null, listening: null, speaking: null }, lastListening: null, listeningPlays: 0 };
       try {
         const parsed = JSON.parse(localStorage.getItem(this.storageKey) || "null");
         if (!parsed || typeof parsed !== "object") return fallback;
         return {
           ...fallback,
           ...parsed,
+          listeningPlays: Number.isInteger(parsed.listeningPlays) ? Math.max(0, Math.min(2, parsed.listeningPlays)) : 0,
           mock: { ...fallback.mock, ...(parsed.mock || {}) }
         };
       } catch (_) { return fallback; }
@@ -73,6 +75,8 @@
 
     resetMock() {
       this.state.mock = { reading: null, writing: null, listening: null, speaking: null };
+      this.state.listeningPlays = 0;
+      this.listeningPlays = 0;
       this.saveState();
       this.renderMock();
     }
@@ -232,8 +236,8 @@
     renderListening() {
       const box = document.getElementById("cambridge-b2-panel");
       if (!box) return;
-      this.listeningPlays = 0;
-      box.innerHTML = '<section class="cc-panel"><span class="academy-eyebrow">ETAPA 3 · LISTENING</span><h3>' + escapeHTML(LISTENING_SAMPLE.title) + '</h3><p>Escucha el texto y completa las cinco palabras. Puedes reproducirlo un máximo de dos veces, como en una práctica guiada. El audio utiliza la voz disponible en tu navegador.</p><div class="cc-listening-controls"><button class="btn btn-primary" id="cc-play-listening" onclick="app.academyHub.cambridgeCoach.playListening()">Reproducir audio (0/2)</button><span id="cc-listening-status" class="academy-muted">No se ha reproducido.</span></div><div class="cc-gap-list">' +
+      this.listeningPlays = this.state.listeningPlays;
+      box.innerHTML = '<section class="cc-panel"><span class="academy-eyebrow">ETAPA 3 · LISTENING</span><h3>' + escapeHTML(LISTENING_SAMPLE.title) + '</h3><p>Escucha el texto y completa las cinco palabras. Puedes reproducirlo un máximo de dos veces, como en una práctica guiada. El audio utiliza la voz disponible en tu navegador.</p><div class="cc-listening-controls"><button class="btn btn-primary" id="cc-play-listening" onclick="app.academyHub.cambridgeCoach.playListening()">Reproducir audio (' + this.listeningPlays + '/2)</button><span id="cc-listening-status" class="academy-muted">No se ha reproducido.</span></div><div class="cc-gap-list">' +
         LISTENING_SAMPLE.gaps.map((gap,index) => '<label>' + (index+1) + '. ' + escapeHTML(gap.prompt) + '<input class="text-input" id="cc-listening-' + index + '" maxlength="40" autocomplete="off"></label>').join("") +
         '</div><button class="btn btn-primary" onclick="app.academyHub.cambridgeCoach.submitListening()">Comprobar respuestas</button><div id="cc-listening-result" aria-live="polite"></div><p class="academy-disclaimer">Actividad original de Aura100 para práctica. No es un audio oficial de Cambridge ni reproduce un examen publicado.</p></section>';
     }
@@ -250,6 +254,8 @@
         return;
       }
       this.listeningPlays++;
+      this.state.listeningPlays = this.listeningPlays;
+      this.saveState();
       const utterance = new SpeechSynthesisUtterance(LISTENING_SAMPLE.script);
       utterance.lang = "en-GB";
       utterance.rate = 0.92;
@@ -308,7 +314,7 @@
     renderWriting() {
       const box = document.getElementById("cambridge-b2-panel");
       if (!box) return;
-      box.innerHTML = '<section class="cc-panel"><span class="academy-eyebrow">ETAPA 2 · WRITING CAMBRIDGE</span><h3>Part 1 - Essay</h3><p>Some people believe that schools should spend more time teaching practical skills, while others think traditional academic subjects should remain the main priority. Discuss both views and give your opinion.</p><div class="cc-writing-meta"><span>140-190 palabras</span><span>Tiempo recomendado: 40 minutos</span></div><label for="cc-writing-response">Tu ensayo en inglés</label><textarea id="cc-writing-response" class="text-input" rows="12" maxlength="4000" placeholder="Write your essay here..."></textarea><div class="cc-writing-actions"><span id="cc-writing-count" class="academy-muted">0 palabras</span><button class="btn btn-primary" onclick="app.academyHub.cambridgeCoach.submitWriting()">Evaluar con rúbrica Cambridge</button></div><div id="cc-writing-status" class="academy-muted" aria-live="polite"></div><p class="academy-disclaimer">La evaluación de Aura100 es orientativa. La rúbrica organiza el feedback según Content, Communicative Achievement, Organisation y Language; no sustituye a un examinador oficial.</p></section>';
+      box.innerHTML = '<section class="cc-panel"><span class="academy-eyebrow">ETAPA 2 · WRITING CAMBRIDGE</span><h3>Part 1 - Essay</h3><p>Some people believe that schools should spend more time teaching practical skills, while others think traditional academic subjects should remain the main priority. Discuss both views and give your opinion.</p><div class="cc-writing-meta"><span>140-190 palabras</span><span>Tiempo recomendado: 40 minutos</span></div><label for="cc-writing-response">Tu ensayo en inglés</label><textarea id="cc-writing-response" class="text-input" rows="12" maxlength="4000" placeholder="Write your essay here..."></textarea><div class="cc-writing-actions"><span id="cc-writing-count" class="academy-muted">0 palabras</span><button id="cc-writing-submit" class="btn btn-primary" onclick="app.academyHub.cambridgeCoach.submitWriting()">Evaluar con rúbrica Cambridge</button></div><div id="cc-writing-status" class="academy-muted" aria-live="polite"></div><p class="academy-disclaimer">La evaluación de Aura100 es orientativa. La rúbrica organiza el feedback según Content, Communicative Achievement, Organisation y Language; no sustituye a un examinador oficial.</p></section>';
       const input = document.getElementById("cc-writing-response");
       if (input) input.addEventListener("input", () => {
         const count = input.value.trim() ? input.value.trim().split(/\s+/).length : 0;
@@ -318,6 +324,7 @@
     }
 
     async submitWriting() {
+      if (this.writingBusy) return;
       const input = document.getElementById("cc-writing-response");
       const status = document.getElementById("cc-writing-status");
       const text = String(input?.value || "").trim();
@@ -330,6 +337,9 @@
         if (status) status.textContent = "El evaluador de IA no está disponible. Comprueba la conexión con el servidor.";
         return;
       }
+      this.writingBusy = true;
+      const submitButton = document.getElementById("cc-writing-submit");
+      if (submitButton) submitButton.disabled = true;
       if (status) status.textContent = "Evaluando con los cuatro criterios de Cambridge B2 First...";
       const taskPrompt = "[CAMBRIDGE_B2_FIRST_RUBRIC] Some people believe that schools should spend more time teaching practical skills, while others think traditional academic subjects should remain the main priority. Discuss both views and give your opinion. Target length: 140-190 words.";
       try {
@@ -352,6 +362,10 @@
         if (status) status.textContent = "Evaluación completada y registrada.";
       } catch (error) {
         if (status) status.textContent = "No se pudo evaluar el ensayo. Inténtalo de nuevo cuando la IA esté disponible.";
+      } finally {
+        this.writingBusy = false;
+        const button = document.getElementById("cc-writing-submit");
+        if (button) button.disabled = false;
       }
     }
   }
