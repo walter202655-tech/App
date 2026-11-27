@@ -197,3 +197,11 @@ Este proyecto es propiedad del equipo de desarrollo de Aura100. Diseñado bajo e
 ## Publicación
 
 Consulta `docs/DEPLOYMENT_PRIVATE_BETA.md` para preparar una beta privada en Railway. Esta configuración utiliza una contraseña compartida y no debe considerarse un sistema de cuentas públicas.
+
+
+## 9. Navegación y experiencia de usuario
+
+- Abre la navegación rápida con **Ctrl/Cmd + K** o con **/** cuando no estés escribiendo en un campo.
+- Busca las secciones principales por nombre y recórrelas con las flechas del teclado.
+- Consulta el historial de versiones desde **Novedades** en el menú lateral.
+- La interfaz incorpora estados de foco visibles, ajustes para pantallas pequeñas y respeta la preferencia del sistema para reducir movimiento.

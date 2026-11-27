@@ -1,4 +1,18 @@
-# Registro de Cambios — Aura100
+# Changelog - Aura100
+
+## [4.1.0] - 2026-11-26
+
+### Added
+- Quick navigation palette with section search, keyboard navigation and shortcuts (Ctrl/Cmd + K or /).
+- In-app changelog view and version history.
+- Visible keyboard focus states for interactive controls.
+
+### Improved
+- Responsive header behavior on tablet and mobile screens.
+- Reduced visual noise in compact layouts.
+- Respect for the operating system's reduced-motion preference.
+
+---
 
 Todos los cambios notables realizados en el proyecto se documentan en este archivo.
 
